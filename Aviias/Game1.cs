@@ -11,7 +11,11 @@ namespace Aviias
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-       // Texture2D texture;
+        Player player;
+        KeyboardState currentKeyboardState;
+        KeyboardState previousKeyboardState;
+        float playerMoveSpeed;
+        // Texture2D texture;
 
         public Game1()
         {
@@ -29,6 +33,9 @@ namespace Aviias
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+
+            player = new Player();
+            playerMoveSpeed = 8.0f;
             base.Initialize();
         }
 
@@ -41,7 +48,8 @@ namespace Aviias
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            Vector2 playerPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
+            player.Initialize(Content.Load<Texture2D>("test"), playerPosition);
         }
 
         /// <summary>
@@ -64,8 +72,37 @@ namespace Aviias
                 Exit();
 
             // TODO: Add your update logic here
-
+            previousKeyboardState = currentKeyboardState;
+            currentKeyboardState = Keyboard.GetState();
+            UpdatePlayer(gameTime);
             base.Update(gameTime);
+        }
+
+        private void UpdatePlayer(GameTime gameTime)
+        {
+
+            player.Position.X = MathHelper.Clamp(player.Position.X, 0, GraphicsDevice.Viewport.Width - player.Width);
+            player.Position.Y = MathHelper.Clamp(player.Position.Y, 0, GraphicsDevice.Viewport.Height - player.Height);
+
+            if (currentKeyboardState.IsKeyDown(Keys.Left))
+            {
+                player.Position.X -= playerMoveSpeed;
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.Right))
+            {
+                player.Position.X += playerMoveSpeed;
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.Up))
+            {
+                player.Position.Y -= playerMoveSpeed;
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.Down))
+            {
+                player.Position.Y += playerMoveSpeed;
+            }
         }
 
         /// <summary>
@@ -79,6 +116,9 @@ namespace Aviias
             // TODO: Add your drawing code here
 
             spriteBatch.Begin();
+
+            player.Draw(spriteBatch);
+
             spriteBatch.End();
             base.Draw(gameTime);
         }
