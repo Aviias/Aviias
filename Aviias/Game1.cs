@@ -12,10 +12,12 @@ namespace Aviias
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Player player;
+        Monster monster;
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
         float playerMoveSpeed;
         // Texture2D texture;
+        
 
         public Game1()
         {
@@ -35,7 +37,9 @@ namespace Aviias
             // TODO: Add your initialization logic here
 
             player = new Player();
+            monster = new Monster(100, 6.0f, 0.05, 10, 5 );
             playerMoveSpeed = 8.0f;
+            
             base.Initialize();
         }
 
@@ -47,9 +51,13 @@ namespace Aviias
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+           
             Vector2 playerPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
             player.Initialize(Content.Load<Texture2D>("test"), playerPosition);
+
+            Vector2 monsterPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
+            monster.Initialize(Content.Load<Texture2D>("mob"), monsterPosition);
+
         }
 
         /// <summary>
@@ -74,8 +82,16 @@ namespace Aviias
             // TODO: Add your update logic here
             previousKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
+            UpdateMonster(gameTime);
             UpdatePlayer(gameTime);
+            
             base.Update(gameTime);
+        }
+
+        private void UpdateMonster(GameTime gameTime)
+        {
+            monster._pos.X = MathHelper.Clamp(monster._pos.X, 0, GraphicsDevice.Viewport.Width - monster.Width);
+            monster._pos.Y = MathHelper.Clamp(monster._pos.Y, 0, GraphicsDevice.Viewport.Height - monster.Height);
         }
 
         private void UpdatePlayer(GameTime gameTime)
@@ -116,9 +132,9 @@ namespace Aviias
             // TODO: Add your drawing code here
 
             spriteBatch.Begin();
-
+            monster.Draw(spriteBatch);
             player.Draw(spriteBatch);
-
+           
             spriteBatch.End();
             base.Draw(gameTime);
         }

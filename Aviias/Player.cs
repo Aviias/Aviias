@@ -25,6 +25,8 @@ namespace Aviias
             get { return PlayerTexture.Height; }
         }
 
+      
+
         public void Initialize(Texture2D texture, Vector2 position)
         {
             PlayerTexture = texture;
@@ -33,10 +35,10 @@ namespace Aviias
             Health = 100;
         }
 
-        public void Update()
+        public Vector2 PlayerPosition
         {
+            get { return Position; }
         }
-
 
 
         public void Draw(SpriteBatch spriteBatch)
