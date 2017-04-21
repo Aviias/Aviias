@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Aviias
 {
@@ -11,7 +12,11 @@ namespace Aviias
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-       // Texture2D texture;
+        // Texture2D texture;
+        Map map = new Map(12, 32);
+        Random random = new Random();
+        int prob = 3;
+        KeyboardState currentKeyboardState;
 
         public Game1()
         {
@@ -30,6 +35,7 @@ namespace Aviias
         {
             // TODO: Add your initialization logic here
             base.Initialize();
+            map.GenerateMap(Content);
         }
 
         /// <summary>
@@ -60,10 +66,17 @@ namespace Aviias
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             // TODO: Add your update logic here
+            currentKeyboardState = Keyboard.GetState();
+            if (currentKeyboardState.IsKeyDown(Keys.M))
+            {
+                map = new Map(12, 32);
+                map.GenerateMap(Content);
+            }
 
             base.Update(gameTime);
         }
@@ -79,6 +92,7 @@ namespace Aviias
             // TODO: Add your drawing code here
 
             spriteBatch.Begin();
+            map.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }
