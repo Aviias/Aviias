@@ -12,16 +12,21 @@ namespace Aviias
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+<<<<<<< HEAD
+        // Texture2D texture;
+        Map map = new Map(12, 32);
+        Random random = new Random();
+        int prob = 3;
+        KeyboardState currentKeyboardState;
+=======
         Player player;
         Monster monster;
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
         float playerMoveSpeed;
         // Texture2D texture;
-        Map map = new Map(12, 32);
-        Random random = new Random();
-        int prob = 3;
         
+>>>>>>> ed421b6916fc902bd27fc384a3f7a465dec5df94
 
         public Game1()
         {
@@ -41,9 +46,8 @@ namespace Aviias
             // TODO: Add your initialization logic here
 
             player = new Player();
+            monster = new Monster(100, 6.0f, 0.05, 10, 5 );
             playerMoveSpeed = 8.0f;
-            monster = new Monster(100, 1.0f, 0.05, 10, 5 );
-            
             
             base.Initialize();
             map.GenerateMap(Content);
@@ -87,18 +91,21 @@ namespace Aviias
                 Exit();
 
             // TODO: Add your update logic here
+<<<<<<< HEAD
             currentKeyboardState = Keyboard.GetState();
             if (currentKeyboardState.IsKeyDown(Keys.M))
             {
                 map = new Map(12, 32);
                 map.GenerateMap(Content);
             }
+
+=======
             previousKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
-                
-            UpdatePlayer(gameTime);
-            monster.Update(player);
             UpdateMonster(gameTime);
+            UpdatePlayer(gameTime);
+            
+>>>>>>> ed421b6916fc902bd27fc384a3f7a465dec5df94
             base.Update(gameTime);
         }
 
@@ -146,10 +153,13 @@ namespace Aviias
             // TODO: Add your drawing code here
 
             spriteBatch.Begin();
+<<<<<<< HEAD
             map.Draw(spriteBatch);
+=======
             monster.Draw(spriteBatch);
             player.Draw(spriteBatch);
            
+>>>>>>> ed421b6916fc902bd27fc384a3f7a465dec5df94
             spriteBatch.End();
             base.Draw(gameTime);
         }
