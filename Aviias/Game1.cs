@@ -21,7 +21,6 @@ namespace Aviias
         Map map = new Map(12, 32);
         Random random = new Random();
         int prob = 3;
-        KeyboardState currentKeyboardState;
         
 
         public Game1()

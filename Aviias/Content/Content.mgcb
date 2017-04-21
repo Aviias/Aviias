@@ -14,7 +14,6 @@
 #---------------------------------- Content ---------------------------------#
 
 #begin air.png
-#begin test.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -25,9 +24,19 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:air.png
+
+#begin test.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
 /build:test.png
 
-#begin grass.jpg
 #begin mob.gif
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -39,6 +48,17 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:mob.gif
+
+#begin grass.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
 /build:grass.jpg
 
 #begin font.spritefont
