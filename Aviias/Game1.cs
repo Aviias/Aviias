@@ -90,12 +90,13 @@ namespace Aviias
             if (currentKeyboardState.IsKeyDown(Keys.M))
             {
                 map = new Map(12, 32);
+                map.GenerateMap(Content);
+            }
             previousKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
             UpdateMonster(gameTime);
             UpdatePlayer(gameTime);
-                map.GenerateMap(Content);
-            }
+                
             
             base.Update(gameTime);
         }
