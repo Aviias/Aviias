@@ -12,11 +12,17 @@ namespace Aviias
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Player player;
+        Monster monster;
+        KeyboardState currentKeyboardState;
+        KeyboardState previousKeyboardState;
+        float playerMoveSpeed;
         // Texture2D texture;
         Map map = new Map(12, 32);
         Random random = new Random();
         int prob = 3;
         KeyboardState currentKeyboardState;
+        
 
         public Game1()
         {
@@ -34,6 +40,11 @@ namespace Aviias
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+
+            player = new Player();
+            monster = new Monster(100, 6.0f, 0.05, 10, 5 );
+            playerMoveSpeed = 8.0f;
+            
             base.Initialize();
             map.GenerateMap(Content);
         }
@@ -46,8 +57,13 @@ namespace Aviias
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+           
+            Vector2 playerPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
+            player.Initialize(Content.Load<Texture2D>("test"), playerPosition);
 
-            // TODO: use this.Content to load your game content here
+            Vector2 monsterPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
+            monster.Initialize(Content.Load<Texture2D>("mob"), monsterPosition);
+
         }
 
         /// <summary>
@@ -75,10 +91,47 @@ namespace Aviias
             if (currentKeyboardState.IsKeyDown(Keys.M))
             {
                 map = new Map(12, 32);
+            previousKeyboardState = currentKeyboardState;
+            currentKeyboardState = Keyboard.GetState();
+            UpdateMonster(gameTime);
+            UpdatePlayer(gameTime);
                 map.GenerateMap(Content);
             }
-
+            
             base.Update(gameTime);
+        }
+
+        private void UpdateMonster(GameTime gameTime)
+        {
+            monster._pos.X = MathHelper.Clamp(monster._pos.X, 0, GraphicsDevice.Viewport.Width - monster.Width);
+            monster._pos.Y = MathHelper.Clamp(monster._pos.Y, 0, GraphicsDevice.Viewport.Height - monster.Height);
+        }
+
+        private void UpdatePlayer(GameTime gameTime)
+        {
+
+            player.Position.X = MathHelper.Clamp(player.Position.X, 0, GraphicsDevice.Viewport.Width - player.Width);
+            player.Position.Y = MathHelper.Clamp(player.Position.Y, 0, GraphicsDevice.Viewport.Height - player.Height);
+
+            if (currentKeyboardState.IsKeyDown(Keys.Left))
+            {
+                player.Position.X -= playerMoveSpeed;
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.Right))
+            {
+                player.Position.X += playerMoveSpeed;
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.Up))
+            {
+                player.Position.Y -= playerMoveSpeed;
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.Down))
+            {
+                player.Position.Y += playerMoveSpeed;
+            }
         }
 
         /// <summary>
@@ -93,6 +146,9 @@ namespace Aviias
 
             spriteBatch.Begin();
             map.Draw(spriteBatch);
+            monster.Draw(spriteBatch);
+            player.Draw(spriteBatch);
+           
             spriteBatch.End();
             base.Draw(gameTime);
         }

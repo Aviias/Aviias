@@ -14,6 +14,7 @@
 #---------------------------------- Content ---------------------------------#
 
 #begin air.png
+#begin test.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -24,8 +25,10 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:air.png
+/build:test.png
 
 #begin grass.jpg
+#begin mob.gif
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -35,6 +38,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
+/build:mob.gif
 /build:grass.jpg
 
 #begin font.spritefont
