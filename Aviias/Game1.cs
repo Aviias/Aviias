@@ -37,8 +37,9 @@ namespace Aviias
             // TODO: Add your initialization logic here
 
             player = new Player();
-            monster = new Monster(100, 6.0f, 0.05, 10, 5 );
             playerMoveSpeed = 8.0f;
+            monster = new Monster(100, 1.0f, 0.05, 10, 5 );
+            
             
             base.Initialize();
         }
@@ -82,9 +83,10 @@ namespace Aviias
             // TODO: Add your update logic here
             previousKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
-            UpdateMonster(gameTime);
-            UpdatePlayer(gameTime);
             
+            UpdatePlayer(gameTime);
+            monster.Update(player);
+            UpdateMonster(gameTime);
             base.Update(gameTime);
         }
 
