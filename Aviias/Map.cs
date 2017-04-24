@@ -19,7 +19,7 @@ namespace Aviias
         int prob;
         int columnHeight;
         const int _ironRate = 5;
-        const int _coalRate = 9;
+        const int _coalRate = 5;
         int _oreRandom = 0;
         bool _oreGeneration;
         int _treeRate = 1;
@@ -31,7 +31,7 @@ namespace Aviias
         {
             _worldHeight = worldHeight;
             _worldWidth = worldWidth;
-            columnHeight = worldHeight - 8;
+            columnHeight = worldHeight - 32;
         }
 
         string id;
@@ -59,9 +59,9 @@ namespace Aviias
                         else if (prob >= 4)
                         {
                             // Ore generation
-                            if (_worldHeight - j < 20)
+                            if (_worldHeight - j < 150)
                             {
-                                if (_worldHeight - j < 5)
+                                if (_worldHeight - j < 100)
                                 {
                                     _oreRandom = NextInt(1, 100);
                                     if (blocs[i, j - 1] != null || blocs[i - 1, j] != null && (blocs[i, j - 1].Type == "iron_ore" || blocs[i - 1, j].Type == "iron_ore")) _oreRandom /= 2;
@@ -71,7 +71,7 @@ namespace Aviias
                                         _oreGeneration = true;
                                     }
                                 }
-                                if (_worldHeight - j < 20)
+                                if (_worldHeight - j < 150)
                                 {
                                     _oreRandom = NextInt(1, 100);
                                     if (blocs[i, j - 1] != null || blocs[i - 1, j] != null && (blocs[i, j - 1].Type == "coal_ore" || blocs[i - 1, j].Type == "coal_ore")) _oreRandom /= 2;
@@ -99,7 +99,7 @@ namespace Aviias
                     {
                         if (k > 6 && l > 6 && blocs[k - 3, l - 1] != null && blocs[k - 3, l - 1].Type != "oak_wood" && blocs[k - 3, l] != null && blocs[k - 3, l].Type == "grass_side")
                         {
-                            _treeGeneration = NextInt(1, 200);
+                            _treeGeneration = NextInt(1, 400);
                             if (_treeGeneration <= _treeRate)
                             {
                                 _structureModel = structures.structures["tree"];

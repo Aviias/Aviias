@@ -90,10 +90,16 @@ namespace Aviias
 
         internal void Update(Player player)
         {
-            Vector2 direction = player.PlayerPosition;
+            float alpha = (float)Math.Atan2((player.Y - posY), (player.X - posX));
+            Vector2 direction = AngleToVector(alpha);
             Vector2 move = new Vector2(direction.X * _speed, direction.Y * _speed);
-            Vector2 newPos = new Vector2(posX + move.X, posY + move.Y);
-            _pos = newPos;
+            _pos = new Vector2(posX + move.X, posY + move.Y);
+            
+        }
+
+        Vector2 AngleToVector(float angle)
+        {
+            return new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
         }
 
         public void Draw(SpriteBatch spriteBatch)

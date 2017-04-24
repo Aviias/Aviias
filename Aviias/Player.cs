@@ -25,7 +25,15 @@ namespace Aviias
             get { return PlayerTexture.Height; }
         }
 
-      
+        public float X
+        {
+            get { return Position.X; }
+        }
+
+        public float Y
+        {
+            get { return Position.Y; }
+        }
 
         public void Initialize(Texture2D texture, Vector2 position)
         {

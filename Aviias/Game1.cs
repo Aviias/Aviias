@@ -20,7 +20,7 @@ namespace Aviias
         KeyboardState previousKeyboardState;
         float playerMoveSpeed;
         // Texture2D texture;
-        Map map = new Map(28, 50);
+        Map map = new Map(200, 200);
         Random random = new Random();
         int prob = 3;
         BoxingViewportAdapter _viewportAdapter;
@@ -80,7 +80,7 @@ namespace Aviias
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
            
-            Vector2 playerPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
+            Vector2 playerPosition = new Vector2(1500, 45 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
             player.Initialize(Content.Load<Texture2D>("test"), playerPosition);
 
             Vector2 monsterPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
@@ -112,12 +112,12 @@ namespace Aviias
             currentKeyboardState = Keyboard.GetState();
             if (currentKeyboardState.IsKeyDown(Keys.M))
             {
-                map = new Map(28, 50);
+                map = new Map(200, 200);
                 map.GenerateMap(Content);
             }
             previousKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
-            monster.Update(player);
+            
             UpdatePlayer(gameTime);
             
             UpdateMonster(gameTime);
@@ -126,16 +126,15 @@ namespace Aviias
 
         private void UpdateMonster(GameTime gameTime)
         {
-            monster._pos.X = MathHelper.Clamp(monster._pos.X, 0, GraphicsDevice.Viewport.Width - monster.Width);
-            monster._pos.Y = MathHelper.Clamp(monster._pos.Y, 0, GraphicsDevice.Viewport.Height - monster.Height);
             monster.Update(player);
+           
         }
 
         private void UpdatePlayer(GameTime gameTime)
         {
 
-            player.Position.X = MathHelper.Clamp(player.Position.X, 0, GraphicsDevice.Viewport.Width - player.Width);
-            player.Position.Y = MathHelper.Clamp(player.Position.Y, 0, GraphicsDevice.Viewport.Height - player.Height);
+            //player.Position.X = MathHelper.Clamp(player.Position.X, 0, GraphicsDevice.Viewport.Width - player.Width);
+            //player.Position.Y = MathHelper.Clamp(player.Position.Y, 0, GraphicsDevice.Viewport.Height - player.Height);
 
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
