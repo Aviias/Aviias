@@ -14,19 +14,27 @@ namespace Aviias
         readonly int _worldWidth;
         readonly int _worldHeight;
         Bloc[,] blocs;
-        public const int _scale = 32;
+        const int _scale = 16;
         Random random = new Random();
         int prob;
         int columnHeight;
+        const int _ironRate = 5;
+        const int _coalRate = 9;
+        int _oreRandom = 0;
+        bool _oreGeneration;
+        int _treeRate = 1;
+        int _treeGeneration = 0;
+        string[,] _structureModel;
+        Structure structures = new Structure();
 
         public Map(int worldHeight, int worldWidth)
         {
             _worldHeight = worldHeight;
             _worldWidth = worldWidth;
-            columnHeight = 5;
+            columnHeight = worldHeight - 8;
         }
 
-        int id;
+        string id;
 
         public Bloc[,] GenerateMap(ContentManager content)
         {
@@ -44,21 +52,81 @@ namespace Aviias
 
                 for (int j = 0; j < _worldHeight; j++)
                 {
-                    if (j == _worldHeight - 1) id = 3;
+                    if (j == _worldHeight - 1) id = "bedrock";
                     else if (j > _worldHeight - columnHeight)
                     {
-                        if (j > 0 && blocs[i, j - 1] != null && blocs[i, j - 1].Type == 0) id = 2;
-                        else if (prob >= 4) id = 4;
-                        else id = 1;
+                        if (j > 0 && blocs[i, j - 1] != null && blocs[i, j - 1].Type == "air") id = "grass_side";
+                        else if (prob >= 4)
+                        {
+                            // Ore generation
+                            if (_worldHeight - j < 20)
+                            {
+                                if (_worldHeight - j < 5)
+                                {
+                                    _oreRandom = NextInt(1, 100);
+                                    if (blocs[i, j - 1] != null || blocs[i - 1, j] != null && (blocs[i, j - 1].Type == "iron_ore" || blocs[i - 1, j].Type == "iron_ore")) _oreRandom /= 2;
+                                    if (_oreRandom <= _ironRate)
+                                    {
+                                        id = "iron_ore";
+                                        _oreGeneration = true;
+                                    }
+                                }
+                                if (_worldHeight - j < 20)
+                                {
+                                    _oreRandom = NextInt(1, 100);
+                                    if (blocs[i, j - 1] != null || blocs[i - 1, j] != null && (blocs[i, j - 1].Type == "coal_ore" || blocs[i - 1, j].Type == "coal_ore")) _oreRandom /= 2;
+                                    if (_oreRandom <= _coalRate)
+                                    {
+                                        id = "coal_ore";
+                                        _oreGeneration = true;
+                                    }
+                                }
+                            }
+                            if (!_oreGeneration) id = "stone";
+                            _oreGeneration = false;
+                        }
+                        else id = "dirt";
                         prob++;
                     }
-                    else id = 0;
-                    blocs[i,j] = new Bloc(new Vector2(i * (_scale), j * (_scale)), _scale, id, content);
+                    else id = "air";
+                    blocs[i, j] = new Bloc(new Vector2(i * (_scale), j * (_scale)), _scale, id, content);
                 }
 
-            }
+                // Structures generation
+                for (int k = 0; k < _worldWidth; k++)
+                {
+                    for (int l = 0; l < _worldHeight; l++)
+                    {
+                        if (k > 6 && l > 6 && blocs[k - 3, l - 1] != null && blocs[k - 3, l - 1].Type != "oak_wood" && blocs[k - 3, l] != null && blocs[k - 3, l].Type == "grass_side")
+                        {
+                            _treeGeneration = NextInt(1, 200);
+                            if (_treeGeneration <= _treeRate)
+                            {
+                                _structureModel = structures.structures["tree"];
+                                AddTree(k, l, _structureModel, content);
+                            }
+                        }
+                    }
+                }
+
+                // Cave generation
+                
+
+                }
 
             return blocs;
+        }
+
+        public bool isAir(int x, int y, int sizeX, int sizeY)
+        {
+            for (int width = x; width < sizeX; width++)
+            {
+                for (int height = y; height < sizeY; height++)
+                {
+
+                }
+            }
+            return true;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -67,14 +135,27 @@ namespace Aviias
             {
                 for (int j = 0; j < _worldWidth; j++)
                 {
-                    if (blocs[j,i] != null) blocs[j,i].Draw(spriteBatch);
+                    if (blocs[j, i] != null) blocs[j, i].Draw(spriteBatch);
+                }
+            }
+        }
+
+        public void AddTree(int x, int y, string[,] treeModel, ContentManager content)
+        {
+            int lengthX = treeModel.GetLength(0);
+            int lengthY = treeModel.GetLength(1);
+            for (int i = 0; i < lengthY; i++)
+            {
+                for (int j = 0; j < lengthX; j++)
+                {
+                    if (x - lengthY >= 0 && y - lengthX >= 0 && treeModel[j, i] != null && treeModel[j, i] != "air" && blocs[x - lengthY + i, y - lengthX + j] != null) blocs[x - lengthY + i, y - lengthX + j]._texture = content.Load<Texture2D>(treeModel[j, i]);
                 }
             }
         }
 
         int NextInt(int min, int max)
         {
-             return random.Next(min, max);
+            return random.Next(min, max);
         }
     }
 }

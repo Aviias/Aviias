@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
+using MonoGame.Extended.ViewportAdapters;
 using System;
 
 namespace Aviias
@@ -18,16 +20,32 @@ namespace Aviias
         KeyboardState previousKeyboardState;
         float playerMoveSpeed;
         // Texture2D texture;
-        Map map = new Map(12, 32);
+        Map map = new Map(28, 50);
         Random random = new Random();
         int prob = 3;
-        
+        BoxingViewportAdapter _viewportAdapter;
+        const int WindowWidth = 900;
+        const int WindowHeight = 600;
+        Camera2D _camera;
+
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            graphics.PreferredBackBufferHeight = WindowHeight;
+            graphics.PreferredBackBufferWidth = WindowWidth;
+
             Window.AllowUserResizing = true;
+        }
+
+        public Camera2D Camera
+        {
+            get
+            {
+                return _camera;
+            }
         }
 
         /// <summary>
@@ -47,6 +65,10 @@ namespace Aviias
             
             base.Initialize();
             map.GenerateMap(Content);
+
+            _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, WindowWidth, WindowHeight);
+            _camera = new Camera2D(_viewportAdapter);
+            _camera.LookAt(new Vector2(player.Position.X + 10, player.Position.Y + 15));
         }
 
         /// <summary>
@@ -90,7 +112,7 @@ namespace Aviias
             currentKeyboardState = Keyboard.GetState();
             if (currentKeyboardState.IsKeyDown(Keys.M))
             {
-                map = new Map(12, 32);
+                map = new Map(28, 50);
                 map.GenerateMap(Content);
             }
             previousKeyboardState = currentKeyboardState;
@@ -117,21 +139,25 @@ namespace Aviias
 
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
+                Camera.Move(new Vector2(-playerMoveSpeed, 0));
                 player.Position.X -= playerMoveSpeed;
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Right))
             {
+                Camera.Move(new Vector2(+playerMoveSpeed, 0));
                 player.Position.X += playerMoveSpeed;
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Up))
             {
+                Camera.Move(new Vector2(0, -playerMoveSpeed));
                 player.Position.Y -= playerMoveSpeed;
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Down))
             {
+                Camera.Move(new Vector2(0, +playerMoveSpeed));
                 player.Position.Y += playerMoveSpeed;
             }
         }
@@ -146,7 +172,7 @@ namespace Aviias
 
             // TODO: Add your drawing code here
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
             map.Draw(spriteBatch);
             monster.Draw(spriteBatch);
             player.Draw(spriteBatch);
