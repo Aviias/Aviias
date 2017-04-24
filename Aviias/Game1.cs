@@ -95,9 +95,9 @@ namespace Aviias
             }
             previousKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
-                
-            UpdatePlayer(gameTime);
             monster.Update(player);
+            UpdatePlayer(gameTime);
+            
             UpdateMonster(gameTime);
             base.Update(gameTime);
         }
@@ -106,6 +106,7 @@ namespace Aviias
         {
             monster._pos.X = MathHelper.Clamp(monster._pos.X, 0, GraphicsDevice.Viewport.Width - monster.Width);
             monster._pos.Y = MathHelper.Clamp(monster._pos.Y, 0, GraphicsDevice.Viewport.Height - monster.Height);
+            monster.Update(player);
         }
 
         private void UpdatePlayer(GameTime gameTime)
