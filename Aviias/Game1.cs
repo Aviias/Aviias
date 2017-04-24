@@ -18,7 +18,7 @@ namespace Aviias
         KeyboardState previousKeyboardState;
         float playerMoveSpeed;
         // Texture2D texture;
-        Map map = new Map(12, 32);
+        Map map = new Map(28, 50);
         Random random = new Random();
         int prob = 3;
         
@@ -89,7 +89,7 @@ namespace Aviias
             currentKeyboardState = Keyboard.GetState();
             if (currentKeyboardState.IsKeyDown(Keys.M))
             {
-                map = new Map(12, 32);
+                map = new Map(28, 50);
                 map.GenerateMap(Content);
             }
             previousKeyboardState = currentKeyboardState;
