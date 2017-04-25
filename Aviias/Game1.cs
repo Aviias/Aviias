@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.ViewportAdapters;
 using System;
+using System.Collections.Generic;
 
 namespace Aviias
 {
@@ -27,6 +28,8 @@ namespace Aviias
         const int WindowWidth = 900;
         const int WindowHeight = 600;
         Camera2D _camera;
+        SpriteFont font;
+        List<Monster> monsters = new List<Monster>();
 
 
         public Game1()
@@ -61,7 +64,8 @@ namespace Aviias
             player = new Player();
             playerMoveSpeed = 8.0f;
             monster = new Monster(100, 1.0f, 0.05, 10, 5 );
-            
+            // Add a new monster in the list
+            monsters.Add(monster);
             
             base.Initialize();
             map.GenerateMap(Content);
@@ -79,6 +83,7 @@ namespace Aviias
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            font = Content.Load<SpriteFont>("font");
            
             Vector2 playerPosition = new Vector2(1500, 45 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
             player.Initialize(Content.Load<Texture2D>("test"), playerPosition);
@@ -118,16 +123,60 @@ namespace Aviias
             previousKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
             
-            UpdatePlayer(gameTime);
-            
+            UpdatePlayer(gameTime);          
             UpdateMonster(gameTime);
+            UpdateCollision(gameTime);
             base.Update(gameTime);
+        }
+
+        private void UpdateCollision(GameTime gameTime)
+        {
+            Rectangle playerRect;
+            Rectangle monsterRect;
+
+            playerRect = new Rectangle((int)player.X, (int)player.Y, player.Width, player.Height);
+
+            for(int i = 0; i<monsters.Count; i++)
+            {
+                monsterRect = new Rectangle((int)monsters[i].posX, (int)monsters[i].posY, monsters[i].Width, monsters[i].Height);
+                if(playerRect.Intersects(monsterRect))
+                {
+                    // Collision between player and monster
+                    if (Math.Abs(playerRect.Center.X - monsterRect.Center.X) > Math.Abs(playerRect.Center.Y - monsterRect.Center.Y) )
+                    {
+                        if (playerRect.Center.X < monsterRect.Center.X)
+                        {
+                            monster.posX = playerRect.Right - monster.moveSpeed;
+                        }
+                        if (playerRect.Center.X > monsterRect.Center.X)
+                        {
+                            monster.posX = playerRect.Left - monster.Width - monster.moveSpeed;
+                        }
+                    }
+                    else
+                    {
+                        if (playerRect.Center.Y < monsterRect.Center.Y)
+                        {
+                            monster.posY = playerRect.Bottom - monster.moveSpeed;
+                        }
+                        if (playerRect.Center.Y > monsterRect.Center.Y)
+                        {
+                            monster.posY = playerRect.Top - monster.Height - monster.moveSpeed;
+                        }
+                    }
+
+                    
+
+
+                }
+                
+            }
+
         }
 
         private void UpdateMonster(GameTime gameTime)
         {
             monster.Update(player);
-           
         }
 
         private void UpdatePlayer(GameTime gameTime)

@@ -28,6 +28,7 @@ namespace Aviias
         public float X
         {
             get { return Position.X; }
+           
         }
 
         public float Y
