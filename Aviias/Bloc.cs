@@ -34,5 +34,10 @@ namespace Aviias
             get { return _type; }
             set { _type = value; }
         }
+
+        public void ChangeBloc(string newTexture, ContentManager content)
+        {
+            _texture = content.Load<Texture2D>(newTexture);
+        }
     }
 }
