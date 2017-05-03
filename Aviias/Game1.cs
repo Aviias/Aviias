@@ -5,6 +5,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.ViewportAdapters;
 using System;
 using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace Aviias
 {
@@ -30,7 +31,8 @@ namespace Aviias
         Camera2D _camera;
         SpriteFont font;
         List<Monster> monsters = new List<Monster>();
-
+        MouseState mouseState = Mouse.GetState();
+        Bloc bloc;
 
         public Game1()
         {
@@ -69,6 +71,7 @@ namespace Aviias
             
             base.Initialize();
             map.GenerateMap(Content);
+            this.IsMouseVisible = true;
 
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, WindowWidth, WindowHeight);
             _camera = new Camera2D(_viewportAdapter);
@@ -122,7 +125,7 @@ namespace Aviias
             }
             previousKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
-            
+           
             UpdatePlayer(gameTime);          
             UpdateMonster(gameTime);
             UpdateCollision(gameTime);
@@ -208,6 +211,17 @@ namespace Aviias
                 Camera.Move(new Vector2(0, +playerMoveSpeed));
                 player.Position.Y += playerMoveSpeed;
             }
+
+            if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Left) == System.Windows.Forms.MouseButtons.Left)
+            {
+                
+                    Vector2 posBloc = new Vector2(mouseState.X, mouseState.Y);
+                    map.FindBreakBlock(posBloc, player, Content);
+                    //player.breakBloc(bloc, player.CursorPos(), Content);
+                
+                 
+            }
+
         }
 
         /// <summary>
@@ -221,10 +235,17 @@ namespace Aviias
             // TODO: Add your drawing code here
 
             spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            map.Draw(spriteBatch);
+            map.Draw(spriteBatch, font);
             monster.Draw(spriteBatch);
             player.Draw(spriteBatch);
-           
+            spriteBatch.DrawString(font,Convert.ToString(player.CursorPos().X), new Vector2(10, 10), Color.Red);
+            spriteBatch.DrawString(font, Convert.ToString(player.CursorPos().Y), new Vector2(200, 10), Color.Red);
+            if (bloc != null)
+            {
+                spriteBatch.DrawString(font, Convert.ToString(bloc.GetPosBlock.X), new Vector2(10, 50), Color.Red);
+                spriteBatch.DrawString(font, Convert.ToString(bloc.GetPosBlock.Y), new Vector2(200, 50), Color.Red);
+            }
+            
             spriteBatch.End();
             base.Draw(gameTime);
         }

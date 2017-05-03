@@ -110,9 +110,9 @@ namespace Aviias
                 }
 
                 // Cave generation
-                
 
-                }
+                blocs[0, 0] = new Bloc(new Vector2(0, 0), _scale, "bedrock", content);
+            }
 
             return blocs;
         }
@@ -129,15 +129,25 @@ namespace Aviias
             return true;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        
+
+        public void Draw(SpriteBatch spriteBatch, SpriteFont font)
         {
             for (int i = 0; i < _worldHeight; i++)
             {
                 for (int j = 0; j < _worldWidth; j++)
                 {
                     if (blocs[j, i] != null) blocs[j, i].Draw(spriteBatch);
+                    if (j== 1 && i == 1)
+                    {
+                        spriteBatch.DrawString(font, Convert.ToString(blocs[j,i].GetPosBlock.X), new Vector2(-10, -10), Color.Red);
+                        spriteBatch.DrawString(font, Convert.ToString(blocs[j,i].GetPosBlock.Y), new Vector2(-20, -20), Color.Red);
+                    }
+                    
                 }
             }
+
+
         }
 
         public void AddTree(int x, int y, string[,] treeModel, ContentManager content)
@@ -151,6 +161,21 @@ namespace Aviias
                     if (x - lengthY >= 0 && y - lengthX >= 0 && treeModel[j, i] != null && treeModel[j, i] != "air" && blocs[x - lengthY + i, y - lengthX + j] != null) blocs[x - lengthY + i, y - lengthX + j]._texture = content.Load<Texture2D>(treeModel[j, i]);
                 }
             }
+        }
+
+        public void FindBreakBlock(Vector2 pos, Player player, ContentManager Content)
+        {
+            
+            for (int i = 0; i < _worldHeight - 1; i++)
+            {
+                for (int j = 0; i < _worldWidth - 1; i++)
+                {
+                    if (blocs[j,i].GetPosBlock == pos)
+                    {                       
+                        player.breakBloc(blocs[j, i], pos, Content, blocs, i, j);
+                    }
+                }
+            }          
         }
 
         int NextInt(int min, int max)
