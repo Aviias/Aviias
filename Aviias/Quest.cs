@@ -6,7 +6,24 @@ using System.Threading.Tasks;
 
 namespace Aviias
 {
-    class Quest
+    public class Quest
     {
+        Ressource[] _reward;
+        string _type;
+        int _idStartNpc;
+        int _idEndNpc;
+        string _spitch;
+
+        public Quest()
+        {
+            CreateSpitch();
+        }
+
+        void CreateSpitch()
+        {
+            _spitch = "testpvofdvoidijgojerignreingernglkfdjgklmjdfkgjlmdfgjlfdmjglfdjgkldfmjgldfmgkjlmdfgkjdflmgkjdflmgkjdflmg";
+        }
+
+        public string Spitch => _spitch;
     }
 }

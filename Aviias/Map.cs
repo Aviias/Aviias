@@ -200,13 +200,15 @@ namespace Aviias
             return wallCounter;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, int x, int y)
         {
-            for (int i = 0; i < _worldHeight; i++)
+            int xx = x / 16;
+            int yy = y / 16;
+            for (int i = yy - 20; i < yy + 20; i++)
             {
-                for (int j = 0; j < _worldWidth; j++)
+                for (int j = xx - 30; j < xx + 30; j++)
                 {
-                    if (blocs[j, i] != null) blocs[j, i].Draw(spriteBatch);
+                    if (i >= 0 && j >= 0 && i < _worldHeight && j < _worldWidth && blocs[j, i] != null) blocs[j, i].Draw(spriteBatch);
                 }
             }
         }

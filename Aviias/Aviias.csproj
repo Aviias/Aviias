@@ -47,6 +47,7 @@
     <Compile Include="Map.cs" />
     <Compile Include="Monster.cs" />
     <Compile Include="NeuronalNetwork.cs" />
+    <Compile Include="NPC.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="Ressource.cs" />
     <Compile Include="Structure.cs" />
     <Compile Include="Stuff.cs" />
+    <Compile Include="Text.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Extended, Version=0.6.377.0, Culture=neutral, processorArchitecture=MSIL">

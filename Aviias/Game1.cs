@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.ViewportAdapters;
 using System;
+using System.Collections.Generic;
 
 namespace Aviias
 {
@@ -20,14 +21,15 @@ namespace Aviias
         KeyboardState previousKeyboardState;
         float playerMoveSpeed;
         // Texture2D texture;
-        Map map = new Map(200, 200);
+        Map map = new Map(100, 100);
         Random random = new Random();
         int prob = 3;
         BoxingViewportAdapter _viewportAdapter;
         const int WindowWidth = 900;
         const int WindowHeight = 600;
         Camera2D _camera;
-
+        SpriteFont msg_font;
+        List<NPC> _npc;
 
         public Game1()
         {
@@ -61,14 +63,15 @@ namespace Aviias
             player = new Player();
             playerMoveSpeed = 8.0f;
             monster = new Monster(100, 1.0f, 0.05, 10, 5 );
-            
-            
+
             base.Initialize();
             map.GenerateMap(Content);
 
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, WindowWidth, WindowHeight);
             _camera = new Camera2D(_viewportAdapter);
             _camera.LookAt(new Vector2(player.Position.X + 10, player.Position.Y + 15));
+            _npc = new List<NPC>(8);
+            _npc.Add(new NPC(Content, "pnj", spriteBatch));
         }
 
         /// <summary>
@@ -81,7 +84,7 @@ namespace Aviias
             spriteBatch = new SpriteBatch(GraphicsDevice);
            
             Vector2 playerPosition = new Vector2(1500, 45 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
-            player.Initialize(Content.Load<Texture2D>("test"), playerPosition);
+            player.Initialize(Content.Load<Texture2D>("test"), playerPosition, Content);
 
             Vector2 monsterPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
             monster.Initialize(Content.Load<Texture2D>("mob"), monsterPosition);
@@ -159,6 +162,21 @@ namespace Aviias
                 Camera.Move(new Vector2(0, +playerMoveSpeed));
                 player.Position.Y += playerMoveSpeed;
             }
+            if (currentKeyboardState.IsKeyDown(Keys.P))
+            {
+                if (player._displayPos) player._displayPos = false;
+                else player._displayPos = true;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.A))
+            {
+                player.AddStr("a");
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.I))
+            {
+                foreach (NPC npc in _npc) npc.Interact(player);
+            }
+
+
         }
 
         /// <summary>
@@ -172,10 +190,11 @@ namespace Aviias
             // TODO: Add your drawing code here
 
             spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            map.Draw(spriteBatch);
+            map.Draw(spriteBatch, (int)player.Position.X, (int)player.Position.Y);
             monster.Draw(spriteBatch);
             player.Draw(spriteBatch);
-           
+            foreach (NPC npc in _npc) npc.Draw(spriteBatch);
+            foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }
