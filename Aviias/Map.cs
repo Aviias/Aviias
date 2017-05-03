@@ -135,7 +135,7 @@ namespace Aviias
                     {
                         if (k > 6 && l > 6 && blocs[k - 3, l] != null && blocs[k - 3, l].Type == "grass_side")
                         {
-                            _treeGeneration = NextInt(1, 1000);
+                            _treeGeneration = NextInt(1, 3000);
                             if (_treeGeneration <= _treeRate)
                             {
                                 _structureModel = structures.structures["tree"];
@@ -147,11 +147,11 @@ namespace Aviias
 
                 blocs[0, 0] = new Bloc(new Vector2(0, 0), _scale, "bedrock", content);
                 // Cave generation
-                for (int o = 150; o < _worldHeight; o++)
+                for (int o = 180; o < _worldHeight; o++)
                 {
                     for (int p = 10; p < _worldWidth; p++)
                     {
-                        if (p < 190 && o < 190 && blocs[p, o] != null && (NextInt(0, 9000) < _caveWallRate)) FillAir(p, o, content);
+                        if (p < 190 && o < 190 && blocs[p, o] != null && (NextInt(0, 12000) < _caveWallRate)) FillAir(p, o, content);
                     }
                 }
             }
@@ -161,8 +161,8 @@ namespace Aviias
 
         public void FillAir(int x, int y, ContentManager content)
         {
-             int caveRandomX = NextInt(2, 4);
-             int caveRandomY = NextInt(1, 5);
+            int caveRandomX = NextInt(2, 4);
+            int caveRandomY = NextInt(1, 5);
 
             for (int i = y - caveRandomY; i < y + caveRandomY; i++)
             {
@@ -202,27 +202,18 @@ namespace Aviias
         }
 
         public void Draw(SpriteBatch spriteBatch, int x, int y)
-
-        public void Draw(SpriteBatch spriteBatch, SpriteFont font)
         {
             int xx = x / 16;
             int yy = y / 16;
-            for (int i = yy - 20; i < yy + 20; i++)
+            for (int i = yy - 60; i < yy + 60; i++)
             {
-                for (int j = xx - 30; j < xx + 30; j++)
+                for (int j = xx - 80; j < xx + 80; j++)
                 {
                     if (i >= 0 && j >= 0 && i < _worldHeight && j < _worldWidth && blocs[j, i] != null) blocs[j, i].Draw(spriteBatch);
-                    if (j== 1 && i == 1)
-                    {
-                        spriteBatch.DrawString(font, Convert.ToString(blocs[j,i].GetPosBlock.X), new Vector2(-10, -10), Color.Red);
-                        spriteBatch.DrawString(font, Convert.ToString(blocs[j,i].GetPosBlock.Y), new Vector2(-20, -20), Color.Red);
-                    }
-                    
                 }
             }
-
-
         }
+
 
         public void AddTree(int x, int y, string[,] treeModel, ContentManager content)
         {
@@ -239,9 +230,9 @@ namespace Aviias
 
         bool isThereATreeHere(int x, int y)
         {
-            for(int i = y - 20; i < y + 10; i++)
+            for (int i = y - 20; i < y + 10; i++)
             {
-                for(int j = x - 20; j < x + 10; j++)
+                for (int j = x - 20; j < x + 10; j++)
                 {
                     if (blocs[i, j] != null && (blocs[i, j].Type == "oak_wood" || blocs[i, j].Type == "oak_leaves")) return true;
                 }
@@ -251,17 +242,17 @@ namespace Aviias
 
         public void FindBreakBlock(Vector2 pos, Player player, ContentManager Content)
         {
-            
+
             for (int i = 0; i < _worldHeight - 1; i++)
             {
                 for (int j = 0; i < _worldWidth - 1; i++)
                 {
-                    if (blocs[j,i].GetPosBlock == pos)
-                    {                       
+                    if (blocs[j, i].GetPosBlock == pos)
+                    {
                         player.breakBloc(blocs[j, i], pos, Content, blocs, i, j);
                     }
                 }
-            }          
+            }
         }
 
         int NextInt(int min, int max)

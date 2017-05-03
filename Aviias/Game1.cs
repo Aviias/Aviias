@@ -22,12 +22,12 @@ namespace Aviias
         KeyboardState previousKeyboardState;
         float playerMoveSpeed;
         // Texture2D texture;
-        Map map = new Map(100, 100);
+        Map map = new Map(300, 1000);
         Random random = new Random();
         int prob = 3;
         BoxingViewportAdapter _viewportAdapter;
-        const int WindowWidth = 900;
-        const int WindowHeight = 600;
+        const int WindowWidth = 1920;
+        const int WindowHeight = 1080;
         Camera2D _camera;
         SpriteFont msg_font;
         List<NPC> _npc;
