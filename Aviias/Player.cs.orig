@@ -20,12 +20,15 @@ namespace Aviias
         public Vector2 Position;
         public bool Active;
         public int Health;
+<<<<<<< HEAD
         Text text;
         public bool _displayPos;
         string _str;
         List<Quest> _activeQuest;
         List<Ressource> _inventory;
+=======
         
+>>>>>>> feature
 
         public int Width
         {
@@ -63,13 +66,16 @@ namespace Aviias
             get { return Position; }
         }
 
+<<<<<<< HEAD
         public void AddQuest(Quest quest)
         {
             _activeQuest.Add(quest);
         }
-        
+
+=======
         public Vector2 CursorPos()
-        {             
+        {
+             
             int posX = Cursor.Position.X;
             int posY = Cursor.Position.Y;
 
@@ -92,6 +98,7 @@ namespace Aviias
         }
 
 
+>>>>>>> feature
 
         public void Draw(SpriteBatch spriteBatch)
         {

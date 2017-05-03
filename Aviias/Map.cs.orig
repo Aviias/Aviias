@@ -14,39 +14,33 @@ namespace Aviias
         readonly int _worldWidth;
         readonly int _worldHeight;
         Bloc[,] blocs;
-        int _scale;
+        const int _scale = 16;
         Random random = new Random();
         int prob;
         int columnHeight;
-<<<<<<< HEAD
         const int _ironRate = 5;
         const int _coalRate = 5;
         int _oreRandom = 0;
-=======
-        int _ironRate;
-        int _coalRate;
-        int _oreRandom;
->>>>>>> -Bug fix
         bool _oreGeneration;
-        int _treeRate;
+        int _treeRate = 1;
         int _treeGeneration;
         string[,] _structureModel;
         Structure structures = new Structure();
         int _caveWallRate;
+        int _mountainRate = 2;
+        int _mountainViolence = 2;
+        int _mountainStep;
+        int _mountainProb;
+        bool _isMountain;
+        int _mountainSize;
+        int _mtest;
 
         public Map(int worldHeight, int worldWidth)
         {
             _worldHeight = worldHeight;
             _worldWidth = worldWidth;
-<<<<<<< HEAD
-            columnHeight = worldHeight - 32;
-=======
-            columnHeight = worldHeight - 8;
-            _ironRate = 5;
-            _coalRate = 9;
-            _treeRate = 1;
-            _scale = 16;
->>>>>>> -Bug fix
+            columnHeight = worldHeight / 2;
+            _caveWallRate = 1;
         }
 
         string id;
@@ -57,10 +51,37 @@ namespace Aviias
 
             for (int i = 0; i < _worldWidth; i++)
             {
-                prob = NextInt(1, 100);
+                if (_mountainStep <= 0)
+                {
+                    _mountainStep = 0;
+                    _isMountain = false;
+                }
+                if (_mountainStep == 0)
+                {
+                    _mountainProb = NextInt(1, 100);
+                    if (_mountainProb < _mountainRate)
+                    {
+                        _mountainStep = 10;
+                        _isMountain = true;
+                        _mountainSize = NextInt(8, 20);
+                    }
+                }
+                if (_isMountain)
+                {
+                    if (_mountainStep < _mountainSize / 2) _mountainProb = NextInt(0, _mountainViolence);
+                    else _mountainProb = NextInt(-_mountainViolence, 0);
+                    columnHeight += _mountainProb;
+                    _mountainStep--;
 
-                if (prob <= 15) columnHeight++;
-                if (prob >= 85) columnHeight--;
+                }
+                else
+                {
+                    prob = NextInt(1, 100);
+
+                    if (prob <= 15) columnHeight++;
+                    if (prob >= 85) columnHeight--;
+                }
+
                 if (columnHeight < 3) columnHeight = 3;
 
                 prob = NextInt(1, 3);
@@ -108,13 +129,13 @@ namespace Aviias
                 }
 
                 // Structures generation
-                for (int k = 0; k < _worldWidth; k++)
+                for (int k = 5; k < _worldWidth - 5; k++)
                 {
-                    for (int l = 0; l < _worldHeight; l++)
+                    for (int l = 5; l < _worldHeight - 5; l++)
                     {
-                        if (k > 6 && l > 6 && blocs[k - 3, l - 1] != null && blocs[k - 3, l - 1].Type != "oak_wood" && blocs[k - 3, l] != null && blocs[k - 3, l].Type == "grass_side")
+                        if (k > 6 && l > 6 && blocs[k - 3, l] != null && blocs[k - 3, l].Type == "grass_side")
                         {
-                            _treeGeneration = NextInt(1, 400);
+                            _treeGeneration = NextInt(1, 1000);
                             if (_treeGeneration <= _treeRate)
                             {
                                 _structureModel = structures.structures["tree"];
@@ -125,29 +146,35 @@ namespace Aviias
                 }
 
                 // Cave generation
-                for (int k = 0; k < _worldWidth; k++)
+<<<<<<< HEAD
+                for (int o = 150; o < _worldHeight; o++)
                 {
-                    for (int l = 0; l < _worldHeight; l++)
+                    for (int p = 10; p < _worldWidth; p++)
                     {
-
+                        if (p < 190 && o < 190 && blocs[p, o] != null && (NextInt(0, 9000) < _caveWallRate)) FillAir(p, o, content);
                     }
                 }
+=======
 
+                blocs[0, 0] = new Bloc(new Vector2(0, 0), _scale, "bedrock", content);
+>>>>>>> feature
             }
 
             return blocs;
         }
 
-        public bool isAir(int x, int y, int sizeX, int sizeY)
+        public void FillAir(int x, int y, ContentManager content)
         {
-            for (int width = x; width < sizeX; width++)
-            {
-                for (int height = y; height < sizeY; height++)
-                {
+             int caveRandomX = NextInt(2, 4);
+             int caveRandomY = NextInt(1, 5);
 
+            for (int i = y - caveRandomY; i < y + caveRandomY; i++)
+            {
+                for (int j = x - caveRandomX; j < x + caveRandomX; j++)
+                {
+                    if (blocs[j, i] != null && blocs[j, i].Type != "bedrock") blocs[j, i]._texture = content.Load<Texture2D>("air");
                 }
             }
-            return true;
         }
 
         public int GetAdjacentWalls(int x, int y, int scopeX, int scopeY)
@@ -168,7 +195,7 @@ namespace Aviias
                 {
                     if (!(iX == x && iY == y))
                     {
-                        if (IsWall(iX, iY))
+                        if (blocs[iX, iY] != null && blocs[iX, iY].Type == "air")
                         {
                             wallCounter += 1;
                         }
@@ -178,22 +205,35 @@ namespace Aviias
             return wallCounter;
         }
 
-        public void Draw(SpriteBatch spriteBatch, int playerX, int playerY)
+<<<<<<< HEAD
+        public void Draw(SpriteBatch spriteBatch, int x, int y)
+=======
+        
+
+        public void Draw(SpriteBatch spriteBatch, SpriteFont font)
+>>>>>>> feature
         {
-            /*     for (int i = ConvertPos(playerY) - 50; i < ConvertPos(playerY) + 50; i++)
-                 {
-                     for (int j = ConvertPos(playerX) - 50; j < ConvertPos(playerX) + 50; j++)
-                     {
-                         if (i > 0 && j > 0 && i < _worldHeight && j < _worldWidth && blocs[j, i] != null) blocs[j, i].Draw(spriteBatch);
-                     }
-                 }*/
-            for (int i = 0; i < _worldHeight; i++)
+            int xx = x / 16;
+            int yy = y / 16;
+            for (int i = yy - 20; i < yy + 20; i++)
             {
-                for (int j = 0; j < _worldWidth; j++)
+                for (int j = xx - 30; j < xx + 30; j++)
                 {
+<<<<<<< HEAD
+                    if (i >= 0 && j >= 0 && i < _worldHeight && j < _worldWidth && blocs[j, i] != null) blocs[j, i].Draw(spriteBatch);
+=======
                     if (blocs[j, i] != null) blocs[j, i].Draw(spriteBatch);
+                    if (j== 1 && i == 1)
+                    {
+                        spriteBatch.DrawString(font, Convert.ToString(blocs[j,i].GetPosBlock.X), new Vector2(-10, -10), Color.Red);
+                        spriteBatch.DrawString(font, Convert.ToString(blocs[j,i].GetPosBlock.Y), new Vector2(-20, -20), Color.Red);
+                    }
+                    
+>>>>>>> feature
                 }
-            } 
+            }
+
+
         }
 
         public void AddTree(int x, int y, string[,] treeModel, ContentManager content)
@@ -204,14 +244,36 @@ namespace Aviias
             {
                 for (int j = 0; j < lengthX; j++)
                 {
-                    if (x - lengthY >= 0 && y - lengthX >= 0 && treeModel[j, i] != null && treeModel[j, i] != "air" && blocs[x - lengthY + i, y - lengthX + j] != null) blocs[x - lengthY + i, y - lengthX + j]._texture = content.Load<Texture2D>(treeModel[j, i]);
+                    if (x - lengthY >= 0 && y - lengthX >= 0 && treeModel[j, i] != null && treeModel[j, i] != "air" && blocs[x - lengthY + i, y - lengthX + j] != null) blocs[x - lengthY + i, y - lengthX + j].ChangeBloc(treeModel[j, i], content);
                 }
             }
         }
 
-        public int ConvertPos (int position)
+        bool isThereATreeHere(int x, int y)
         {
-            return position;
+            for(int i = y - 20; i < y + 10; i++)
+            {
+                for(int j = x - 20; j < x + 10; j++)
+                {
+                    if (blocs[i, j] != null && (blocs[i, j].Type == "oak_wood" || blocs[i, j].Type == "oak_leaves")) return true;
+                }
+            }
+            return false;
+        }
+
+        public void FindBreakBlock(Vector2 pos, Player player, ContentManager Content)
+        {
+            
+            for (int i = 0; i < _worldHeight - 1; i++)
+            {
+                for (int j = 0; i < _worldWidth - 1; i++)
+                {
+                    if (blocs[j,i].GetPosBlock == pos)
+                    {                       
+                        player.breakBloc(blocs[j, i], pos, Content, blocs, i, j);
+                    }
+                }
+            }          
         }
 
         int NextInt(int min, int max)

@@ -15,6 +15,8 @@ namespace Aviias
         public Texture2D _texture;
         float _scale;
         string _type;
+        public bool _isBreakable;
+        bool _isAir;
 
         public Bloc(Vector2 position, float scale, string type, ContentManager content)
         {
@@ -22,11 +24,34 @@ namespace Aviias
             _texture = content.Load<Texture2D>(type);
             _scale = scale;
             _type = type;
+            if (type != "air")
+            {
+                _isBreakable = true;
+                _isAir = false;
+            }
+            else
+            {
+                _isBreakable = false;
+                _isAir = true;
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, _position, null, Color.White, 0f, Vector2.Zero, _scale / 64, SpriteEffects.None, 0f);
+        }
+
+        
+
+        public void setBloc(Bloc bloc, Vector2 position, ContentManager content)
+        {
+            
+        }
+
+
+        public Vector2 GetPosBlock
+        {
+            get { return _position; }
         }
 
         public string Type

@@ -145,6 +145,7 @@ namespace Aviias
                     }
                 }
 
+                blocs[0, 0] = new Bloc(new Vector2(0, 0), _scale, "bedrock", content);
                 // Cave generation
                 for (int o = 150; o < _worldHeight; o++)
                 {
@@ -201,6 +202,8 @@ namespace Aviias
         }
 
         public void Draw(SpriteBatch spriteBatch, int x, int y)
+
+        public void Draw(SpriteBatch spriteBatch, SpriteFont font)
         {
             int xx = x / 16;
             int yy = y / 16;
@@ -209,8 +212,16 @@ namespace Aviias
                 for (int j = xx - 30; j < xx + 30; j++)
                 {
                     if (i >= 0 && j >= 0 && i < _worldHeight && j < _worldWidth && blocs[j, i] != null) blocs[j, i].Draw(spriteBatch);
+                    if (j== 1 && i == 1)
+                    {
+                        spriteBatch.DrawString(font, Convert.ToString(blocs[j,i].GetPosBlock.X), new Vector2(-10, -10), Color.Red);
+                        spriteBatch.DrawString(font, Convert.ToString(blocs[j,i].GetPosBlock.Y), new Vector2(-20, -20), Color.Red);
+                    }
+                    
                 }
             }
+
+
         }
 
         public void AddTree(int x, int y, string[,] treeModel, ContentManager content)
@@ -236,6 +247,21 @@ namespace Aviias
                 }
             }
             return false;
+        }
+
+        public void FindBreakBlock(Vector2 pos, Player player, ContentManager Content)
+        {
+            
+            for (int i = 0; i < _worldHeight - 1; i++)
+            {
+                for (int j = 0; i < _worldWidth - 1; i++)
+                {
+                    if (blocs[j,i].GetPosBlock == pos)
+                    {                       
+                        player.breakBloc(blocs[j, i], pos, Content, blocs, i, j);
+                    }
+                }
+            }          
         }
 
         int NextInt(int min, int max)

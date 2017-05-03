@@ -46,6 +46,11 @@ namespace Aviias
             get { return _texture.Height; }
         }
 
+        public float moveSpeed
+        {
+            get { return _speed; }
+        }
+
         public void Initialize(Texture2D texture, Vector2 pos)
         {
             _pos = pos;
@@ -80,11 +85,13 @@ namespace Aviias
         public float posX
         {
             get { return _pos.X; }
+            set { _pos.X = value; }
         }
 
         public float posY
         {
             get { return _pos.Y; }
+            set { _pos.Y = value; }
         }
 
 
