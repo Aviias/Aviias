@@ -15,7 +15,7 @@ namespace Aviias
         public Texture2D _texture;
         float _scale;
         string _type;
-        public bool _isBreakable;
+        bool _isBreakable;
         bool _isAir;
 
         public Bloc(Vector2 position, float scale, string type, ContentManager content)
@@ -48,6 +48,10 @@ namespace Aviias
             
         }
 
+        public bool IsBreakable
+        {
+            get { return _isBreakable; }
+        }
 
         public Vector2 GetPosBlock
         {
