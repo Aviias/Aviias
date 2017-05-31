@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,12 +36,22 @@ namespace Aviias
         int _mountainSize;
         int _mtest;
 
+        public int WorldWidth
+        {
+            get { return _worldWidth; }
+        }
+
+        public int WorldHeight
+        {
+            get { return _worldHeight; }
+        }
+
         public Map(int worldHeight, int worldWidth)
         {
             _worldHeight = worldHeight;
             _worldWidth = worldWidth;
             columnHeight = worldHeight / 2;
-            _caveWallRate = 1;
+            _caveWallRate = 2;
         }
 
         string id;
@@ -147,7 +158,7 @@ namespace Aviias
 
                 blocs[0, 0] = new Bloc(new Vector2(0, 0), _scale, "bedrock", content);
                 // Cave generation
-                for (int o = 180; o < _worldHeight; o++)
+                for (int o = 130; o < _worldHeight; o++)
                 {
                     for (int p = 10; p < _worldWidth; p++)
                     {
@@ -240,24 +251,54 @@ namespace Aviias
             return false;
         }
 
-        public void FindBreakBlock(Vector2 pos, Player player, ContentManager Content)
+        public void FindBreakBlock(Vector2 pos, Player player, ContentManager Content, StreamWriter log)
         {
+            float clickCoordX = pos.X ;
+            float clickCoordY = (float)1.007 * pos.Y + (float)8.06; 
+            int i = 0;
+            int j = 0;
+            bool isFind = false;
 
-            for (int i = 0; i < _worldHeight - 1; i++)
+            //log.WriteLine("=========================   clickCoordX = " + clickCoordX + ", clickCoordY = " + clickCoordY);
+
+            while ( (i < _worldHeight) && (isFind == false))
             {
-                for (int j = 0; i < _worldWidth - 1; i++)
+                j = 0;
+                while ( (j < _worldWidth) && (isFind == false))
                 {
-                    if (blocs[j, i].GetPosBlock == pos)
+                    /*
+                    if (blocs[i, j].IsBreakable )
+                        log.WriteLine("bloc[ " + i + "," + j + "] X = " + blocs[i, j].GetPosBlock.X + ", Y = " + blocs[i, j].GetPosBlock.Y + " Breakable, type = "+ blocs[i, j].Type );
+                    else
+                        log.WriteLine("bloc[ " + i + "," + j + "] X = " + blocs[i, j].GetPosBlock.X + ", Y = " + blocs[i, j].GetPosBlock.Y + " Not Breakable, type = " + blocs[i, j].Type);
+                    */
+                    if ((clickCoordX >= blocs[i,j].GetPosBlock.X) && (clickCoordX < (blocs[i, j].GetPosBlock.X + _scale)))
                     {
-                        player.breakBloc(blocs[j, i], pos, Content, blocs, i, j);
+                        if ((clickCoordY >= blocs[i, j].GetPosBlock.Y) && (clickCoordY < (blocs[i, j].GetPosBlock.Y +_scale)))
+                        {
+                            //log.WriteLine("=========================   Trouve = i " + i + ", j = " + j);
+                            player.breakBloc(blocs[i, j], Content, blocs, i, j, _scale, log);
+                            isFind = true;
+  
+                        }
                     }
+                    j++;
                 }
+                i++;
             }
+ 
+        }
+
+        public void DebugBloc(int i, int j, StreamWriter log)
+        {
+            log.WriteLine("bloc[ " + i + "," + j +"] X = " + blocs[i, j].GetPosBlock.X + ", Y = " + blocs[i, j].GetPosBlock.Y);
         }
 
         int NextInt(int min, int max)
         {
             return random.Next(min, max);
         }
+        
+
     }
 }
