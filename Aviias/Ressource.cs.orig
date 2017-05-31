@@ -8,6 +8,11 @@ namespace Aviias
 {
     public class Ressource
     {
+<<<<<<< HEAD
+        
+
+        
+=======
         string _name;
         static int _id;
         int id;
@@ -23,5 +28,6 @@ namespace Aviias
         public string Name => _name;
 
         public int Id => id;
+>>>>>>> origin/gravity
     }
 }

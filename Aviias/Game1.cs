@@ -28,13 +28,15 @@ namespace Aviias
         const int WindowWidth = 1920;
         const int WindowHeight = 1088;
         Camera2D _camera;
-        List<NPC> _npc;
+        public List<NPC> _npc;
         SpriteFont font;
         List<Monster> monsters = new List<Monster>();
         StreamWriter log; // Debug file
         Random rnd = new Random();
 
         float _spawnTimer = 10f;
+        List<int> list = new List<int>(16);
+        Ressource _testRessource = new Ressource();
         const float _spawnTIMER = 10f;
 
         public Game1()
@@ -95,7 +97,8 @@ namespace Aviias
             _camera = new Camera2D(_viewportAdapter);
             _camera.LookAt(new Vector2(player.Position.X + 10, player.Position.Y + 15));
             _npc = new List<NPC>(8);
-            _npc.Add(new NPC(Content, "pnj", spriteBatch));
+            _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(500, 250), 1));
+            _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(1400, 300), 0));
         }
 
         /// <summary>
@@ -148,6 +151,9 @@ namespace Aviias
             previousKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
 
+            player.Update(map);
+            player.UpdateCollision(map, player);
+            Camera.Position = new Vector2(player.Position.X - WindowWidth / 2, player.Position.Y - WindowHeight / 2);
             for (int i = 0; i < monsters.Count; i++)
             {
                 if (monsters[i].IsDie == false && monsters[i] != null)
@@ -157,19 +163,39 @@ namespace Aviias
                 else
                 {
                     monsters.RemoveAt(i);
+
+            list = player.GetCollisionSide(player.GetBlocsAround(map));
+
+                Camera.Move(new Vector2(-playerMoveSpeed, 0));
+                player.Position.X -= playerMoveSpeed;
+                //  if (player.GetCollisionSide(player.GetBlocsAround(map)) != 2) player.Position.X -= playerMoveSpeed;
+                if (!list.Contains(2)) player.Position.X -= playerMoveSpeed;
+                //Camera.Move(new Vector2(+playerMoveSpeed, 0));
+              //  if (player.GetCollisionSide(player.GetBlocsAround(map)) != 1) player.Position.X += playerMoveSpeed;
+                if (!list.Contains(1)) player.Position.X += playerMoveSpeed;
+                //Camera.Move(new Vector2(0, -playerMoveSpeed));
                 }
                     
+                //Camera.Move(new Vector2(0, +playerMoveSpeed));
+                /*   if (player.IsInAir())*/
+           //     if (player.GetCollisionSide(player.GetBlocsAround(map)) != 3) player.Position.Y += playerMoveSpeed;
+                if (!list.Contains(3)) player.Position.Y += playerMoveSpeed;
             }
 
             float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
             _spawnTimer -= elapsed;
 
             if (_spawnTimer < 1)
+
             {
                 int posX = rnd.Next(0, map.WorldWidth * 10);
                 int posY = rnd.Next(0, map.WorldHeight * 10);
                 Vector2 monsterPosition = new Vector2(posX, posY);
                 monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);               
+                foreach (NPC npc in _npc)
+                {
+                    if (map.GetDistance(player.PlayerPosition, npc.Position) < 400) npc.Interact(player);
+                }
                 monsters.Add(monster);
                 _spawnTimer = _spawnTIMER;
             }
@@ -177,6 +203,14 @@ namespace Aviias
             player.UpdatePlayer(gameTime, monsters, map, player, Content, log, _npc, _camera);          
             player.UpdatePlayerCollision(gameTime, player, monsters);
             base.Update(gameTime);
+            if (currentKeyboardState.IsKeyDown(Keys.Space))
+            {
+                player.Jump(map);
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.G))
+            {
+                player.flyMod = !player.flyMod;
+            }
         }
 
         /// <summary>
@@ -198,12 +232,23 @@ namespace Aviias
             if (player.IsDie == false)
             {
                 player.Draw(spriteBatch);
+            //   foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
+            foreach (NPC npc in _npc)           
+            {
+                npc.Draw(spriteBatch);
+                npc.Update();
             }
-            
-            foreach (NPC npc in _npc) npc.Draw(spriteBatch);
-            foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
-            
-
+            foreach (KeyValuePair<Ressource, int> entry in player._inventory)
+            {
+                if (entry.Key.Name == "dirt")
+                {
+                    spriteBatch.DrawString(font, entry.Value.ToString(), new Vector2(player.Position.X - 10, player.Position.Y - 100), Color.Black);
+                }
+            }
+            if (list.Contains(1)) spriteBatch.DrawString(font, "1", new Vector2(player.Position.X - 20, player.Position.Y - 20), Color.Red);
+            if (list.Contains(2)) spriteBatch.DrawString(font, "2", new Vector2(player.Position.X - 20, player.Position.Y - 40), Color.Red);
+            if (list.Contains(3)) spriteBatch.DrawString(font, "3", new Vector2(player.Position.X - 20, player.Position.Y - 60), Color.Red);
+            if (list.Contains(4)) spriteBatch.DrawString(font, "4", new Vector2(player.Position.X - 20, player.Position.Y - 80), Color.Red);
             spriteBatch.End();
             base.Draw(gameTime);
         }
