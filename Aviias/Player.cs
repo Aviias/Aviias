@@ -27,6 +27,7 @@ namespace Aviias
         int _resistance;
         int _damage;
         bool _isDie;
+        List<int> list = new List<int>(16);
 
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
@@ -194,28 +195,8 @@ namespace Aviias
             }
         }
 
-        internal void UpdatePlayer(GameTime gameTime, List<Monster> monsters, Map map, Player player, ContentManager Content, StreamWriter log, List<NPC> _npc, Camera2D Camera)
-        {
+        
 
-            //player.Position.X = MathHelper.Clamp(player.Position.X, 0, GraphicsDevice.Viewport.Width - player.Width);
-            //player.Position.Y = MathHelper.Clamp(player.Position.Y, 0, GraphicsDevice.Viewport.Height - player.Height);
-            currentKeyboardState = Keyboard.GetState();
-            float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
-            _playerTimer -= elapsed;
-            _blocBreakTimer -= elapsed;
-            
-
-            if (currentKeyboardState.IsKeyDown(Keys.Left))
-            {
-                Camera.Move(new Vector2(-_playerMoveSpeed, 0));
-                player.Position.X -= _playerMoveSpeed;
-            }
-
-            if (currentKeyboardState.IsKeyDown(Keys.Right))
-            {
-                Camera.Move(new Vector2(+_playerMoveSpeed, 0));
-                player.Position.X += _playerMoveSpeed;
-            }
         internal void Jump(Map map)
         {
             if (!IsInAir(map))
@@ -249,26 +230,43 @@ namespace Aviias
             return true;
         }
 
-        internal void UpdateCollision(Map map, Player player)
+        internal void Update(Player player, Camera2D Camera, List<NPC> _npc, GameTime gameTime, ContentManager Content, StreamWriter log, Map map)
         {
-            _nbBlocs = 0;
+            currentKeyboardState = Keyboard.GetState();
+            mouseState = Mouse.GetState();
 
-            if (currentKeyboardState.IsKeyDown(Keys.Up))
-            List<Bloc> _blocs = new List<Bloc>(16);
+            float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+            list = GetCollisionSide(GetBlocsAround(map));
+
+            if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
-                Camera.Move(new Vector2(0, -_playerMoveSpeed));
-                player.Position.Y -= _playerMoveSpeed;
+                if (!list.Contains(2)) Position.X -= _playerMoveSpeed;
             }
 
+            if (currentKeyboardState.IsKeyDown(Keys.Right))
+            {
+                if (!list.Contains(1)) Position.X += _playerMoveSpeed;
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.Up))
+            {
+                Position.Y -= _playerMoveSpeed;
+            }
             if (currentKeyboardState.IsKeyDown(Keys.Down))
             {
                 Camera.Move(new Vector2(0, +_playerMoveSpeed));
                 player.Position.Y += _playerMoveSpeed;
             }
 
-            if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Left) == System.Windows.Forms.MouseButtons.Left)
+            if (currentKeyboardState.IsKeyDown(Keys.Space))
             {
-                MouseState mouseState = Mouse.GetState();
+                Jump(map);
+            }
+
+               if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Left) == System.Windows.Forms.MouseButtons.Left)
+               {
+          
+                mouseState = Mouse.GetState();
                 Vector2 position = new Vector2(mouseState.X, mouseState.Y);
                 position = Camera.ScreenToWorld(position);
 
@@ -299,15 +297,7 @@ namespace Aviias
                     }
                     
                 }
-               
-                   
-                 
-                    
-                //log.WriteLine("mouse.X = " + position.X + ", mouse.Y = " + position.Y);
-                //log.WriteLine("camera.X = " + _camera.Position.X + ", camera.Y = " + _camera.Position.Y);
-                //map.DebugBloc(0, 0, log);
-
-
+              
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.P))
@@ -324,6 +314,10 @@ namespace Aviias
                 foreach (NPC npc in _npc) npc.Interact(player);
             }
 
+            if (currentKeyboardState.IsKeyDown(Keys.G))
+            {
+                flyMod = !flyMod;
+            }
 
         }
 
@@ -367,7 +361,11 @@ namespace Aviias
             }
 
         }
+            internal void UpdateCollision(Map map, Player player) {
 
+            _nbBlocs = 0;
+
+            List<Bloc> _blocs = new List<Bloc>(16);
             for (int a = (int)(Position.Y / 16); a < (Position.Y / 16) + 8; a++)
             {
                 for (int b = (int)(Position.X / 16); b < (Position.X) / 16 + 8; b++)

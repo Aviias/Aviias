@@ -10,7 +10,7 @@ using MonoGame.Extended.Timers;
 
 namespace Aviias
 {
-    class Monster : IMonster
+    class Monster 
     {
         Text text;
         Player _ctx;

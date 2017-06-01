@@ -256,49 +256,51 @@ namespace Aviias
 
         public void FindBreakBlock(Vector2 pos, Player player, ContentManager Content, StreamWriter log)
         {
-            float clickCoordX = pos.X ;
-            float clickCoordY = (float)1.007 * pos.Y + (float)8.06; 
+            float clickCoordX = pos.X;
+            float clickCoordY = (float)1.007 * pos.Y + (float)8.06;
             int i = 0;
             int j = 0;
             bool isFind = false;
 
             //log.WriteLine("=========================   clickCoordX = " + clickCoordX + ", clickCoordY = " + clickCoordY);
 
-            while ( (i < _worldHeight) && (isFind == false))
+            while ((i < _worldHeight) && (isFind == false))
             {
                 j = 0;
-                while ( (j < _worldWidth) && (isFind == false))
+                while ((j < _worldWidth) && (isFind == false))
                 {
-                    if (blocs[j, i].GetPosBlock == pos)
                     if (_blocs[j, i].GetPosBlock == pos)
-                    /*
-                    if (blocs[i, j].IsBreakable )
-                        log.WriteLine("bloc[ " + i + "," + j + "] X = " + blocs[i, j].GetPosBlock.X + ", Y = " + blocs[i, j].GetPosBlock.Y + " Breakable, type = "+ blocs[i, j].Type );
-                    else
-                        log.WriteLine("bloc[ " + i + "," + j + "] X = " + blocs[i, j].GetPosBlock.X + ", Y = " + blocs[i, j].GetPosBlock.Y + " Not Breakable, type = " + blocs[i, j].Type);
-                    */
-                    if ((clickCoordX >= blocs[i,j].GetPosBlock.X) && (clickCoordX < (blocs[i, j].GetPosBlock.X + _scale)))
-                    {
-                        if ((clickCoordY >= blocs[i, j].GetPosBlock.Y) && (clickCoordY < (blocs[i, j].GetPosBlock.Y +_scale)))
-                        {
-                        player.breakBloc(_blocs[j, i], pos, Content, _blocs, i, j);
-                    }
-                            //log.WriteLine("=========================   Trouve = i " + i + ", j = " + j);
-                            player.breakBloc(blocs[i, j], Content, blocs, i, j, _scale, log);
-                            isFind = true;
-  
-                    }
+                        if (_blocs[j, i].GetPosBlock == pos)
+                            /*
+                            if (blocs[i, j].IsBreakable )
+                                log.WriteLine("bloc[ " + i + "," + j + "] X = " + blocs[i, j].GetPosBlock.X + ", Y = " + blocs[i, j].GetPosBlock.Y + " Breakable, type = "+ blocs[i, j].Type );
+                            else
+                                log.WriteLine("bloc[ " + i + "," + j + "] X = " + blocs[i, j].GetPosBlock.X + ", Y = " + blocs[i, j].GetPosBlock.Y + " Not Breakable, type = " + blocs[i, j].Type);
+                            */
+                            if ((clickCoordX >= _blocs[i, j].GetPosBlock.X) && (clickCoordX < (_blocs[i, j].GetPosBlock.X + _scale)))
+                            {
+                                if ((clickCoordY >= _blocs[i, j].GetPosBlock.Y) && (clickCoordY < (_blocs[i, j].GetPosBlock.Y + _scale)))
+                                {
+                                    player.breakBloc(_blocs[j, i], Content, _blocs, i, j, 16, log);
+                                }
+                                //log.WriteLine("=========================   Trouve = i " + i + ", j = " + j);
+                                player.breakBloc(_blocs[i, j], Content, _blocs, i, j, _scale, log);
+                                isFind = true;
+
+                            }
                 }
-                    j++;
-                }
+                j++;
+            }
+        }
 
         public float GetDistance(Vector2 one, Vector2 two)
         {
-
             return (Math.Abs(one.X - two.X) + Math.Abs(one.Y - two.Y));
+        }
+
         public void DebugBloc(int i, int j, StreamWriter log)
         {
-            log.WriteLine("bloc[ " + i + "," + j +"] X = " + blocs[i, j].GetPosBlock.X + ", Y = " + blocs[i, j].GetPosBlock.Y);
+            log.WriteLine("bloc[ " + i + "," + j +"] X = " + _blocs[i, j].GetPosBlock.X + ", Y = " + _blocs[i, j].GetPosBlock.Y);
         }
 
         int NextInt(int min, int max)
