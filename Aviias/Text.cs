@@ -26,10 +26,10 @@ namespace Aviias
             int i = 0;
             if (msg != null)
             {
-                while (_msg.Length > 20)
+                while (_msg.Length > 50)
                 {
-                    _msgTab[i] = _msg.Substring(0, 20);
-                    _msg = _msg.Remove(0, 20);
+                    _msgTab[i] = _msg.Substring(0, 50);
+                    _msg = _msg.Remove(0, 50);
                     i++;
                 }
                 _msgTab[i] = _msg;

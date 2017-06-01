@@ -18,6 +18,21 @@ namespace Aviias
 
         internal void Add()
         {
+        string _name;
+        static int _id;
+        int id;
+        public Ressource()
+        {
+            _name = "dirt";
+            id = _id;
+            _id++;
+        }
+
+
+
+        public string Name => _name;
+
+        public int Id => id;
             _ressource.Add(1, "bois");
             _ressource.Add(2, "pierre");
             _ressource.Add(3, "terre");

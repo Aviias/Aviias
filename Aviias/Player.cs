@@ -7,24 +7,54 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using Microsoft.Xna.Framework.Content;
+using System.IO;
+using MonoGame.Extended;
 
 namespace Aviias
 {
     public class Player
     {
         Map _ctx;
-        public Texture2D PlayerTexture;
+        Texture2D PlayerTexture;
         public Vector2 Position;
-        public bool Active;
-        public int Health;
+        bool Active;
+        int _health;
         Text text;
         public bool _displayPos;
         string _str;
-        List<Quest> _activeQuest;
-        List<Ressource> _inventory;
+        public List<Quest> _activeQuest;
+        internal Dictionary<Ressource, int> _inventory;
+        int _resistance;
+        int _damage;
+        bool _isDie;
+        List<int> list = new List<int>(16);
+
+        KeyboardState currentKeyboardState;
+        KeyboardState previousKeyboardState;
+        List<Monster> monsters = new List<Monster>();
+        MouseState mouseState = Mouse.GetState();
+        public bool isInAir;
+        public float _yVelocity;
+        public double _gravity;
+        public float _jumpHeight;
+        bool _collisions;
+        int _nbBlocs;
+        float _moveSpeed;
+        public bool flyMod;
+        Map map;
+
+        float _playerTimer = 1.2f;
+        const float _playerTIMER = 1.2f;
+
+        float _blocBreakTimer = 1.5f;
+        const float _blocBreakTIMER = 1.5f;
+        float _blockDurationTimer = 1.5f;
+        const float _blockDurationTIMER = 1.5f;
+        //   MonoGame.Extended.Camera2D Camera;
+        float _playerMoveSpeed;
         
+
+
 
         public int Width
         {
@@ -47,14 +77,57 @@ namespace Aviias
             get { return Position.Y; }
         }
 
+        public int Health
+        {
+            get { return _health; }
+            set { _health = value; }
+        }
+
+        public int Resistance
+        {
+            get { return _resistance; }
+            set { _resistance = value; }
+        }
+
+        public int Damage
+        {
+            get { return _damage; }
+            set { _damage = value; }
+        }
+
         public void Initialize(Texture2D texture, Vector2 position, ContentManager content)
         {
             PlayerTexture = texture;
             Position = position;
             Active = true;
-            Health = 100;
+            _resistance = 0;
+            _damage = 20;
+            _health = 100;
             text = new Aviias.Text(content);
             _displayPos = true;
+            _isDie = false;
+            _gravity = 1;
+            _jumpHeight = -20;
+            _moveSpeed = 0.8f;
+            _activeQuest = new List<Quest>(8);
+            _inventory = new Dictionary<Ressource, int>(8);
+            _inventory.Add(new Ressource(), 10);
+        }
+
+        public void DecreaseInventory(int quantity, string name)
+        {
+            foreach (KeyValuePair<Ressource, int> entry in _inventory)
+            {
+                if (entry.Key.Name == name) _inventory[entry.Key] -= quantity;
+            }
+        }
+
+        public void AddInventory(int quantity, string name)
+        {
+            foreach (KeyValuePair<Ressource, int> entry in _inventory)
+            {
+                if (entry.Key.Name == name) _inventory[entry.Key] += quantity;
+            }
         }
 
         public Vector2 PlayerPosition
@@ -66,7 +139,12 @@ namespace Aviias
         {
             _activeQuest.Add(quest);
         }
-        
+
+        public void RemoveQuest(Quest quest)
+        {
+            _activeQuest.Remove(quest);
+        }
+        /*
         public Vector2 CursorPos()
         {             
             int posX = Cursor.Position.X;
@@ -76,31 +154,305 @@ namespace Aviias
             return cursorPos;
             
         }
-
-        public void breakBloc(Bloc bloc, Vector2 position, ContentManager content, Bloc[,] blocs, int i, int j)
+        */
+        public float PlayerMoveSpeed
         {
+            get { return _playerMoveSpeed; }
+            set { _playerMoveSpeed = value; }
+        }
+
+        public bool IsDie
+        {
+            get { return _isDie; }
+            set { _isDie = value; }
+        }
+
+        public void GetDamage(int damage)
+        {
+            int newHealth = _health - (damage - _resistance);
+            if (newHealth <= 0)
+            {
+                _isDie = true;
+            }
+            else
+            {
+                _health = newHealth;
+            }
+        }
+
+        public void breakBloc(Bloc bloc, ContentManager content, Bloc[,] blocs, int i, int j, int scale, StreamWriter log)
+        {
+            Bloc bloc1;
             if (bloc != null)
             {
-                if (bloc._isBreakable)
+                //log.WriteLine("---- > breakBloc i=" + i + " j=" + j);
+                if (bloc.IsBreakable)
                 {
-                    bloc = new Bloc(position, 16, "air", content);
-                    blocs[j, i] = bloc;
+                    bloc1 = new Bloc(blocs[i,j].GetPosBlock ,scale, "air", content);
+                    blocs[i, j] = bloc1;
+                    //log.WriteLine("---- > breakBloc block.X = " + blocs[i, j].GetPosBlock.X + " block.Y = " + blocs[i, j].GetPosBlock.Y);
                 }
+            }
+        }
+
+        
+
+        internal void Jump(Map map)
+        {
+            if (!IsInAir(map))
+            {
+                _yVelocity = _jumpHeight;
+                Position.Y -= 10;
+            }
+        }
+
+        internal void Update(Map map)
+        {
+            if (!flyMod)
+            {
+                if (IsInAir(map))
+                {
+                    Position.Y += _yVelocity;
+                    if (_yVelocity < 12) _yVelocity += (float)_gravity;
+                }
+                else
+                {
+                    _yVelocity = 0;
+                }
+            }
+        }
+
+        internal bool IsInAir(Map map)
+        {
+            List<int> list = new List<int>(16);
+            list = GetCollisionSide(GetBlocsAround(map));
+            if (list.Contains(3)) return false;
+            return true;
+        }
+
+        internal void Update(Player player, Camera2D Camera, List<NPC> _npc, GameTime gameTime, ContentManager Content, StreamWriter log, Map map)
+        {
+            currentKeyboardState = Keyboard.GetState();
+            mouseState = Mouse.GetState();
+
+            float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+            list = GetCollisionSide(GetBlocsAround(map));
+
+            if (currentKeyboardState.IsKeyDown(Keys.Left))
+            {
+                if (!list.Contains(2)) Position.X -= _playerMoveSpeed;
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.Right))
+            {
+                if (!list.Contains(1)) Position.X += _playerMoveSpeed;
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.Up))
+            {
+                Position.Y -= _playerMoveSpeed;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.Down))
+            {
+                Camera.Move(new Vector2(0, +_playerMoveSpeed));
+                player.Position.Y += _playerMoveSpeed;
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.Space))
+            {
+                Jump(map);
+            }
+
+               if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Left) == System.Windows.Forms.MouseButtons.Left)
+               {
+          
+                mouseState = Mouse.GetState();
+                Vector2 position = new Vector2(mouseState.X, mouseState.Y);
+                position = Camera.ScreenToWorld(position);
+
+                for (int i = 0; i < monsters.Count; i++)
+                {
+                    if (position.X >= monsters[i].MonsterPosition.X && position.X <= monsters[i].MonsterPosition.X + monsters[i].Width && position.Y >= monsters[i].MonsterPosition.Y && position.Y <= monsters[i].MonsterPosition.Y + monsters[i].Height)
+                    {
+                        if (_playerTimer < 1 && Vector2.Distance(player.PlayerPosition, position) <= 400)
+                        {
+                            monsters[i].GetDamage(player.Damage);
+                            if (monsters[i].IsDie)
+                            {
+                                monsters.Remove(monsters[i]);
+                            }
+                            _playerTimer = _playerTIMER;
+                        }
+                            
+                    }
+                }
+                if (mouseState.LeftButton == ButtonState.Pressed && _blocBreakTimer < 1)
+                {
+                    _blockDurationTimer -= elapsed;
+                    if (_blockDurationTimer < 1)
+                    {
+                        map.FindBreakBlock(position, player, Content, log);
+                        _blocBreakTimer = _blocBreakTIMER;
+                        _blockDurationTimer = _blockDurationTIMER;
+                    }
+                    
+                }
+              
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.P))
+            {
+                if (player._displayPos) player._displayPos = false;
+                else player._displayPos = true;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.A))
+            {
+                player.AddStr("a");
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.I))
+            {
+                foreach (NPC npc in _npc) npc.Interact(player);
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.G))
+            {
+                flyMod = !flyMod;
             }
 
         }
 
+        internal void UpdatePlayerCollision(GameTime gameTime, Player player, List<Monster> monsters)
+        {
+            Rectangle playerRect;
+            Rectangle monsterRect;
+            
 
+            playerRect = new Rectangle((int)player.X, (int)player.Y, player.Width, player.Height);
 
-        public void Draw(SpriteBatch spriteBatch)
+            for (int i = 0; i < monsters.Count; i++)
+            {
+                monsterRect = new Rectangle((int)monsters[i].posX, (int)monsters[i].posY, monsters[i].Width, monsters[i].Height);
+                if (playerRect.Intersects(monsterRect))
+                {
+                    // Collision between player and monster
+                    if (Math.Abs(playerRect.Center.X - monsterRect.Center.X) > Math.Abs(playerRect.Center.Y - monsterRect.Center.Y))
+                    {
+                        if (playerRect.Center.X < monsterRect.Center.X)
+                        {
+                            monsters[i].posX = playerRect.Right - monsters[i].moveSpeed;
+                        }
+                        if (playerRect.Center.X > monsterRect.Center.X)
+                        {
+                            monsters[i].posX = playerRect.Left - monsters[i].Width - monsters[i].moveSpeed;
+                        }
+                    }
+                    else
+                    {
+                        if (playerRect.Center.Y < monsterRect.Center.Y)
+                        {
+                            monsters[i].posY = playerRect.Bottom - monsters[i].moveSpeed;
+                        }
+                        if (playerRect.Center.Y > monsterRect.Center.Y)
+                        {
+                            monsters[i].posY = playerRect.Top - monsters[i].Height - monsters[i].moveSpeed;
+                        }
+                    }
+                }
+            }
+
+        }
+            internal void UpdateCollision(Map map, Player player) {
+
+            _nbBlocs = 0;
+
+            List<Bloc> _blocs = new List<Bloc>(16);
+            for (int a = (int)(Position.Y / 16); a < (Position.Y / 16) + 8; a++)
+            {
+                for (int b = (int)(Position.X / 16); b < (Position.X) / 16 + 8; b++)
+                {
+                    if (a >= 0 && b >= 0 && map._blocs[b, a] != null && map._blocs[b, a].Type != "air")
+                    {
+                        _blocs.Add(map._blocs[b, a]);
+                        _nbBlocs++;
+                    }
+                }
+            }
+            
+            List<int> list = new List<int>(16);
+            list = GetCollisionSide(_blocs);
+        }
+
+        public List<int> GetCollisionSide(List<Bloc> _blocs)
+        {
+            List<int> result = new List<int>(16);
+            Rectangle playerRect;
+            Rectangle playerRect2;
+            playerRect = new Rectangle((int)Position.X, (int)Position.Y, PlayerTexture.Width, PlayerTexture.Height);
+            playerRect2 = new Rectangle((int)Position.X, (int)Position.Y + 1, PlayerTexture.Width, PlayerTexture.Height);
+
+            for (int i = 0; i < _blocs.Count; i++)
+            {
+                if (_blocs[i] != null)
+                {
+                    Rectangle blocRect;
+                    blocRect = new Rectangle((int)_blocs[i].posX, (int)_blocs[i].posY, _blocs[i].Width, _blocs[i].Height);
+                    if (playerRect.Intersects(blocRect))
+                    {
+                        if (playerRect.Bottom > blocRect.Top && playerRect.Bottom < blocRect.Bottom)
+                        {
+                            result.Add(3);
+                            Position.Y -= 1;
+                        }
+                         if (playerRect.Top < blocRect.Bottom && playerRect.Top > blocRect.Top) result.Add(4);
+                         if (playerRect.Left < blocRect.Right && playerRect.Left > blocRect.Left) result.Add(2);
+                         if (playerRect.Right > blocRect.Left && playerRect.Right < blocRect.Right) result.Add(1);
+                        _collisions = true;
+                    }
+                    if (playerRect2.Intersects(blocRect))
+                    {
+                        if (playerRect2.Bottom > blocRect.Top && playerRect2.Bottom < blocRect.Bottom)
+                        {
+                            _yVelocity = 0;
+                            result.Add(3);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        internal List<Bloc> GetBlocsAround(Map map)
+        {
+            _nbBlocs = 0;
+
+            List<Bloc> _blocs = new List<Bloc>(16);
+
+            for (int a = (int)(Position.Y / 16); a < (Position.Y / 16) + 8; a++)
+            {
+                for (int b = (int)(Position.X / 16); b < (Position.X) / 16 + 8; b++)
+                {
+                    if (a >= 0 && b >= 0 && map._blocs[b, a] != null && map._blocs[b, a].Type != "air")
+                    {
+                        _blocs.Add(map._blocs[b, a]);
+                        _nbBlocs++;
+                    }
+                }
+            }
+
+            return _blocs;
+        }
+
+        internal void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(PlayerTexture, Position, null, Microsoft.Xna.Framework.Color.White, 0f, Vector2.Zero, 1f,
                SpriteEffects.None, 0f);
 
-              if (_displayPos) text.DisplayText((Position.X + " - " + Position.Y), new Vector2(Position.X, Position.Y - 30), spriteBatch, Color.Red);
+              if (_displayPos) text.DisplayText((Position.X  + " - " + Position.Y), new Vector2(Position.X, Position.Y - 30), spriteBatch, Color.Red);
+            text.DisplayText(("Life : " + _health), new Vector2(Position.X, Position.Y - 60), spriteBatch, Color.Orange);
             // if (_displayPos) text.DisplayText(((int)Position.X/64 + " - " + (int)Position.Y/64), new Vector2(Position.X, Position.Y - 50), spriteBatch);
             // if (_displayPos) text.DisplayText(("Si la memoire est a la tete ce que le passe, peut-on y acceder a six"), new Vector2(Position.X, Position.Y - 50), spriteBatch, Color.Black);
-            if (_displayPos) text.DisplayText(_str, new Vector2(Position.X, Position.Y - 50), spriteBatch, Color.Black);
+            // if (_displayPos) text.DisplayText(_str, new Vector2(Position.X, Position.Y - 50), spriteBatch, Color.Black);
+            //text.DisplayText((Convert.ToString(_nbBlocs)), new Vector2(Position.X, Position.Y - 50), spriteBatch, Color.Red);
         }
 
         public void AddStr(string str)
@@ -108,5 +460,6 @@ namespace Aviias
              _str += str;
         }
 
+        public Dictionary<Ressource, int> Inventory => _inventory;
     }
 }

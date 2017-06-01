@@ -12,15 +12,46 @@ namespace Aviias
 
         public Structure()
         {
-            structures["tree"] = _treeModel;
+            structures["treeA"] = _treeModelA;
+            structures["treeB"] = _treeModelB;
+            structures["houseA"] = _houseModelA;
         }
 
-        string[,] _treeModel =  new string[,] { 
+        string[,] _treeModelA =  new string[,] 
+        { 
             { "air", "oak_leaves", "oak_leaves", "oak_leaves", "air"}, 
             { "oak_leaves", "oak_leaves", "oak_leaves", "oak_leaves", "oak_leaves"},
             { "oak_leaves", "oak_leaves", "oak_leaves", "oak_leaves", "oak_leaves"},
             { "air", "air", "oak_wood", "air", "air"},
             { "air", "air", "oak_wood", "air", "air"},
-            { "air", "air", "oak_wood", "air", "air"} };
+            { "air", "air", "oak_wood", "air", "air"}
+        };
+
+        string[,] _treeModelB = new string[,]
+        {
+            { "air", "air", "oak_leaves", "air", "air"},
+            { "air", "oak_leaves", "oak_leaves", "oak_leaves", "air"},
+            { "air", "air", "oak_wood", "air", "air"},
+            { "oak_leaves", "oak_leaves", "oak_leaves", "oak_leaves", "oak_leaves"},
+            { "air", "air", "oak_wood", "air", "air"},
+            { "oak_leaves", "oak_leaves", "oak_leaves", "oak_leaves", "oak_leaves"},
+            { "air", "air", "oak_wood", "air", "air"},
+            { "air", "air", "oak_wood", "air", "air"},
+            { "air", "air", "oak_wood", "air", "air"},
+        };
+
+        string[,] _houseModelA = new string[,]
+        {
+            {"air", "air", "air", "oak_wood", "oak_wood", "oak_wood", "air", "air", "air"},
+            {"air", "air", "oak_wood", "oak_plank", "oak_plank", "oak_plank", "oak_wood", "air", "air"},
+            {"air", "oak_wood", "oak_plank", "oak_plank", "glass", "oak_plank", "oak_plank", "oak_wood", "air"},
+            {"oak_wood", "oak_plank", "oak_plank", "oak_plank", "glass", "oak_plank", "bookshelf", "oak_plank", "oak_wood"},
+            {"oak_wood", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "bookshelf", "oak_plank", "oak_wood"},
+            {"oak_wood", "oak_wood", "oak_wood", "oak_wood", "oak_wood", "oak_wood", "oak_wood", "oak_wood", "oak_wood"},
+            {"oak_wood", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_wood"},
+            {"air", "oak_plank", "oak_plank", "glass", "glass", "glass", "oak_plank", "oak_plank", "oak_wood"},
+            {"air", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "furnace_off", "oak_plank", "oak_wood"},
+            {"stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick"}
+        };
     }
 }
