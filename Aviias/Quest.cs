@@ -77,7 +77,7 @@ namespace Aviias
         {
             foreach(KeyValuePair<string, int> entry in _reward)
             {
-                 player.AddInventory(entry.Value, entry.Key);
+                // player.AddInventory(entry.Value, entry.Key);
             }
         }
 

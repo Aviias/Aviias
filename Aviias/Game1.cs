@@ -36,7 +36,7 @@ namespace Aviias
 
         float _spawnTimer = 10f;
         List<int> list = new List<int>(16);
-        Ressource _testRessource = new Ressource();
+        //Ressource _testRessource = new Ressource();
         const float _spawnTIMER = 10f;
 
         public Game1()
@@ -217,7 +217,7 @@ namespace Aviias
 
             // TODO: Add your drawing code here
 
-            spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+             spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
             map.Draw(spriteBatch, (int)player.Position.X, (int)player.Position.Y);
             for (int i = 0; i < monsters.Count; i++)
             {
@@ -225,19 +225,12 @@ namespace Aviias
             }
             if (player.IsDie == false)
             {
-                player.Draw(spriteBatch);
+                player.Draw(spriteBatch,Content);
                 //   foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
                 foreach (NPC npc in _npc)
                 {
                     npc.Draw(spriteBatch);
                     npc.Update();
-                }
-                foreach (KeyValuePair<Ressource, int> entry in player._inventory)
-                {
-                    if (entry.Key.Name == "dirt")
-                    {
-                        spriteBatch.DrawString(font, entry.Value.ToString(), new Vector2(player.Position.X - 10, player.Position.Y - 100), Color.Black);
-                    }
                 }
                 if (list.Contains(1)) spriteBatch.DrawString(font, "1", new Vector2(player.Position.X - 20, player.Position.Y - 20), Color.Red);
                 if (list.Contains(2)) spriteBatch.DrawString(font, "2", new Vector2(player.Position.X - 20, player.Position.Y - 40), Color.Red);

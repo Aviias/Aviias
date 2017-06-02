@@ -13,17 +13,17 @@ namespace Aviias
         int id;
         Dictionary<int, string> _ressource;
 
-        public Ressource()
+        public Ressource(string name)
             {
-                _name = "dirt";
-                id = _id;
-                _id++;
+                _name = name;
+                //id = _id;
+                //_id++;
                 _ressource = new Dictionary<int, string>();
                 Add();
         }
 
             public string Name => _name;
-            public int Id => id;
+            //public int Id => id;
 
         internal void Add()
         {

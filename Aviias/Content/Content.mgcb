@@ -184,7 +184,6 @@
 /build:msg_font.spritefont
 
 #begin alienmonster.png
-#begin tt.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -195,10 +194,20 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:alienmonster.png
+
+#begin tt.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
 /build:tt.png
 
 #begin babyplayer.png
-#begin bookshelf.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -209,6 +218,17 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:babyplayer.png
+
+#begin bookshelf.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
 /build:bookshelf.png
 
 #begin furnace_off.png
@@ -258,4 +278,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:glass.png
+
+#begin Inventaire.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Inventaire.png
 

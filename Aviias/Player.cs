@@ -41,6 +41,7 @@ namespace Aviias
         int _nbBlocs;
         float _moveSpeed;
         public bool flyMod;
+        public bool IsInventoryOpen;
         Map map;
 
         float _playerTimer = 1.2f;
@@ -52,6 +53,8 @@ namespace Aviias
         const float _blockDurationTIMER = 1.5f;
         //   MonoGame.Extended.Camera2D Camera;
         float _playerMoveSpeed;
+
+        Inventory _test;
         
 
 
@@ -110,24 +113,9 @@ namespace Aviias
             _jumpHeight = -20;
             _moveSpeed = 0.8f;
             _activeQuest = new List<Quest>(8);
-            _inventory = new Dictionary<Ressource, int>(8);
-            _inventory.Add(new Ressource(), 10);
-        }
+            _test = new Inventory(this);
+            _test.AddInventory(500, "dirt");
 
-        public void DecreaseInventory(int quantity, string name)
-        {
-            foreach (KeyValuePair<Ressource, int> entry in _inventory)
-            {
-                if (entry.Key.Name == name) _inventory[entry.Key] -= quantity;
-            }
-        }
-
-        public void AddInventory(int quantity, string name)
-        {
-            foreach (KeyValuePair<Ressource, int> entry in _inventory)
-            {
-                if (entry.Key.Name == name) _inventory[entry.Key] += quantity;
-            }
         }
 
         public Vector2 PlayerPosition
@@ -257,6 +245,12 @@ namespace Aviias
                 Camera.Move(new Vector2(0, +_playerMoveSpeed));
                 player.Position.Y += _playerMoveSpeed;
             }
+
+            if (currentKeyboardState.IsKeyDown(Keys.E))
+            {
+                IsInventoryOpen = !IsInventoryOpen;
+            }
+
 
             if (currentKeyboardState.IsKeyDown(Keys.Space))
             {
@@ -442,13 +436,17 @@ namespace Aviias
             return _blocs;
         }
 
-        internal void Draw(SpriteBatch spriteBatch)
+        internal void Draw(SpriteBatch spriteBatch, ContentManager content)
         {
-            spriteBatch.Draw(PlayerTexture, Position, null, Microsoft.Xna.Framework.Color.White, 0f, Vector2.Zero, 1f,
+            spriteBatch.Draw(PlayerTexture, Position, null, Color.White, 0f, Vector2.Zero, 1f,
                SpriteEffects.None, 0f);
 
               if (_displayPos) text.DisplayText((Position.X  + " - " + Position.Y), new Vector2(Position.X, Position.Y - 30), spriteBatch, Color.Red);
             text.DisplayText(("Life : " + _health), new Vector2(Position.X, Position.Y - 60), spriteBatch, Color.Orange);
+            if(IsInventoryOpen)
+            {
+                _test.Draw(spriteBatch, content);
+            }
             // if (_displayPos) text.DisplayText(((int)Position.X/64 + " - " + (int)Position.Y/64), new Vector2(Position.X, Position.Y - 50), spriteBatch);
             // if (_displayPos) text.DisplayText(("Si la memoire est a la tete ce que le passe, peut-on y acceder a six"), new Vector2(Position.X, Position.Y - 50), spriteBatch, Color.Black);
             // if (_displayPos) text.DisplayText(_str, new Vector2(Position.X, Position.Y - 50), spriteBatch, Color.Black);
