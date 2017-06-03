@@ -69,7 +69,6 @@ namespace Aviias
         }
         
 
-
         public void DecreaseInventory(int quantity, string name)
         {
             for (int i = 0; i < _cellArray.Length; i++)
@@ -88,9 +87,12 @@ namespace Aviias
                 SpriteEffects.None, 0f);
             for (int i=0; i<40; i++)
             {
-                spriteBatch.Draw(content.Load<Texture2D>(_cellArray[i]._name), _cellArray[i].Position, null, Color.White, 0f, Vector2.Zero, 0.8f,
+                if (_cellArray[i]._name != "")
+                {
+                    spriteBatch.Draw(content.Load<Texture2D>(_cellArray[i]._name), _cellArray[i].Position, null, Color.White, 0f, Vector2.Zero, 0.8f,
                         SpriteEffects.None, 0f);
-                text.DisplayText("" + _cellArray[i]._quantity,new Vector2(_cellArray[i].Position.X, _cellArray[i].Position.Y + 20), spriteBatch, Color.White);
+                    text.DisplayText("" + _cellArray[i]._quantity, new Vector2(_cellArray[i].Position.X, _cellArray[i].Position.Y + 20), spriteBatch, Color.White);
+                }
             }
         }
     }
