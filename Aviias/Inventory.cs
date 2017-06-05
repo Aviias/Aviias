@@ -14,32 +14,40 @@ namespace Aviias
         {
             _player = player;
             _cellArray = new _cell[40];
-            int _difX = 77;
-            int _difY = 82;
             for (int i = 0; i < 40; i++)
             {
                 _cellArray[i] = new _cell();
                 _cellArray[i]._name = "";
                 _cellArray[i]._ressource = new Ressource("air");
-                if(i == 0)
+
+                UpdatePosition(i);
+            }
+        }
+
+        public void UpdatePosition(int i)
+        {
+            int _difX = 77;
+            float _difY = 82;
+            if (i == 0)
+            {
+                _cellArray[i].Position = new Vector2(_player.Position.X - 325, _player.Position.Y + 49);
+            }
+            else
+            {
+                if (i > 0 && i < 10)
                 {
-                    _cellArray[i].Position = new Vector2(_player.Position.X - 325, _player.Position.Y + 49);
-                }else
+                    _cellArray[i].Position = new Vector2(_cellArray[i - 1].Position.X + _difX, _cellArray[0].Position.Y);
+                }
+                else
                 {
-                    if(i > 0 && i < 10)
+                    if ((i % 10) == 0)
                     {
-                        _cellArray[i].Position = new Vector2(_cellArray[i-1].Position.X + _difX, _cellArray[0].Position.Y);
-                    }else
+                        _cellArray[i].Position = new Vector2(_cellArray[0].Position.X, _cellArray[0].Position.Y + _difY);
+                        _difY = _difY + _difY;
+                    }
+                    else
                     {
-                        if((i % 10) == 0)
-                        {
-                            _difY = _difY + _difY;
-                            _cellArray[i].Position = new Vector2(_cellArray[0].Position.X, _cellArray[0].Position.Y + _difY);
-                        }
-                        else
-                        {
-                            _cellArray[i].Position = new Vector2(_cellArray[i - 1].Position.X + _difX, _cellArray[0].Position.Y + _difY);
-                        }
+                        _cellArray[i].Position = new Vector2(_cellArray[i - 1].Position.X + _difX, _cellArray[0].Position.Y + _difY);
                     }
                 }
             }
@@ -59,7 +67,7 @@ namespace Aviias
             //foreach ( entry in _cellArray)
             for (int i = 0; i < _cellArray.Length; i++)
             {
-                if (_cellArray[i]._name == name) { _cellArray[i]._quantity += quantity; return;}
+                if (_cellArray[i]._name == name) { _cellArray[i]._quantity += quantity; }
             }
 
             for (int i = 0; i < _cellArray.Length; i++)
@@ -89,9 +97,10 @@ namespace Aviias
             {
                 if (_cellArray[i]._name != "")
                 {
+                    UpdatePosition(i);
                     spriteBatch.Draw(content.Load<Texture2D>(_cellArray[i]._name), _cellArray[i].Position, null, Color.White, 0f, Vector2.Zero, 0.8f,
                         SpriteEffects.None, 0f);
-                    text.DisplayText("" + _cellArray[i]._quantity, new Vector2(_cellArray[i].Position.X, _cellArray[i].Position.Y + 20), spriteBatch, Color.White);
+                    text.DisplayText("" + _cellArray[i]._quantity, new Vector2(_cellArray[i].Position.X, _cellArray[i].Position.Y + 100), spriteBatch, Color.Black);
                 }
             }
         }

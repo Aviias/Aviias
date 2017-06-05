@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +9,25 @@ namespace Aviias
 {
     class Craft
     {
-        //Dictionary<int, int> _pelleEnBois;
-        //Dictionary<int, int> _planche;
-        //Dictionary<int, int> _stick;
-        //Ressource _ressource;
+        public Craft(Dictionary<int, Ressource> ressource)
+        {
+            //Ressource toto = new Ressource("oak-wood");
+            //Ressource tptp = ressource.Add(1, toto);
+            //AddCraft("planche", 4, );
+        }
+        
+        struct _craft
+        {
+            public string _name { get; set; }
+            public bool IsCraftable { get; set; }
+            public int _quantity { get; set; }
+            public Dictionary<int, Ressource> _ressource;
+        }
+
+        public void AddCraft(string name, int quantity, Dictionary<int, Ressource> ressource)
+        {
+            
+        }
 
         //public Craft()
         //{
@@ -22,7 +38,7 @@ namespace Aviias
 
         //public int Planche()
         //{
-        //    _planche.Add(1, _ressource.Id("bois"));
+        //    _planche.Add(1, "bois");
         //    int Out = 4;
         //    return Out;
         //}
