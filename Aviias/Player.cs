@@ -47,6 +47,12 @@ namespace Aviias
         float _playerTimer = 1.2f;
         const float _playerTIMER = 1.2f;
 
+        float _inventoryTimer = 1.3f;
+        const float _inventoryTIMER = 1.3f;
+
+        float _craftTimer = 1.5f;
+        const float _craftTIMER = 1.5f;
+
         float _blocBreakTimer = 1.5f;
         const float _blocBreakTIMER = 1.5f;
         float _blockDurationTimer = 1.5f;
@@ -228,9 +234,13 @@ namespace Aviias
         {
             currentKeyboardState = Keyboard.GetState();
             mouseState = Mouse.GetState();
+            
 
             float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
             list = GetCollisionSide(GetBlocsAround(map));
+            
+            _inventoryTimer -= elapsed;
+            _craftTimer -= elapsed;
 
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
@@ -252,12 +262,13 @@ namespace Aviias
                 player.Position.Y += _playerMoveSpeed;
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.E))
+            if (currentKeyboardState.IsKeyDown(Keys.E) && _inventoryTimer < 1)
             {
                 IsInventoryOpen = !IsInventoryOpen;
+                _inventoryTimer = _inventoryTIMER;
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.C))
+            if (currentKeyboardState.IsKeyDown(Keys.C) && _craftTimer < 1)
             {
                 for (int i = 0; i < _inv._craft._cellCraft.Length; i++)
                 {
@@ -272,6 +283,7 @@ namespace Aviias
                         break;
                     }
                 }
+                _craftTimer = _craftTIMER;
 
             }
 
