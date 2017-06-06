@@ -54,10 +54,7 @@ namespace Aviias
         //   MonoGame.Extended.Camera2D Camera;
         float _playerMoveSpeed;
 
-        Inventory _test;
-        
-
-
+        Inventory _inv;
 
         public int Width
         {
@@ -113,18 +110,18 @@ namespace Aviias
             _jumpHeight = -20;
             _moveSpeed = 0.8f;
             _activeQuest = new List<Quest>(8);
-            _test = new Inventory(this);
-            //_test.AddInventory(20, "oak_wood");
-            _test.AddInventory(30, "oak_plank");
-            _test.AddInventory(500, "dirt");
-            _test.AddInventory(70, "stone");
-            _test.AddInventory(12, "bedrock");
-            _test.AddInventory(45, "bookshelf");
-            _test.AddInventory(27, "coal_ore");
-            _test.AddInventory(117, "glass");
-            _test.AddInventory(80, "iron_ore");
-            _test.AddInventory(1000, "stonebrick");
-            _test.AddInventory(247, "oak_leaves");
+            _inv = new Inventory(this);
+            _inv.AddInventory(20, "oak_wood");
+            _inv.AddInventory(30, "oak_plank");
+            _inv.AddInventory(500, "dirt");
+            _inv.AddInventory(70, "stone");
+            _inv.AddInventory(12, "bedrock");
+            _inv.AddInventory(45, "bookshelf");
+            _inv.AddInventory(27, "coal_ore");
+            _inv.AddInventory(117, "glass");
+            _inv.AddInventory(80, "iron_ore");
+            _inv.AddInventory(1000, "stonebrick");
+            _inv.AddInventory(247, "oak_leaves");
         }
 
         public Vector2 PlayerPosition
@@ -258,6 +255,24 @@ namespace Aviias
             if (currentKeyboardState.IsKeyDown(Keys.E))
             {
                 IsInventoryOpen = !IsInventoryOpen;
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.C))
+            {
+                for (int i = 0; i < _inv._craft._cellCraft.Length; i++)
+                {
+                    if (_inv._craft._cellCraft[i].IsCraftable == true)
+                    {
+                        _inv.AddInventory(_inv._craft._cellCraft[i]._quantity, _inv._craft._cellCraft[i]._name);
+
+                        foreach (KeyValuePair<int, Ressource> element in _inv._craft._cellCraft[i]._ressource)
+                        {
+                            _inv.DecreaseInventory(element.Key, element.Value.Name);
+                        }
+                        break;
+                    }
+                }
+
             }
 
 
@@ -454,7 +469,7 @@ namespace Aviias
             text.DisplayText(("Life : " + _health), new Vector2(Position.X, Position.Y - 60), spriteBatch, Color.Orange);
             if(IsInventoryOpen)
             {
-                _test.Draw(spriteBatch, content);
+                _inv.Draw(spriteBatch, content);
             }
             // if (_displayPos) text.DisplayText(((int)Position.X/64 + " - " + (int)Position.Y/64), new Vector2(Position.X, Position.Y - 50), spriteBatch);
             // if (_displayPos) text.DisplayText(("Si la memoire est a la tete ce que le passe, peut-on y acceder a six"), new Vector2(Position.X, Position.Y - 50), spriteBatch, Color.Black);

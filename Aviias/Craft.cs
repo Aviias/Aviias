@@ -5,7 +5,6 @@ namespace Aviias
     public class Craft
     {
         public _craft[] _cellCraft;
-        
 
         public Craft()
         {
@@ -26,7 +25,7 @@ namespace Aviias
             public string _name { get; set; }
             public bool IsCraftable { get; set; }
             public int _quantity { get; set; }
-            public Dictionary<int, Ressource> _ressource;
+            public Dictionary<int, Ressource> _ressource { get; set; }
         }
 
         public Dictionary<int,Ressource> Add(int number, string ressource)
@@ -51,8 +50,6 @@ namespace Aviias
                 }
             }
         }
-
-
         public void IsCraftable(Inventory._cell[] inventory)
         {
             for(int i=0; i<_cellCraft.Length; i++)

@@ -7,7 +7,7 @@ namespace Aviias
     public class Inventory
     {
         Player _player;
-        _cell[]  _cellArray;
+        public _cell[]  _cellArray;
         private Text text;
         public Craft _craft;
 
@@ -74,7 +74,7 @@ namespace Aviias
             //foreach ( entry in _cellArray)
             for (int i = 0; i < _cellArray.Length; i++)
             {
-                if (_cellArray[i]._name == name) { _cellArray[i]._quantity += quantity; }
+                if (_cellArray[i]._name == name) { _cellArray[i]._quantity += quantity; break; }
             }
 
             for (int i = 0; i < _cellArray.Length; i++)
