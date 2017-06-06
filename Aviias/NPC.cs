@@ -13,67 +13,27 @@ namespace Aviias
     {
         Texture2D _texture;
         Vector2 _position;
-        public bool _isQuestActive;
-        public int _nbQuest;
+        bool _isQuestActive;
+        int _nbQuest;
         Text _text;
         Quest _questActive;
         SpriteBatch _spriteBatch;
         public bool _isTalking;
-        static int _id;
-        int trueid = 0;
-        Random rand = new Random();
-        
+        int _id;
 
-        public NPC(ContentManager content, string texture, SpriteBatch spriteBatch, Vector2 position, int nbQuest)
+        public NPC(ContentManager content, string texture, SpriteBatch spriteBatch)
         {
             _texture = content.Load<Texture2D>(texture);
-            _position = position;
+            _position = new Vector2(50, 50);
             _text = new Text(content);
             _spriteBatch = spriteBatch;
-            _nbQuest = nbQuest;
-            _id++;
-            trueid = _id;
         }
 
         public void Interact(Player player)
         {
-            foreach(Quest quest in player._activeQuest)
-            {
-                if (quest.Type == 1 && quest.EndNpc == trueid)
-                {
-                   // player.AddInventory(2000, "dirt");
-                   // quest.StartNpc.
-                    quest._startNpc._nbQuest--;
-                    quest._startNpc._isQuestActive = false;
-                    player.RemoveQuest(_questActive);
-                    quest._startNpc._isTalking = false; ;
-                    player._activeQuest.Remove(quest);
-                    break;
-                }
-
-              /*  if (quest.CheckGoal(player, trueid))
-                {
-                    player.AddInventory(800, "dirt");
-                    player._activeQuest.Remove(quest);
-                    break;
-                }*/
-                if (quest.Type == 1)
-                {
-
-                }
-            }
-
-            if (_isQuestActive)
-            {
-                if (_questActive.CheckGoal(player, _id)) EndQuest(player);
-            }
+            if (_isQuestActive) EndQuest();
             else GiveQuest(player);
-         //   _isTalking = true;
-        }
-
-        public void Update()
-        {
-            if (_isTalking) Talk(_questActive, _spriteBatch);
+            _isTalking = true;
         }
 
         public void GiveQuest(Player player)
@@ -82,15 +42,11 @@ namespace Aviias
 
             if (!_isQuestActive && _nbQuest > 0)
             {
-                int idEnd = trueid == 1 ? 2 : 1;
-                _questActive = new Quest(1, _id, idEnd, this);
+                _questActive = new Quest();
                 player.AddQuest(_questActive);
-                //   Talk(_questActive, _spriteBatch);
-                _isQuestActive = true;
-                _nbQuest--;
-                _isTalking = true;
+                Talk(_questActive, _spriteBatch);
             }
- 
+            _isQuestActive = true;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -99,26 +55,16 @@ namespace Aviias
                SpriteEffects.None, 0f);
         }
 
-        public void EndQuest(Player player)
+        public void EndQuest()
         {
-            foreach (KeyValuePair<string, int> entry in _questActive._goal)
-            {
-               // player.DecreaseInventory(entry.Value, entry.Key);
-            }
-            _questActive.GetReward(player);
+            //check conditions quete
             _nbQuest--;
             _isQuestActive = false;
-            player.RemoveQuest(_questActive);
-            _isTalking = false;
         }
 
         public void Talk(Quest quest, SpriteBatch spriteBatch)
         {
             _text.DisplayText(quest.Spitch, new Vector2(_position.X, _position.Y - 50), spriteBatch, Color.Black);
         }
-
-        public Vector2 Position => _position;
-
-        public int Id => trueid;
     }
 }

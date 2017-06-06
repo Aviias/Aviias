@@ -22,36 +22,20 @@ namespace Aviias
         Text text;
         public bool _displayPos;
         string _str;
-        public List<Quest> _activeQuest;
-        internal Dictionary<Ressource, int> _inventory;
+        List<Quest> _activeQuest;
+        List<Ressource> _inventory;
         int _resistance;
         int _damage;
         bool _isDie;
-        List<int> list = new List<int>(16);
 
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
         List<Monster> monsters = new List<Monster>();
         MouseState mouseState = Mouse.GetState();
-        public bool isInAir;
-        public float _yVelocity;
-        public double _gravity;
-        public float _jumpHeight;
-        bool _collisions;
-        int _nbBlocs;
-        float _moveSpeed;
-        public bool flyMod;
-        public bool IsInventoryOpen;
         Map map;
 
         float _playerTimer = 1.2f;
         const float _playerTIMER = 1.2f;
-
-        float _inventoryTimer = 1.3f;
-        const float _inventoryTIMER = 1.3f;
-
-        float _craftTimer = 1.5f;
-        const float _craftTIMER = 1.5f;
 
         float _blocBreakTimer = 1.5f;
         const float _blocBreakTIMER = 1.5f;
@@ -59,8 +43,9 @@ namespace Aviias
         const float _blockDurationTIMER = 1.5f;
         //   MonoGame.Extended.Camera2D Camera;
         float _playerMoveSpeed;
+        
 
-        Inventory _inv;
+
 
         public int Width
         {
@@ -112,22 +97,6 @@ namespace Aviias
             text = new Aviias.Text(content);
             _displayPos = true;
             _isDie = false;
-            _gravity = 1;
-            _jumpHeight = -20;
-            _moveSpeed = 0.8f;
-            _activeQuest = new List<Quest>(8);
-            _inv = new Inventory(this);
-            _inv.AddInventory(20, "oak_wood");
-            _inv.AddInventory(30, "oak_plank");
-            _inv.AddInventory(500, "dirt");
-            _inv.AddInventory(70, "stone");
-            _inv.AddInventory(12, "bedrock");
-            _inv.AddInventory(45, "bookshelf");
-            _inv.AddInventory(27, "coal_ore");
-            _inv.AddInventory(117, "glass");
-            _inv.AddInventory(80, "iron_ore");
-            _inv.AddInventory(1000, "stonebrick");
-            _inv.AddInventory(247, "oak_leaves");
         }
 
         public Vector2 PlayerPosition
@@ -139,22 +108,7 @@ namespace Aviias
         {
             _activeQuest.Add(quest);
         }
-
-        public void RemoveQuest(Quest quest)
-        {
-            _activeQuest.Remove(quest);
-        }
-        /*
-        public Vector2 CursorPos()
-        {             
-            int posX = Cursor.Position.X;
-            int posY = Cursor.Position.Y;
-
-            Vector2 cursorPos = new Vector2(posX, posY);
-            return cursorPos;
-            
-        }
-        */
+       
         public float PlayerMoveSpeed
         {
             get { return _playerMoveSpeed; }
@@ -195,118 +149,44 @@ namespace Aviias
             }
         }
 
-        bool IsOnLadder(Map map)
+        internal void UpdatePlayer(GameTime gameTime, List<Monster> monsters, Map map, Player player, ContentManager Content, StreamWriter log, List<NPC> _npc, Camera2D Camera)
         {
-            for (int a = (int)(Position.Y / 16); a < (Position.Y / 16) + 3; a++)
-            {
-                for (int b = (int)(Position.X / 16); b < (Position.X) / 16 + 1; b++)
-                {
-                    if (map._blocs[b, a] != null && map._blocs[b, a].Type == "ladder") return true;
-                }
-            }
-            return false;
-        }
 
-        internal void Jump(Map map)
-        {
-            if (!IsInAir(map) && !IsOnLadder(map))
-            {
-                _yVelocity = _jumpHeight;
-                Position.Y -= 10;
-            }
-        }
-
-        internal void Update(Map map)
-        {
-            if (!flyMod && !IsOnLadder(map))
-            {
-                if (IsInAir(map))
-                {
-                    Position.Y += _yVelocity;
-                    if (_yVelocity < 12) _yVelocity += (float)_gravity;
-                }
-                else
-                {
-                    _yVelocity = 0;
-                }
-            }
-        }
-
-        internal bool IsInAir(Map map)
-        {
-            List<int> list = new List<int>(16);
-            list = GetCollisionSide(GetBlocsAround(map));
-            if (list.Contains(3)) return false;
-            return true;
-        }
-
-        internal void Update(Player player, Camera2D Camera, List<NPC> _npc, GameTime gameTime, ContentManager Content, StreamWriter log, Map map)
-        {
+            //player.Position.X = MathHelper.Clamp(player.Position.X, 0, GraphicsDevice.Viewport.Width - player.Width);
+            //player.Position.Y = MathHelper.Clamp(player.Position.Y, 0, GraphicsDevice.Viewport.Height - player.Height);
             currentKeyboardState = Keyboard.GetState();
-            mouseState = Mouse.GetState();
-            
-
             float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
-            list = GetCollisionSide(GetBlocsAround(map));
+            _playerTimer -= elapsed;
+            _blocBreakTimer -= elapsed;
             
-            _inventoryTimer -= elapsed;
-            _craftTimer -= elapsed;
 
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
-                if (!list.Contains(2)) Position.X -= _playerMoveSpeed;
+                Camera.Move(new Vector2(-_playerMoveSpeed, 0));
+                player.Position.X -= _playerMoveSpeed;
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Right))
             {
-                if (!list.Contains(1)) Position.X += _playerMoveSpeed;
+                Camera.Move(new Vector2(+_playerMoveSpeed, 0));
+                player.Position.X += _playerMoveSpeed;
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Up))
             {
-                Position.Y -= _playerMoveSpeed;
+                Camera.Move(new Vector2(0, -_playerMoveSpeed));
+                player.Position.Y -= _playerMoveSpeed;
             }
+
             if (currentKeyboardState.IsKeyDown(Keys.Down))
             {
                 Camera.Move(new Vector2(0, +_playerMoveSpeed));
                 player.Position.Y += _playerMoveSpeed;
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.E) && _inventoryTimer < 1)
+            if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Left) == System.Windows.Forms.MouseButtons.Left)
             {
-                IsInventoryOpen = !IsInventoryOpen;
-                _inventoryTimer = _inventoryTIMER;
-            }
-
-            if (currentKeyboardState.IsKeyDown(Keys.C) && _craftTimer < 1)
-            {
-                for (int i = 0; i < _inv._craft._cellCraft.Length; i++)
-                {
-                    if (_inv._craft._cellCraft[i].IsCraftable == true)
-                    {
-                        _inv.AddInventory(_inv._craft._cellCraft[i]._quantity, _inv._craft._cellCraft[i]._name);
-
-                        foreach (KeyValuePair<int, Ressource> element in _inv._craft._cellCraft[i]._ressource)
-                        {
-                            _inv.DecreaseInventory(element.Key, element.Value.Name);
-                        }
-                        break;
-                    }
-                }
-                _craftTimer = _craftTIMER;
-
-            }
-
-
-            if (currentKeyboardState.IsKeyDown(Keys.Space))
-            {
-                Jump(map);
-            }
-
-               if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Left) == System.Windows.Forms.MouseButtons.Left)
-               {
-
-                mouseState = Mouse.GetState();
+                MouseState mouseState = Mouse.GetState();
                 Vector2 position = new Vector2(mouseState.X, mouseState.Y);
                 position = Camera.ScreenToWorld(position);
 
@@ -337,7 +217,7 @@ namespace Aviias
                     }
                     
                 }
-              
+               
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.P))
@@ -354,10 +234,6 @@ namespace Aviias
                 foreach (NPC npc in _npc) if (map.GetDistance(player.PlayerPosition, npc.Position) < 400) npc.Interact(player);
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.G))
-            {
-                flyMod = !flyMod;
-            }
 
         }
 
@@ -401,102 +277,17 @@ namespace Aviias
             }
 
         }
-            internal void UpdateCollision(Map map, Player player) {
 
-            _nbBlocs = 0;
-
-            List<Bloc> _blocs = new List<Bloc>(16);
-            for (int a = (int)(Position.Y / 16); a < (Position.Y / 16) + 8; a++)
-            {
-                for (int b = (int)(Position.X / 16); b < (Position.X) / 16 + 8; b++)
-                {
-                    if (a >= 0 && b >= 0 && a < map._worldHeight && b < map._worldWidth && map._blocs[b, a] != null && map._blocs[b, a].Type != "air")
-                    {
-                        _blocs.Add(map._blocs[b, a]);
-                        _nbBlocs++;
-                    }
-                }
-            }
-            
-            List<int> list = new List<int>(16);
-            list = GetCollisionSide(_blocs);
-        }
-
-        public List<int> GetCollisionSide(List<Bloc> _blocs)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            List<int> result = new List<int>(16);
-            Rectangle playerRect;
-            Rectangle playerRect2;
-            playerRect = new Rectangle((int)Position.X, (int)Position.Y, PlayerTexture.Width, PlayerTexture.Height);
-            playerRect2 = new Rectangle((int)Position.X, (int)Position.Y + 1, PlayerTexture.Width, PlayerTexture.Height);
-
-            Rectangle rectTest = new Rectangle((int)Position.X, (int)Position.Y - 10, PlayerTexture.Width, PlayerTexture.Height);
-
-            for (int i = 0; i < _blocs.Count; i++)
-            {
-                if (_blocs[i] != null)
-                {
-                    Rectangle blocRect;
-                    blocRect = new Rectangle((int)_blocs[i].posX, (int)_blocs[i].posY, _blocs[i].Width, _blocs[i].Height);
-                    if (playerRect.Intersects(blocRect))
-                    {
-                        if (playerRect.Bottom > blocRect.Top && playerRect.Bottom < blocRect.Bottom)
-                        {
-                            result.Add(3);
-                            if(!rectTest.Intersects(blocRect)) Position.Y -= 1;
-                        }
-                         if (playerRect.Top < blocRect.Bottom && playerRect.Top > blocRect.Top) result.Add(4);
-                        //  if (playerRect.Left < blocRect.Right && playerRect.Left > blocRect.Left) result.Add(2);
-                        //  if (playerRect.Right > blocRect.Left && playerRect.Right < blocRect.Right) result.Add(1);
-                        if (rectTest.Left < blocRect.Right && rectTest.Left > blocRect.Left) result.Add(2);
-                        if (rectTest.Right > blocRect.Left && rectTest.Right < blocRect.Right) result.Add(1);
-                        _collisions = true;
-                    }
-                    if (playerRect2.Intersects(blocRect))
-                    {
-                        if (playerRect2.Bottom > blocRect.Top && playerRect2.Bottom < blocRect.Bottom)
-                        {
-                            _yVelocity = 0;
-                            result.Add(3);
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-
-        internal List<Bloc> GetBlocsAround(Map map)
-        {
-            _nbBlocs = 0;
-
-            List<Bloc> _blocs = new List<Bloc>(16);
-
-            for (int a = (int)(Position.Y / 16); a < (Position.Y / 16) + 8; a++)
-            {
-                for (int b = (int)(Position.X / 16); b < (Position.X) / 16 + 8; b++)
-                {
-                    if (a >= 0 && b >= 0 && a < map._worldHeight && b < map._worldWidth && map._blocs[b, a] != null && map._blocs[b, a].Type != "air" && map._blocs[b, a].Type != "ladder")
-                    {
-                        _blocs.Add(map._blocs[b, a]);
-                        _nbBlocs++;
-                    }
-                }
-            }
-
-            return _blocs;
-        }
-
-        internal void Draw(SpriteBatch spriteBatch, ContentManager content)
-        {
-            spriteBatch.Draw(PlayerTexture, Position, null, Color.White, 0f, Vector2.Zero, 1f,
+            spriteBatch.Draw(PlayerTexture, Position, null, Microsoft.Xna.Framework.Color.White, 0f, Vector2.Zero, 1f,
                SpriteEffects.None, 0f);
 
-              if (_displayPos) text.DisplayText((Position.X  + " - " + Position.Y), new Vector2(Position.X, Position.Y - 30), spriteBatch, Color.Red);
+              if (_displayPos) text.DisplayText((Position.X + " - " + Position.Y), new Vector2(Position.X, Position.Y - 30), spriteBatch, Color.Red);
             text.DisplayText(("Life : " + _health), new Vector2(Position.X, Position.Y - 60), spriteBatch, Color.Orange);
-            if(IsInventoryOpen)
-            {
-                _inv.Draw(spriteBatch, content);
-            }
+            // if (_displayPos) text.DisplayText(((int)Position.X/64 + " - " + (int)Position.Y/64), new Vector2(Position.X, Position.Y - 50), spriteBatch);
+            // if (_displayPos) text.DisplayText(("Si la memoire est a la tete ce que le passe, peut-on y acceder a six"), new Vector2(Position.X, Position.Y - 50), spriteBatch, Color.Black);
+            if (_displayPos) text.DisplayText(_str, new Vector2(Position.X, Position.Y - 50), spriteBatch, Color.Black);
         }
 
         public void AddStr(string str)
@@ -504,6 +295,5 @@ namespace Aviias
              _str += str;
         }
 
-        public Dictionary<Ressource, int> Inventory => _inventory;
     }
 }
