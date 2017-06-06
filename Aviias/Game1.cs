@@ -191,10 +191,10 @@ namespace Aviias
                 int posY = rnd.Next(0, map.WorldHeight * 10);
                 Vector2 monsterPosition = new Vector2(posX, posY);
                 monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
-                foreach (NPC npc in _npc)
+             /*   foreach (NPC npc in _npc)
                 {
                     if (map.GetDistance(player.PlayerPosition, npc.Position) < 400) npc.Interact(player);
-                }
+                }*/
                 monsters.Add(monster);
                 _spawnTimer = _spawnTIMER;
             }

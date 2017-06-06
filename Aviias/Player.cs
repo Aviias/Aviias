@@ -351,7 +351,7 @@ namespace Aviias
             }
             if (currentKeyboardState.IsKeyDown(Keys.I))
             {
-                foreach (NPC npc in _npc) npc.Interact(player);
+                foreach (NPC npc in _npc) if (map.GetDistance(player.PlayerPosition, npc.Position) < 400) npc.Interact(player);
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.G))
