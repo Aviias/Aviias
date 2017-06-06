@@ -61,6 +61,7 @@ namespace Aviias
             _nbQuest--;
             _isQuestActive = false;
         }
+        public Vector2 Position => _position;
 
         public void Talk(Quest quest, SpriteBatch spriteBatch)
         {

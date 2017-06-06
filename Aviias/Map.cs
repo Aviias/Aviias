@@ -170,6 +170,11 @@ namespace Aviias
             return blocs;
         }
 
+        public float GetDistance(Vector2 one, Vector2 two)
+        {
+            return (Math.Abs(one.X - two.X) + Math.Abs(one.Y - two.Y));
+        }
+
         public void FillAir(int x, int y, ContentManager content)
         {
             int caveRandomX = NextInt(2, 4);
