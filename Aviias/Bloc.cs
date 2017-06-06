@@ -68,6 +68,7 @@ namespace Aviias
         public void ChangeBloc(string newTexture, ContentManager content)
         {
             _texture = content.Load<Texture2D>(newTexture);
+            if (newTexture == "ladder") _type = newTexture;
         }
 
         public float posX

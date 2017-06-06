@@ -116,6 +116,7 @@ namespace Aviias
             _jumpHeight = -20;
             _moveSpeed = 0.8f;
             _activeQuest = new List<Quest>(8);
+<<<<<<< HEAD
             _inv = new Inventory(this);
             _inv.AddInventory(20, "oak_wood");
             _inv.AddInventory(30, "oak_plank");
@@ -128,6 +129,26 @@ namespace Aviias
             _inv.AddInventory(80, "iron_ore");
             _inv.AddInventory(1000, "stonebrick");
             _inv.AddInventory(247, "oak_leaves");
+=======
+            _inventory = new Dictionary<Ressource, int>(8);
+
+        }
+
+        public void DecreaseInventory(int quantity, string name)
+        {
+            foreach (KeyValuePair<Ressource, int> entry in _inventory)
+            {
+                if (entry.Key.Name == name) _inventory[entry.Key] -= quantity;
+            }
+        }
+
+        public void AddInventory(int quantity, string name)
+        {
+            foreach (KeyValuePair<Ressource, int> entry in _inventory)
+            {
+                if (entry.Key.Name == name) _inventory[entry.Key] += quantity;
+            }
+>>>>>>> gravity
         }
 
         public Vector2 PlayerPosition
@@ -230,6 +251,7 @@ namespace Aviias
             return true;
         }
 
+<<<<<<< HEAD
         internal void Update(Player player, Camera2D Camera, List<NPC> _npc, GameTime gameTime, ContentManager Content, StreamWriter log, Map map)
         {
             currentKeyboardState = Keyboard.GetState();
@@ -393,6 +415,21 @@ namespace Aviias
         }
             internal void UpdateCollision(Map map, Player player) {
 
+=======
+        bool IsOnLadder(Map map)
+        {
+            for (int a = (int)(Position.Y / 16); a < (Position.Y / 16) + 3; a++)
+            {
+                for (int b = (int)(Position.X / 16); b < (Position.X) / 16 + 1; b++)
+                {
+                    if (map._blocs[b, a]!= null && map._blocs[b, a].Type == "ladder") return true;
+                }
+            }
+            return false;
+        }
+
+        internal void UpdateCollision(Map map, Player player) {
+>>>>>>> gravity
             _nbBlocs = 0;
 
             List<Bloc> _blocs = new List<Bloc>(16);
@@ -482,11 +519,18 @@ namespace Aviias
                SpriteEffects.None, 0f);
 
               if (_displayPos) text.DisplayText((Position.X  + " - " + Position.Y), new Vector2(Position.X, Position.Y - 30), spriteBatch, Color.Red);
+<<<<<<< HEAD
             text.DisplayText(("Life : " + _health), new Vector2(Position.X, Position.Y - 60), spriteBatch, Color.Orange);
             if(IsInventoryOpen)
             {
                 _inv.Draw(spriteBatch, content);
             }
+            // if (_displayPos) text.DisplayText(((int)Position.X/64 + " - " + (int)Position.Y/64), new Vector2(Position.X, Position.Y - 50), spriteBatch);
+            // if (_displayPos) text.DisplayText(("Si la memoire est a la tete ce que le passe, peut-on y acceder a six"), new Vector2(Position.X, Position.Y - 50), spriteBatch, Color.Black);
+            // if (_displayPos) text.DisplayText(_str, new Vector2(Position.X, Position.Y - 50), spriteBatch, Color.Black);
+            //text.DisplayText((Convert.ToString(_nbBlocs)), new Vector2(Position.X, Position.Y - 50), spriteBatch, Color.Red);
+=======
+>>>>>>> gravity
         }
 
         public void AddStr(string str)
