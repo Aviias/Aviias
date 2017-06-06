@@ -15,6 +15,7 @@ namespace Aviias
             structures["treeA"] = _treeModelA;
             structures["treeB"] = _treeModelB;
             structures["houseA"] = _houseModelA;
+            structures["mobTowerA"] = _mobTowerModelA;
         }
 
         string[,] _treeModelA =  new string[,] 
@@ -48,10 +49,46 @@ namespace Aviias
             {"oak_wood", "oak_plank", "oak_plank", "oak_plank", "glass", "oak_plank", "bookshelf", "oak_plank", "oak_wood"},
             {"oak_wood", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "bookshelf", "oak_plank", "oak_wood"},
             {"oak_wood", "oak_wood", "oak_wood", "oak_wood", "oak_wood", "oak_wood", "oak_wood", "oak_wood", "oak_wood"},
-            {"oak_wood", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_wood"},
-            {"air", "oak_plank", "oak_plank", "glass", "glass", "glass", "oak_plank", "oak_plank", "oak_wood"},
-            {"air", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "furnace_off", "oak_plank", "oak_wood"},
+            {"oak_wood", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "ladder", "oak_wood"},
+            {"air", "oak_plank", "oak_plank", "glass", "glass", "glass", "oak_plank", "ladder", "oak_wood"},
+            {"air", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "furnace_off", "ladder", "oak_wood"},
             {"stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick"}
+        };
+
+        string[,] _mobTowerModelA = new string[,]
+        {
+            {"stonebrick", "air", "stonebrick", "air", "stonebrick", "air", "stonebrick", "air", "stonebrick", "air", "stonebrick", "air", "stonebrick" },
+            {"stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick" },
+            {"stonebrick", "air", "air", "air", "air", "air", "air", "air", "air", "air", "air", "air", "stonebrick" },
+            {"stonebrick", "air", "air", "air", "air", "air", "air", "air", "air", "air", "air", "air", "stonebrick" },
+            {"stonebrick", "air", "air", "air", "air", "air", "air", "air", "air", "air", "air", "air", "stonebrick" },
+            {"stonebrick", "air", "air", "air", "air", "air", "air", "air", "air", "air", "air", "air", "stonebrick" },
+            {"stonebrick", "stonebrick", "ladder", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick" },
+            {"stonebrick", "air", "ladder", "air", "air", "air", "air", "air", "air", "air", "air", "air", "stonebrick" },
+            {"stonebrick", "air", "ladder", "air", "air", "air", "air", "air", "air", "air", "air", "air", "stonebrick" },
+            {"stonebrick", "air", "ladder", "air", "air", "air", "air", "air", "air", "air", "air", "air", "stonebrick" },
+
+            {"stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "ladder", "stonebrick", "stonebrick", "stonebrick" },
+            {"stonebrick", "air", "air", "air", "air", "air", "air", "air", "air", "ladder", "air", "air", "stonebrick" },
+            {"stonebrick", "air", "air", "air", "air", "air", "air", "air", "air", "ladder", "air", "air", "stonebrick" },
+            {"stonebrick", "air", "air", "air", "air", "air", "air", "air", "air", "ladder", "air", "air", "stonebrick" },
+
+            {"stonebrick", "ladder", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick" },
+            {"stonebrick", "ladder", "air", "air", "air", "air", "air", "air", "air", "air", "air", "air", "stonebrick" },
+            {"stonebrick", "ladder", "air", "air", "air", "air", "air", "air", "air", "air", "air", "air", "stonebrick" },
+            {"stonebrick", "ladder", "air", "air", "air", "air", "air", "air", "air", "air", "air", "air", "stonebrick" },
+
+
+            {"stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "ladder", "stonebrick", "stonebrick" },
+            {"stonebrick", "air", "air", "air", "air", "air", "air", "air", "air", "air", "ladder", "air", "stonebrick" },
+            {"stonebrick", "air", "air", "air", "air", "air", "air", "air", "air", "air", "ladder", "air", "stonebrick" },
+            {"stonebrick", "air", "air", "air", "air", "air", "air", "air", "air", "air", "ladder", "air", "stonebrick" },
+            {"stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick" }
+
+
+
+
+
         };
     }
 }

@@ -139,8 +139,8 @@ namespace Aviias
                             if (_treeGeneration <= _treeRate)
                             {
                                 _treeGeneration = NextInt(1, 3);
-                                if (_treeGeneration == 1) _structureModel = structures.structures["treeA"];
-                                else _structureModel = structures.structures["treeB"];
+                                if (_treeGeneration == 1) _structureModel = structures.structures["mobTowerA"];
+                                else _structureModel = structures.structures["mobTowerA"];
                                 AddTree(k, l, _structureModel, content);
                             }
                         }

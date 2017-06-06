@@ -177,14 +177,8 @@ namespace Aviias
                             monster.posY = playerRect.Top - monster.Height - monster.moveSpeed;
                         }
                     }
-
-                    
-
-
-                }
-                
+                }   
             }
-
         }
 
         private void UpdateMonster(GameTime gameTime)
@@ -194,37 +188,25 @@ namespace Aviias
 
         private void UpdatePlayer(GameTime gameTime)
         {
-
-            //player.Position.X = MathHelper.Clamp(player.Position.X, 0, GraphicsDevice.Viewport.Width - player.Width);
-            //player.Position.Y = MathHelper.Clamp(player.Position.Y, 0, GraphicsDevice.Viewport.Height - player.Height);
-
-
             list = player.GetCollisionSide(player.GetBlocsAround(map));
 
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
-                //  if (player.GetCollisionSide(player.GetBlocsAround(map)) != 2) player.Position.X -= playerMoveSpeed;
                 if (!list.Contains(2)) player.Position.X -= playerMoveSpeed;
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Right))
             {
-                //Camera.Move(new Vector2(+playerMoveSpeed, 0));
-              //  if (player.GetCollisionSide(player.GetBlocsAround(map)) != 1) player.Position.X += playerMoveSpeed;
                 if (!list.Contains(1)) player.Position.X += playerMoveSpeed;
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Up))
             {
-                //Camera.Move(new Vector2(0, -playerMoveSpeed));
                 player.Position.Y -= playerMoveSpeed;
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Down))
             {
-                //Camera.Move(new Vector2(0, +playerMoveSpeed));
-                /*   if (player.IsInAir())*/
-           //     if (player.GetCollisionSide(player.GetBlocsAround(map)) != 3) player.Position.Y += playerMoveSpeed;
                 if (!list.Contains(3)) player.Position.Y += playerMoveSpeed;
             }
 
@@ -234,8 +216,6 @@ namespace Aviias
                     Vector2 posBloc = new Vector2(mouseState.X, mouseState.Y);
                     map.FindBreakBlock(posBloc, player, Content);
                     //player.breakBloc(bloc, player.CursorPos(), Content);
-                
-                 
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.P))
@@ -287,6 +267,7 @@ namespace Aviias
                 npc.Draw(spriteBatch);
                 npc.Update();
             }
+      /*        if (list.Contains(1)) spriteBatch.DrawString(font, "1", new Vector2(player.Position.X - 20, player.Position.Y - 20), Color.Red);
             foreach (KeyValuePair<Ressource, int> entry in player._inventory)
             {
                 if (entry.Key.Name == "dirt")
@@ -294,17 +275,16 @@ namespace Aviias
                     spriteBatch.DrawString(font, entry.Value.ToString(), new Vector2(player.Position.X - 10, player.Position.Y - 100), Color.Black);
                 }
             }
-            spriteBatch.DrawString(font,Convert.ToString(player.CursorPos().X), new Vector2(10, 10), Color.Red);
+           spriteBatch.DrawString(font,Convert.ToString(player.CursorPos().X), new Vector2(10, 10), Color.Red);
             spriteBatch.DrawString(font, Convert.ToString(player.CursorPos().Y), new Vector2(200, 10), Color.Red);
             if (bloc != null)
             {
                 spriteBatch.DrawString(font, Convert.ToString(bloc.GetPosBlock.X), new Vector2(10, 50), Color.Red);
                 spriteBatch.DrawString(font, Convert.ToString(bloc.GetPosBlock.Y), new Vector2(200, 50), Color.Red);
             }
-            if (list.Contains(1)) spriteBatch.DrawString(font, "1", new Vector2(player.Position.X - 20, player.Position.Y - 20), Color.Red);
             if (list.Contains(2)) spriteBatch.DrawString(font, "2", new Vector2(player.Position.X - 20, player.Position.Y - 40), Color.Red);
             if (list.Contains(3)) spriteBatch.DrawString(font, "3", new Vector2(player.Position.X - 20, player.Position.Y - 60), Color.Red);
-            if (list.Contains(4)) spriteBatch.DrawString(font, "4", new Vector2(player.Position.X - 20, player.Position.Y - 80), Color.Red);
+            if (list.Contains(4)) spriteBatch.DrawString(font, "4", new Vector2(player.Position.X - 20, player.Position.Y - 80), Color.Red);*/
             spriteBatch.End();
             base.Draw(gameTime);
         }

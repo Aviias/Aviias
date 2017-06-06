@@ -67,7 +67,7 @@ namespace Aviias
             _moveSpeed = 0.8f;
             _activeQuest = new List<Quest>(8);
             _inventory = new Dictionary<Ressource, int>(8);
-            _inventory.Add(new Ressource(), 10);
+
         }
 
         public void DecreaseInventory(int quantity, string name)
@@ -126,7 +126,7 @@ namespace Aviias
 
         internal void Jump(Map map)
         {
-            if (!IsInAir(map))
+            if (!IsInAir(map) && !IsOnLadder(map))
             {
                 _yVelocity = _jumpHeight;
                 Position.Y -= 10;
@@ -135,7 +135,7 @@ namespace Aviias
 
         internal void Update(Map map)
         {
-            if (!flyMod)
+            if (!flyMod && !IsOnLadder(map))
             {
                 if (IsInAir(map))
                 {
@@ -157,8 +157,19 @@ namespace Aviias
             return true;
         }
 
-        internal void UpdateCollision(Map map, Player player)
+        bool IsOnLadder(Map map)
         {
+            for (int a = (int)(Position.Y / 16); a < (Position.Y / 16) + 3; a++)
+            {
+                for (int b = (int)(Position.X / 16); b < (Position.X) / 16 + 1; b++)
+                {
+                    if (map._blocs[b, a]!= null && map._blocs[b, a].Type == "ladder") return true;
+                }
+            }
+            return false;
+        }
+
+        internal void UpdateCollision(Map map, Player player) {
             _nbBlocs = 0;
 
             List<Bloc> _blocs = new List<Bloc>(16);
@@ -187,6 +198,8 @@ namespace Aviias
             playerRect = new Rectangle((int)Position.X, (int)Position.Y, PlayerTexture.Width, PlayerTexture.Height);
             playerRect2 = new Rectangle((int)Position.X, (int)Position.Y + 1, PlayerTexture.Width, PlayerTexture.Height);
 
+            Rectangle rectTest = new Rectangle((int)Position.X, (int)Position.Y - 10, PlayerTexture.Width, PlayerTexture.Height);
+
             for (int i = 0; i < _blocs.Count; i++)
             {
                 if (_blocs[i] != null)
@@ -198,11 +211,13 @@ namespace Aviias
                         if (playerRect.Bottom > blocRect.Top && playerRect.Bottom < blocRect.Bottom)
                         {
                             result.Add(3);
-                            Position.Y -= 1;
+                            if(!rectTest.Intersects(blocRect)) Position.Y -= 1;
                         }
                          if (playerRect.Top < blocRect.Bottom && playerRect.Top > blocRect.Top) result.Add(4);
-                         if (playerRect.Left < blocRect.Right && playerRect.Left > blocRect.Left) result.Add(2);
-                         if (playerRect.Right > blocRect.Left && playerRect.Right < blocRect.Right) result.Add(1);
+                        //  if (playerRect.Left < blocRect.Right && playerRect.Left > blocRect.Left) result.Add(2);
+                        //  if (playerRect.Right > blocRect.Left && playerRect.Right < blocRect.Right) result.Add(1);
+                        if (rectTest.Left < blocRect.Right && rectTest.Left > blocRect.Left) result.Add(2);
+                        if (rectTest.Right > blocRect.Left && rectTest.Right < blocRect.Right) result.Add(1);
                         _collisions = true;
                     }
                     if (playerRect2.Intersects(blocRect))
@@ -228,7 +243,7 @@ namespace Aviias
             {
                 for (int b = (int)(Position.X / 16); b < (Position.X) / 16 + 8; b++)
                 {
-                    if (a >= 0 && b >= 0 && map._blocs[b, a] != null && map._blocs[b, a].Type != "air")
+                    if (a >= 0 && b >= 0 && map._blocs[b, a] != null && map._blocs[b, a].Type != "air" && map._blocs[b, a].Type != "ladder")
                     {
                         _blocs.Add(map._blocs[b, a]);
                         _nbBlocs++;
@@ -245,10 +260,6 @@ namespace Aviias
                SpriteEffects.None, 0f);
 
               if (_displayPos) text.DisplayText((Position.X  + " - " + Position.Y), new Vector2(Position.X, Position.Y - 30), spriteBatch, Color.Red);
-            // if (_displayPos) text.DisplayText(((int)Position.X/64 + " - " + (int)Position.Y/64), new Vector2(Position.X, Position.Y - 50), spriteBatch);
-            // if (_displayPos) text.DisplayText(("Si la memoire est a la tete ce que le passe, peut-on y acceder a six"), new Vector2(Position.X, Position.Y - 50), spriteBatch, Color.Black);
-            // if (_displayPos) text.DisplayText(_str, new Vector2(Position.X, Position.Y - 50), spriteBatch, Color.Black);
-            //text.DisplayText((Convert.ToString(_nbBlocs)), new Vector2(Position.X, Position.Y - 50), spriteBatch, Color.Red);
         }
 
         public void AddStr(string str)
