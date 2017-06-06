@@ -167,10 +167,10 @@ namespace Aviias
                     list = player.GetCollisionSide(player.GetBlocsAround(map));
 
                     Camera.Move(new Vector2(-player.PlayerMoveSpeed, 0));
-                    player.Position.X -= player.PlayerMoveSpeed;
+                   // player.Position.X -= player.PlayerMoveSpeed;
                 //  if (player.GetCollisionSide(player.GetBlocsAround(map)) != 2) player.Position.X -= playerMoveSpeed;
-                    if (!list.Contains(2)) player.Position.X -= player.PlayerMoveSpeed;
-                    if (!list.Contains(1)) player.Position.X += player.PlayerMoveSpeed;
+             /*       if (!list.Contains(2)) player.Position.X -= player.PlayerMoveSpeed;
+                    if (!list.Contains(1)) player.Position.X += player.PlayerMoveSpeed;*/
            }
 
             //     if (player.GetCollisionSide(player.GetBlocsAround(map)) != 3) player.Position.Y += playerMoveSpeed;
