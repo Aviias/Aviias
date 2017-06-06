@@ -1,18 +1,13 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Aviias
 {
-    class Craft
+    public class Craft
     {
-        _craft[] _cellCraft;
+        public _craft[] _cellCraft;
         
 
-        public Craft(Dictionary<int, Ressource> ressource)
+        public Craft()
         {
             _cellCraft = new _craft[40];
             for (int i = 0; i < 40; i++)
@@ -20,13 +15,13 @@ namespace Aviias
                 _cellCraft[i] = new _craft();
                 _cellCraft[i]._name = "";
                 _cellCraft[i]._quantity = -1;
-
+                
             }
-            AddCraft("planche", 4, Add(1, "bois"));
-            AddCraft("stick", 4, Add(2, "planche"));
+            AddCraft("oak_plank", 4, Add(1, "oak_wood"));
+            AddCraft("stick", 4, Add(2, "oak_plank"));
         }
 
-        struct _craft
+        public struct _craft
         {
             public string _name { get; set; }
             public bool IsCraftable { get; set; }
@@ -52,6 +47,7 @@ namespace Aviias
                     _cellCraft[i]._name = name;
                     _cellCraft[i]._quantity = quantity;
                     _cellCraft[i]._ressource = ressource;
+                    break;
                 }
             }
         }
@@ -59,7 +55,31 @@ namespace Aviias
 
         public void IsCraftable(Inventory._cell[] inventory)
         {
-            //if()
+            for(int i=0; i<_cellCraft.Length; i++)
+            {
+                if (_cellCraft[i]._name != "")
+                {
+                    foreach (KeyValuePair<int, Ressource> element in _cellCraft[i]._ressource)
+                    {
+                        int count = 0;
+                        for (int j = 0; j < inventory.Length; j++)
+                        {
+                            if (element.Value.Name == inventory[j]._ressource.Name && element.Key <= inventory[j]._quantity)
+                            {
+                                count++;
+                            }
+                        }
+                        if (count == _cellCraft[i]._ressource.Count)
+                        {
+                            _cellCraft[i].IsCraftable = true;
+                        }
+                        else
+                        {
+                            _cellCraft[i].IsCraftable = false;
+                        }
+                    }
+                }
+            }
         }
     }
 }

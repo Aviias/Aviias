@@ -114,6 +114,8 @@ namespace Aviias
             _moveSpeed = 0.8f;
             _activeQuest = new List<Quest>(8);
             _test = new Inventory(this);
+            //_test.AddInventory(20, "oak_wood");
+            _test.AddInventory(30, "oak_plank");
             _test.AddInventory(500, "dirt");
             _test.AddInventory(70, "stone");
             _test.AddInventory(12, "bedrock");
@@ -122,8 +124,6 @@ namespace Aviias
             _test.AddInventory(117, "glass");
             _test.AddInventory(80, "iron_ore");
             _test.AddInventory(1000, "stonebrick");
-            _test.AddInventory(20, "oak_wood");
-            _test.AddInventory(30, "oak_plank");
             _test.AddInventory(247, "oak_leaves");
         }
 

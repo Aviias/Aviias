@@ -4,17 +4,18 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Aviias
 {
-    internal class Inventory
+    public class Inventory
     {
         Player _player;
         _cell[]  _cellArray;
         private Text text;
-        Craft _craft;
+        public Craft _craft;
 
         public Inventory(Player player)
         {
             _player = player;
             _cellArray = new _cell[40];
+            _craft = new Craft();
             for (int i = 0; i < 40; i++)
             {
                 _cellArray[i] = new _cell();
@@ -101,13 +102,43 @@ namespace Aviias
                 SpriteEffects.None, 0f);
             for (int i=0; i<40; i++)
             {
-                _craft.IsCraftable(_cellArray);
                 if (_cellArray[i]._name != "")
                 {
                     UpdatePosition(i);
                     spriteBatch.Draw(content.Load<Texture2D>(_cellArray[i]._name), _cellArray[i].Position, null, Color.White, 0f, Vector2.Zero, 0.8f,
                         SpriteEffects.None, 0f);
                     text.DisplayText("" + _cellArray[i]._quantity, new Vector2(_cellArray[i].Position.X, _cellArray[i].Position.Y + 100), spriteBatch, Color.Black);
+                }
+            }
+            int count = 0;
+            for (int i = 0; i < _craft._cellCraft.Length; i++)
+            {
+                _craft.IsCraftable(_cellArray);
+                if (_craft._cellCraft[i].IsCraftable == true)
+                {
+                    if(count == 0)
+                    {
+                        spriteBatch.Draw(content.Load<Texture2D>("craft"), new Vector2(_player.Position.X + 500, _player.Position.Y - 400), null, Color.White, 0f, Vector2.Zero, 1.1f,
+                            SpriteEffects.None, 0f);
+                        spriteBatch.Draw(content.Load<Texture2D>(_craft._cellCraft[i]._name), new Vector2(_player.Position.X + 513, _player.Position.Y - 387), null, Color.White, 0f, Vector2.Zero, 0.8f,
+                            SpriteEffects.None, 0f);
+                        count++;
+                    }
+                    else if(count == 1)
+                    {
+                        spriteBatch.Draw(content.Load<Texture2D>("craft"), new Vector2(_player.Position.X + 500, _player.Position.Y - 325), null, Color.White, 0f, Vector2.Zero, 1.1f,
+                            SpriteEffects.None, 0f);
+                        spriteBatch.Draw(content.Load<Texture2D>(_craft._cellCraft[i]._name), new Vector2(_player.Position.X + 513, _player.Position.Y - 312), null, Color.White, 0f, Vector2.Zero, 0.8f,
+                            SpriteEffects.None, 0f);
+                        count++;
+                    }
+                    else if(count == 2)
+                    {
+                        spriteBatch.Draw(content.Load<Texture2D>("craft"), new Vector2(_player.Position.X + 500, _player.Position.Y - 250), null, Color.White, 0f, Vector2.Zero, 1.1f,
+                            SpriteEffects.None, 0f);
+                        spriteBatch.Draw(content.Load<Texture2D>(_craft._cellCraft[i]._name), new Vector2(_player.Position.X + 513, _player.Position.Y - 237), null, Color.White, 0f, Vector2.Zero, 0.8f,
+                            SpriteEffects.None, 0f);
+                    }
                 }
             }
         }
