@@ -9,6 +9,7 @@ namespace Aviias
         Player _player;
         _cell[]  _cellArray;
         private Text text;
+        Craft _craft;
 
         public Inventory(Player player)
         {
@@ -53,7 +54,12 @@ namespace Aviias
             }
         }
 
-        struct _cell
+        public _cell[] Array
+        {
+            get { return _cellArray; }
+        }
+
+        public struct _cell
         {
             public Vector2 Position { get; set; }
             public bool IsFull { get; set; }
@@ -95,6 +101,7 @@ namespace Aviias
                 SpriteEffects.None, 0f);
             for (int i=0; i<40; i++)
             {
+                _craft.IsCraftable(_cellArray);
                 if (_cellArray[i]._name != "")
                 {
                     UpdatePosition(i);

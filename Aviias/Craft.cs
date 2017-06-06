@@ -9,13 +9,23 @@ namespace Aviias
 {
     class Craft
     {
+        _craft[] _cellCraft;
+        
+
         public Craft(Dictionary<int, Ressource> ressource)
         {
-            //Ressource toto = new Ressource("oak-wood");
-            //Ressource tptp = ressource.Add(1, toto);
-            //AddCraft("planche", 4, );
+            _cellCraft = new _craft[40];
+            for (int i = 0; i < 40; i++)
+            {
+                _cellCraft[i] = new _craft();
+                _cellCraft[i]._name = "";
+                _cellCraft[i]._quantity = -1;
+
+            }
+            AddCraft("planche", 4, Add(1, "bois"));
+            AddCraft("stick", 4, Add(2, "planche"));
         }
-        
+
         struct _craft
         {
             public string _name { get; set; }
@@ -24,38 +34,32 @@ namespace Aviias
             public Dictionary<int, Ressource> _ressource;
         }
 
-        public void AddCraft(string name, int quantity, Dictionary<int, Ressource> ressource)
+        public Dictionary<int,Ressource> Add(int number, string ressource)
         {
-            
+            Dictionary<int, Ressource> _ressource = new Dictionary<int, Ressource>();
+            Ressource t = new Ressource(ressource);
+            _ressource.Add(number, t);
+
+            return _ressource;
         }
 
-        //public Craft()
-        //{
-        //    _planche = new Dictionary<int, int>();
-        //    _stick = new Dictionary<int, int>();
-        //    _pelleEnBois = new Dictionary<int, int>();
-        //}
+        public void AddCraft(string name, int quantity, Dictionary<int, Ressource> ressource)
+        {
+            for(int i=0; i<_cellCraft.Length; i++)
+            {
+                if(_cellCraft[i]._name == "")
+                {
+                    _cellCraft[i]._name = name;
+                    _cellCraft[i]._quantity = quantity;
+                    _cellCraft[i]._ressource = ressource;
+                }
+            }
+        }
 
-        //public int Planche()
-        //{
-        //    _planche.Add(1, "bois");
-        //    int Out = 4;
-        //    return Out;
-        //}
 
-        //public int Stick()
-        //{
-        //    _stick.Add(2, _ressource.Id("planche"));
-        //    int Out = 4;
-        //    return Out;
-        //}
-
-        //public int PelleEnBois()
-        //{
-        //    _pelleEnBois.Add(1, _ressource.Id("planche"));
-        //    _pelleEnBois.Add(2, _ressource.Id("stick"));
-        //    int Out = 1;
-        //    return Out;
-        //}
+        public void IsCraftable(Inventory._cell[] inventory)
+        {
+            //if()
+        }
     }
 }
