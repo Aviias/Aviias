@@ -195,7 +195,17 @@ namespace Aviias
             }
         }
 
-        
+        bool IsOnLadder(Map map)
+        {
+            for (int a = (int)(Position.Y / 16); a < (Position.Y / 16) + 3; a++)
+            {
+                for (int b = (int)(Position.X / 16); b < (Position.X) / 16 + 1; b++)
+                {
+                    if (map._blocs[b, a] != null && map._blocs[b, a].Type == "ladder") return true;
+                }
+            }
+            return false;
+        }
 
         internal void Jump(Map map)
         {
