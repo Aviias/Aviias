@@ -254,42 +254,39 @@ namespace Aviias
             return false;
         }
 
-        public void FindBreakBlock(Vector2 pos, Player player, ContentManager Content, StreamWriter log)
+        public void FindBreakBlock(Vector2 pos, Player player, ContentManager Content)
         {
             float clickCoordX = pos.X;
             float clickCoordY = (float)1.007 * pos.Y + (float)8.06;
             int i = 0;
-            int j = 0;
             bool isFind = false;
 
             //log.WriteLine("=========================   clickCoordX = " + clickCoordX + ", clickCoordY = " + clickCoordY);
 
             while ((i < _worldHeight) && (isFind == false))
             {
-                j = 0;
+                int j = 0;
                 while ((j < _worldWidth) && (isFind == false))
                 {
-                    if (_blocs[j, i].GetPosBlock == pos)
-                        if (_blocs[j, i].GetPosBlock == pos)
-                            /*
-                            if (blocs[i, j].IsBreakable )
-                                log.WriteLine("bloc[ " + i + "," + j + "] X = " + blocs[i, j].GetPosBlock.X + ", Y = " + blocs[i, j].GetPosBlock.Y + " Breakable, type = "+ blocs[i, j].Type );
-                            else
-                                log.WriteLine("bloc[ " + i + "," + j + "] X = " + blocs[i, j].GetPosBlock.X + ", Y = " + blocs[i, j].GetPosBlock.Y + " Not Breakable, type = " + blocs[i, j].Type);
-                            */
-                            if ((clickCoordX >= _blocs[i, j].GetPosBlock.X) && (clickCoordX < (_blocs[i, j].GetPosBlock.X + _scale)))
+                        /*
+                        if (blocs[i, j].IsBreakable )
+                            log.WriteLine("bloc[ " + i + "," + j + "] X = " + blocs[i, j].GetPosBlock.X + ", Y = " + blocs[i, j].GetPosBlock.Y + " Breakable, type = "+ blocs[i, j].Type );
+                        else
+                            log.WriteLine("bloc[ " + i + "," + j + "] X = " + blocs[i, j].GetPosBlock.X + ", Y = " + blocs[i, j].GetPosBlock.Y + " Not Breakable, type = " + blocs[i, j].Type);
+                        */
+                        if ((clickCoordX >= _blocs[i, j].GetPosBlock.X) && (clickCoordX < (_blocs[i, j].GetPosBlock.X + _scale)))
+                        {
+                            if ((clickCoordY >= _blocs[i, j].GetPosBlock.Y) && (clickCoordY < (_blocs[i, j].GetPosBlock.Y + _scale)))
                             {
-                                if ((clickCoordY >= _blocs[i, j].GetPosBlock.Y) && (clickCoordY < (_blocs[i, j].GetPosBlock.Y + _scale)))
-                                {
-                                    player.breakBloc(_blocs[j, i], Content, _blocs, i, j, 16, log);
-                                }
-                                //log.WriteLine("=========================   Trouve = i " + i + ", j = " + j);
-                                player.breakBloc(_blocs[i, j], Content, _blocs, i, j, _scale, log);
+                                player.breakBloc(_blocs[j, i], Content, _blocs, i, j, 16);
                                 isFind = true;
-
                             }
+                            //log.WriteLine("=========================   Trouve = i " + i + ", j = " + j);
+                            //player.breakBloc(_blocs[i, j], Content, _blocs, i, j, _scale);
+                        }
+                    j++;
                 }
-                j++;
+                i++;
             }
         }
 

@@ -22,11 +22,11 @@ namespace Aviias
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
         // Texture2D texture;
-        Map map = new Map(200, 200);
+        Map map = new Map(200,200);
         Random random = new Random();
         BoxingViewportAdapter _viewportAdapter;
         const int WindowWidth = 1920;
-        const int WindowHeight = 1088;
+        const int WindowHeight = 1080;
         Camera2D _camera;
         public List<NPC> _npc;
         SpriteFont font;
@@ -174,12 +174,7 @@ namespace Aviias
            }
 
             //     if (player.GetCollisionSide(player.GetBlocsAround(map)) != 3) player.Position.Y += playerMoveSpeed;
-            //  if (!list.Contains(3)) player.Position.Y += player.PlayerMoveSpeed;
-
-            player.Update(player, Camera, _npc, gameTime, Content, log, map);
-            player.UpdatePlayerCollision(gameTime, player, monsters);
-            base.Update(gameTime);
-        
+            //  if (!list.Contains(3)) player.Position.Y += player.PlayerMoveSpeed;    
 
             float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
             _spawnTimer -= elapsed;
@@ -198,8 +193,11 @@ namespace Aviias
                 monsters.Add(monster);
                 _spawnTimer = _spawnTIMER;
             }
-            
-           
+
+            player.Update(player, Camera, _npc, gameTime, Content, log, map);
+            player.UpdatePlayerCollision(gameTime, player, monsters);
+            base.Update(gameTime);
+
         }
 
         /// <summary>

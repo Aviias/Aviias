@@ -14,7 +14,6 @@ namespace Aviias
 {
     public class Player
     {
-        Map _ctx;
         Texture2D PlayerTexture;
         public Vector2 Position;
         bool Active;
@@ -42,7 +41,6 @@ namespace Aviias
         float _moveSpeed;
         public bool flyMod;
         public bool IsInventoryOpen;
-        Map map;
 
         float _playerTimer = 1.2f;
         const float _playerTIMER = 1.2f;
@@ -128,6 +126,7 @@ namespace Aviias
             _inv.AddInventory(80, "iron_ore");
             _inv.AddInventory(1000, "stonebrick");
             _inv.AddInventory(247, "oak_leaves");
+            
         }
 
         public Vector2 PlayerPosition
@@ -180,7 +179,7 @@ namespace Aviias
             }
         }
 
-        public void breakBloc(Bloc bloc, ContentManager content, Bloc[,] blocs, int i, int j, int scale, StreamWriter log)
+        public void breakBloc(Bloc bloc, ContentManager content, Bloc[,] blocs, int i, int j, int scale)
         {
             Bloc bloc1;
             if (bloc != null)
@@ -248,7 +247,9 @@ namespace Aviias
 
             float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
             list = GetCollisionSide(GetBlocsAround(map));
-            
+
+            _playerTimer -= elapsed;
+            _blocBreakTimer -= elapsed;
             _inventoryTimer -= elapsed;
             _craftTimer -= elapsed;
 
@@ -331,7 +332,7 @@ namespace Aviias
                     _blockDurationTimer -= elapsed;
                     if (_blockDurationTimer < 1)
                     {
-                        map.FindBreakBlock(position, player, Content, log);
+                        map.FindBreakBlock(position, player, Content);
                         _blocBreakTimer = _blocBreakTIMER;
                         _blockDurationTimer = _blockDurationTIMER;
                     }
