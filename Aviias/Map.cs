@@ -11,8 +11,8 @@ namespace Aviias
 {
     class Map
     {
-        readonly int _worldWidth;
-        readonly int _worldHeight;
+        public readonly int _worldWidth;
+        public readonly int _worldHeight;
         public Bloc[,] _blocs;
         const int _scale = 16;
         Random random = new Random();

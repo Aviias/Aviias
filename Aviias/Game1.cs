@@ -81,8 +81,8 @@ namespace Aviias
             _camera = new Camera2D(_viewportAdapter);
             _camera.LookAt(new Vector2(player.Position.X + 10, player.Position.Y + 15));
             _npc = new List<NPC>(8);
-            _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(500, 250), 1));
-            _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(1400, 300), 0));
+            _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(500, 250), 5));
+            _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(1400, 300), 3));
         }
 
         /// <summary>

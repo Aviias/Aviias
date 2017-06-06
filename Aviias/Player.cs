@@ -178,7 +178,7 @@ namespace Aviias
             {
                 for (int b = (int)(Position.X / 16); b < (Position.X) / 16 + 8; b++)
                 {
-                    if (a >= 0 && b >= 0 && map._blocs[b, a] != null && map._blocs[b, a].Type != "air")
+                    if (a >= 0 && b >= 0 && a < map._worldHeight && b < map._worldWidth && map._blocs[b, a] != null && map._blocs[b, a].Type != "air")
                     {
                         _blocs.Add(map._blocs[b, a]);
                         _nbBlocs++;
@@ -243,7 +243,7 @@ namespace Aviias
             {
                 for (int b = (int)(Position.X / 16); b < (Position.X) / 16 + 8; b++)
                 {
-                    if (a >= 0 && b >= 0 && map._blocs[b, a] != null && map._blocs[b, a].Type != "air" && map._blocs[b, a].Type != "ladder")
+                    if (a >= 0 && b >= 0 && a < map._worldHeight && b < map._worldWidth && map._blocs[b, a] != null && map._blocs[b, a].Type != "air" && map._blocs[b, a].Type != "ladder")
                     {
                         _blocs.Add(map._blocs[b, a]);
                         _nbBlocs++;

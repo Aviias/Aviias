@@ -21,6 +21,7 @@ namespace Aviias
         public bool _isTalking;
         static int _id;
         int trueid = 0;
+        Random rand = new Random();
 
         public NPC(ContentManager content, string texture, SpriteBatch spriteBatch, Vector2 position, int nbQuest)
         {
@@ -39,7 +40,7 @@ namespace Aviias
             {
                 if (quest.Type == 1 && quest.EndNpc == trueid)
                 {
-                    player.AddInventory(2000, "dirt");
+              //      player.AddInventory(2000, "dirt");
                    // quest.StartNpc.
                     quest._startNpc._nbQuest--;
                     quest._startNpc._isQuestActive = false;
@@ -80,7 +81,8 @@ namespace Aviias
 
             if (!_isQuestActive && _nbQuest > 0)
             {
-                _questActive = new Quest(1, _id, 2, this);
+                int idEnd = trueid == 1 ? 2 : 1;
+                _questActive = new Quest(1, _id, idEnd, this);
                 player.AddQuest(_questActive);
                 //   Talk(_questActive, _spriteBatch);
                 _isQuestActive = true;
