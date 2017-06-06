@@ -11,13 +11,12 @@ namespace Aviias
 {
     public class Bloc
     {
-        protected Vector2 _position;
+        Vector2 _position;
         public Texture2D _texture;
         float _scale;
         string _type;
         bool _isBreakable;
         bool _isAir;
-        public float moveSpeed = 0.1f;
 
         public Bloc(Vector2 position, float scale, string type, ContentManager content)
         {
@@ -68,29 +67,6 @@ namespace Aviias
         public void ChangeBloc(string newTexture, ContentManager content)
         {
             _texture = content.Load<Texture2D>(newTexture);
-            if (newTexture == "ladder") _type = newTexture;
-        }
-
-        public float posX
-        {
-            get { return _position.X; }
-            set { _position.X = value; }
-        }
-
-        public float posY
-        {
-            get { return _position.Y; }
-            set { _position.Y = value; }
-        }
-
-        public int Width
-        {
-            get { return _texture.Width; }
-        }
-
-        public int Height
-        {
-            get { return _texture.Height; }
         }
     }
 }
