@@ -16,6 +16,7 @@ namespace Aviias
         string _spitch;
         int _id;
         internal Dictionary<string, int> _goal;
+        Random rand = new Random();
 
         public Quest(int type, int idStartNpc, int idEndNpc, NPC startNPC)
         {
@@ -26,9 +27,9 @@ namespace Aviias
             _goal = new Dictionary<string, int>(4);
             _reward = new Dictionary<string, int>(2);
              _goal.Add("dirt", 8);
-            _reward.Add("dirt", 128);
             _startNpc = startNPC;
             CreateSpitch();
+            CreateReward();
         }
 
         internal bool CheckGoal(Player player, int npcId)
@@ -49,6 +50,13 @@ namespace Aviias
                 }
             }*/
             return false;
+        }
+
+        void CreateReward()
+        {
+            _reward.Add("dirt", rand.Next(0, 30));
+            _reward.Add("stone", rand.Next(0, 20));
+            _reward.Add("heal_potion", 1);
         }
 
         void CreateSpitch()
@@ -77,7 +85,7 @@ namespace Aviias
         {
             foreach(KeyValuePair<string, int> entry in _reward)
             {
-                // player.AddInventory(entry.Value, entry.Key);
+                 player._inv.AddInventory(entry.Value, entry.Key);
             }
         }
 

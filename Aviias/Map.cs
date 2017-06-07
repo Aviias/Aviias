@@ -89,8 +89,8 @@ namespace Aviias
                 {
                     prob = NextInt(1, 100);
 
-                    if (prob <= 15) columnHeight++;
-                    if (prob >= 85) columnHeight--;
+                    if (prob <= 8) columnHeight++;
+                    if (prob >= 92) columnHeight--;
                 }
 
                 if (columnHeight < 3) columnHeight = 3;
@@ -146,13 +146,29 @@ namespace Aviias
                     {
                         if (k > 6 && l > 6 && _blocs[k - 3, l] != null && _blocs[k - 3, l].Type == "grass_side")
                         {
-                            _treeGeneration = NextInt(1, 2500);
+                            int rand = random.Next(1, 8500);
+                            if (rand == 1)
+                            {
+                                rand = NextInt(1, 3);
+                                if (rand == 1)
+                                {
+                                    _structureModel = structures.structures["houseA"];
+                                }
+                                else _structureModel = structures.structures["mobTowerA"];
+                                AddHouse(k, l, _structureModel, content);
+                            }
+                        }
+
+                            if (k > 6 && l > 6 && _blocs[k - 3, l] != null && _blocs[k - 3, l].Type == "grass_side")
+                        {
+                            _treeGeneration = NextInt(1, 2300);
                             if (_treeGeneration <= _treeRate)
                             {
                                 _treeGeneration = NextInt(1, 3);
-                                if (_treeGeneration == 1) _structureModel = structures.structures["mobTowerA"];
-                                else _structureModel = structures.structures["mobTowerA"];
+                                if (_treeGeneration == 1) _structureModel = structures.structures["treeA"];
+                                else _structureModel = structures.structures["treeB"];
                                 AddTree(k, l, _structureModel, content);
+                               
                             }
                         }
                     }
@@ -252,6 +268,20 @@ namespace Aviias
                 }
             }
             return false;
+        }
+
+
+        public void AddHouse(int x, int y, string[,] houseModel, ContentManager content)
+        {
+            int lengthX = houseModel.GetLength(0);
+            int lengthY = houseModel.GetLength(1);
+            for (int i = 0; i < lengthY; i++)
+            {
+                for (int j = 0; j < lengthX; j++)
+                {
+                    if (x - lengthY >= 0 && y - lengthX >= 0 && houseModel[j, i] != null && houseModel[j, i] != "air" && _blocs[x - lengthY + i, y - lengthX + j] != null) _blocs[x - lengthY + i, y - lengthX + j].ChangeBloc(houseModel[j, i], content);
+                }
+            }
         }
 
         public void FindBreakBlock(Vector2 pos, Player player, ContentManager Content, StreamWriter log)

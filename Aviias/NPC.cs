@@ -41,8 +41,7 @@ namespace Aviias
             {
                 if (quest.Type == 1 && quest.EndNpc == trueid)
                 {
-                   // player.AddInventory(2000, "dirt");
-                   // quest.StartNpc.
+                    quest.GetReward(player);
                     quest._startNpc._nbQuest--;
                     quest._startNpc._isQuestActive = false;
                     player.RemoveQuest(_questActive);

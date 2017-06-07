@@ -60,7 +60,7 @@ namespace Aviias
         //   MonoGame.Extended.Camera2D Camera;
         float _playerMoveSpeed;
 
-        Inventory _inv;
+        internal Inventory _inv;
 
         public int Width
         {
@@ -113,7 +113,7 @@ namespace Aviias
             _displayPos = true;
             _isDie = false;
             _gravity = 1;
-            _jumpHeight = -20;
+            _jumpHeight = -12;
             _moveSpeed = 0.8f;
             _activeQuest = new List<Quest>(8);
             _inv = new Inventory(this);
@@ -359,6 +359,23 @@ namespace Aviias
                 flyMod = !flyMod;
             }
 
+            if (currentKeyboardState.IsKeyDown(Keys.N))
+            {
+                for(int i = 0; i < _inv._cellArray.Length; i++)
+                {
+                    if(_inv._cellArray[i]._name == "heal_potion" && _inv._cellArray[i]._quantity >= 1)
+                    {
+                        Health += 50;
+                        _inv.DecreaseInventory(1, "heal_potion");
+                    }
+                }
+            }
+        }
+
+        internal void RegenerateHealth(int quantity)
+        {
+            Health += quantity;
+            if (Health > 100) Health = 100;
         }
 
         internal void UpdatePlayerCollision(GameTime gameTime, Player player, List<Monster> monsters)

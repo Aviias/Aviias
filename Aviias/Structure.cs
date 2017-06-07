@@ -50,8 +50,8 @@ namespace Aviias
             {"oak_wood", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "bookshelf", "oak_plank", "oak_wood"},
             {"oak_wood", "oak_wood", "oak_wood", "oak_wood", "oak_wood", "oak_wood", "oak_wood", "oak_wood", "oak_wood"},
             {"oak_wood", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "ladder", "oak_wood"},
-            {"air", "oak_plank", "oak_plank", "glass", "glass", "glass", "oak_plank", "ladder", "oak_wood"},
-            {"air", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "furnace_off", "ladder", "oak_wood"},
+            {"door_upper", "oak_plank", "oak_plank", "glass", "glass", "glass", "oak_plank", "ladder", "oak_wood"},
+            {"door_lower", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "oak_plank", "furnace_off", "ladder", "oak_wood"},
             {"stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick"}
         };
 
