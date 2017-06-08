@@ -117,8 +117,8 @@ namespace Aviias
             _moveSpeed = 0.8f;
             _activeQuest = new List<Quest>(8);
             _inv = new Inventory(this);
-            _inv.AddInventory(20, "oak_wood");
-            _inv.AddInventory(30, "oak_plank");
+            _inv.AddInventory(2, "oak_wood");
+            _inv.AddInventory(4, "oak_plank");
             _inv.AddInventory(500, "dirt");
             _inv.AddInventory(70, "stone");
             _inv.AddInventory(12, "bedrock");

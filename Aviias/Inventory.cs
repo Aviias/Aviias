@@ -55,6 +55,15 @@ namespace Aviias
             }
         }
 
+        public bool IsFull(int i)
+        {
+            if(_cellArray[i]._quantity == 0)
+            {
+                _cellArray[i].IsFull = false;
+            }
+            return _cellArray[i].IsFull;
+        }
+
         public _cell[] Array
         {
             get { return _cellArray; }
@@ -106,7 +115,7 @@ namespace Aviias
                 SpriteEffects.None, 0f);
             for (int i=0; i<40; i++)
             {
-                if (_cellArray[i]._name != "")
+                if (_cellArray[i]._name != "" && IsFull(i))
                 {
                     UpdatePosition(i);
                     spriteBatch.Draw(content.Load<Texture2D>(_cellArray[i]._name), _cellArray[i].Position, null, Color.White, 0f, Vector2.Zero, 0.8f,
@@ -115,9 +124,9 @@ namespace Aviias
                 }
             }
             int count = 0;
+            _craft.IsCraftable(_cellArray);
             for (int i = 0; i < _craft._cellCraft.Length; i++)
             {
-                _craft.IsCraftable(_cellArray);
                 if (_craft._cellCraft[i].IsCraftable == true)
                 {
                     if(count == 0)
