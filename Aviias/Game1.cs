@@ -176,7 +176,7 @@ namespace Aviias
             //     if (player.GetCollisionSide(player.GetBlocsAround(map)) != 3) player.Position.Y += playerMoveSpeed;
             //  if (!list.Contains(3)) player.Position.Y += player.PlayerMoveSpeed;
 
-            player.Update(player, Camera, _npc, gameTime, Content, log, map);
+            player.Update(player, Camera, _npc, gameTime, Content, log, map, monsters);
             player.UpdatePlayerCollision(gameTime, player, monsters);
             base.Update(gameTime);
         
@@ -211,8 +211,7 @@ namespace Aviias
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
-             spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+            spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
             map.Draw(spriteBatch, (int)player.Position.X, (int)player.Position.Y);
             for (int i = 0; i < monsters.Count; i++)
             {
@@ -220,22 +219,19 @@ namespace Aviias
             }
             if (player.IsDie == false)
             {
-                player.Draw(spriteBatch,Content);
+                player.Draw(spriteBatch, Content);
+            }
+
                 //   foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
                 foreach (NPC npc in _npc)
                 {
                     npc.Draw(spriteBatch);
                     npc.Update();
                 }
-      /*        if (list.Contains(1)) spriteBatch.DrawString(font, "1", new Vector2(player.Position.X - 20, player.Position.Y - 20), Color.Red);
-            spriteBatch.DrawString(font,Convert.ToString(player.CursorPos().X), new Vector2(10, 10), Color.Red);
-                if (list.Contains(1)) spriteBatch.DrawString(font, "1", new Vector2(player.Position.X - 20, player.Position.Y - 20), Color.Red);
-                if (list.Contains(2)) spriteBatch.DrawString(font, "2", new Vector2(player.Position.X - 20, player.Position.Y - 40), Color.Red);
-                if (list.Contains(3)) spriteBatch.DrawString(font, "3", new Vector2(player.Position.X - 20, player.Position.Y - 60), Color.Red);
-            if (list.Contains(4)) spriteBatch.DrawString(font, "4", new Vector2(player.Position.X - 20, player.Position.Y - 80), Color.Red);*/
+
                 spriteBatch.End();
                 base.Draw(gameTime);
-            }
+            
         }
     }
 }

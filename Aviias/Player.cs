@@ -240,7 +240,7 @@ namespace Aviias
             return true;
         }
 
-        internal void Update(Player player, Camera2D Camera, List<NPC> _npc, GameTime gameTime, ContentManager Content, StreamWriter log, Map map)
+        internal void Update(Player player, Camera2D Camera, List<NPC> _npc, GameTime gameTime, ContentManager Content, StreamWriter log, Map map, List<Monster> monsters)
         {
             currentKeyboardState = Keyboard.GetState();
             mouseState = Mouse.GetState();
@@ -326,6 +326,7 @@ namespace Aviias
                             
                     }
                 }
+
                 if (mouseState.LeftButton == ButtonState.Pressed && _blocBreakTimer < 1)
                 {
                     _blockDurationTimer -= elapsed;
@@ -365,7 +366,7 @@ namespace Aviias
                 {
                     if(_inv._cellArray[i]._name == "heal_potion" && _inv._cellArray[i]._quantity >= 1)
                     {
-                        Health += 50;
+                        RegenerateHealth(50);
                         _inv.DecreaseInventory(1, "heal_potion");
                     }
                 }
