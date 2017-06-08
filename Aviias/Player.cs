@@ -251,6 +251,7 @@ namespace Aviias
             
             _inventoryTimer -= elapsed;
             _craftTimer -= elapsed;
+            _playerTimer -= elapsed;
 
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {

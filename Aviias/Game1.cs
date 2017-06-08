@@ -160,10 +160,7 @@ namespace Aviias
                 {
                     monsters[i].Update(player, gameTime);
                 }
-                else
-                {
-                    monsters.RemoveAt(i);
-                }   
+                
                     list = player.GetCollisionSide(player.GetBlocsAround(map));
 
                     Camera.Move(new Vector2(-player.PlayerMoveSpeed, 0));
