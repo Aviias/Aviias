@@ -12,7 +12,7 @@ namespace Aviias
     {
         public Chest(Vector2 position, float scale, string type, ContentManager content) : base (position, scale, type, content)
         {
-            
+
         }
     }
 }

@@ -18,8 +18,6 @@ namespace Aviias
         bool _isBreakable;
         bool _isAir;
         public float moveSpeed = 0.1f;
-        int _luminosity;
-        public bool _isInContactWithTheSky;
 
         public Bloc(Vector2 position, float scale, string type, ContentManager content)
         {
@@ -27,7 +25,6 @@ namespace Aviias
             _texture = content.Load<Texture2D>(type);
             _scale = scale;
             _type = type;
-            _luminosity = 6;
             if (type != "air")
             {
                 _isBreakable = true;
@@ -42,7 +39,7 @@ namespace Aviias
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _position, null, new Color(_luminosity, _luminosity, _luminosity, 255), 0f, Vector2.Zero, _scale / 64, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_texture, _position, null, Color.White, 0f, Vector2.Zero, _scale / 64, SpriteEffects.None, 0f);
         }
 
         
@@ -94,12 +91,6 @@ namespace Aviias
         public int Height
         {
             get { return _texture.Height; }
-        }
-
-        public int Luminosity
-        {
-            get { return _luminosity; }
-            set { _luminosity = value * 36; }
         }
     }
 }
