@@ -338,12 +338,12 @@ namespace Aviias
                 if (mouseState.LeftButton == ButtonState.Pressed && _blocBreakTimer < 1)
                 {
                     _blockDurationTimer -= elapsed;
-                    //if (_blockDurationTimer < 1)
-                    //{
+                    if (_blockDurationTimer < 1)
+                    {
                         map.FindBreakBlock(position, player, Content, log);
                         _blocBreakTimer = _blocBreakTIMER;
                         _blockDurationTimer = _blockDurationTIMER;
-                    //}
+                    }
                     
                 }
               
