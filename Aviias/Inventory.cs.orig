@@ -4,28 +4,17 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Aviias
 {
-<<<<<<< HEAD
     public class Inventory
     {
         Player _player;
         public _cell[]  _cellArray;
         private Text text;
         public Craft _craft;
-=======
-    internal class Inventory
-    {
-        Player _player;
-        _cell[]  _cellArray;
-        private Text text;
-        int _difX = 77;
-        int _difY = 82;
->>>>>>> gravity
 
         public Inventory(Player player)
         {
             _player = player;
             _cellArray = new _cell[40];
-<<<<<<< HEAD
             _craft = new Craft();
             for (int i = 0; i < 40; i++)
             {
@@ -50,47 +39,13 @@ namespace Aviias
                 if (i > 0 && i < 10)
                 {
                     _cellArray[i].Position = new Vector2(_cellArray[i - 1].Position.X + _difX, _cellArray[0].Position.Y);
-=======
-            for (int i = 0; i < 40; i++)
-            {
-                _cellArray[i] = new _cell();
-                _cellArray[i].IsFull = false;
-                _cellArray[i]._ressource = new Ressource("bedrock");
-                _cellArray[i]._name = _cellArray[i]._ressource.Name;
-                Update();
-            }
-        }
-
-        struct _cell
-        {
-            public Vector2 Position { get; set; }
-            public bool IsFull { get; set; }
-            public string _name { get; set; }
-            public int _quantity { get; set; }
-            public Ressource _ressource { get; set; }
-            public bool _isUsable { get; set; }
-        }
-
-        public void Update()
-        {
-            for (int i = 0; i < _cellArray.Length; i++)
-            {
-                if (i == 0)
-                {
-                    _cellArray[i].Position = new Vector2(_player.Position.X - 325, _player.Position.Y + 49);
->>>>>>> gravity
                 }
                 else
                 {
                     if ((i % 10) == 0)
                     {
-<<<<<<< HEAD
                         _cellArray[i].Position = new Vector2(_cellArray[0].Position.X, _cellArray[0].Position.Y + _difY);
                         _difY = _difY + _difY;
-=======
-                        _difY += 82;
-                        _cellArray[i].Position = new Vector2(_cellArray[0].Position.X, _cellArray[0].Position.Y + _difY);
->>>>>>> gravity
                     }
                     else
                     {
@@ -98,7 +53,34 @@ namespace Aviias
                     }
                 }
             }
+        }
+
 <<<<<<< HEAD
+=======
+        public _cell PositionToolBar(int i)
+        {
+            int _difX = 77;
+            if (i == 0)
+            {
+                _cellArray[i].Position = new Vector2(_player.Position.X - 390, _player.Position.Y + 484);
+                return _cellArray[i];
+            }
+            else if (i > 0 && i < 10)
+            {
+                _cellArray[i].Position = new Vector2(_cellArray[i - 1].Position.X + _difX, _cellArray[0].Position.Y);
+                return _cellArray[i];
+            }
+            return _cellArray[40];
+        }
+
+>>>>>>> fusion
+        public bool IsFull(int i)
+        {
+            if(_cellArray[i]._quantity == 0)
+            {
+                _cellArray[i].IsFull = false;
+            }
+            return _cellArray[i].IsFull;
         }
 
         public _cell[] Array
@@ -113,49 +95,33 @@ namespace Aviias
             public string _name { get; set; }
             public int _quantity { get; set; }
             public Ressource _ressource { get; set; }
-=======
-          /*  for (int i = 0; i < _cellArray.Length; i++)
-            {
-                if(_cellArray[i].IsFull) _cellArray[i].Position = _player.Position;
-            }*/
->>>>>>> gravity
         }
 
         public void AddInventory(int quantity, string name)
         {
-<<<<<<< HEAD
             //foreach ( entry in _cellArray)
             for (int i = 0; i < _cellArray.Length; i++)
             {
-                if (_cellArray[i]._name == name) { _cellArray[i]._quantity += quantity; break; }
-=======
-            for (int i = 0; i < _cellArray.Length; i++)
-            {
-                if (_cellArray[i]._name == name) { _cellArray[i]._quantity += quantity; return;}
->>>>>>> gravity
+                if (_cellArray[i]._name == name) { _cellArray[i]._quantity += quantity; return; }
             }
 
             for (int i = 0; i < _cellArray.Length; i++)
             {
-<<<<<<< HEAD
                 if (!_cellArray[i].IsFull && _cellArray[i]._name != name) { _cellArray[i]._name = name; _cellArray[i]._quantity = quantity; _cellArray[i].IsFull = true; _cellArray[i]._ressource = new Ressource(name); break; }
-=======
-                if (!_cellArray[i].IsFull && _cellArray[i]._name == "bedrock") { _cellArray[i]._name = name; _cellArray[i]._quantity = quantity; _cellArray[i].IsFull = true; _cellArray[i]._ressource = new Ressource(name); break; }
->>>>>>> gravity
             }
         }
         
 
-<<<<<<< HEAD
-=======
-
->>>>>>> gravity
         public void DecreaseInventory(int quantity, string name)
         {
             for (int i = 0; i < _cellArray.Length; i++)
             {
-                if (_cellArray[i]._name == name) _cellArray[i]._quantity -= quantity;
-                break;
+                if (_cellArray[i]._name == name)
+                {
+                    _cellArray[i]._quantity -= quantity;
+                    return;
+                }
+               
             }
         }
 
@@ -168,19 +134,18 @@ namespace Aviias
                 SpriteEffects.None, 0f);
             for (int i=0; i<40; i++)
             {
-<<<<<<< HEAD
-                if (_cellArray[i]._name != "")
+                UpdatePosition(i);
+                if (_cellArray[i]._name != "" && IsFull(i))
                 {
-                    UpdatePosition(i);
                     spriteBatch.Draw(content.Load<Texture2D>(_cellArray[i]._name), _cellArray[i].Position, null, Color.White, 0f, Vector2.Zero, 0.8f,
                         SpriteEffects.None, 0f);
                     text.DisplayText("" + _cellArray[i]._quantity, new Vector2(_cellArray[i].Position.X, _cellArray[i].Position.Y + 100), spriteBatch, Color.Black);
                 }
             }
             int count = 0;
+            _craft.IsCraftable(_cellArray);
             for (int i = 0; i < _craft._cellCraft.Length; i++)
             {
-                _craft.IsCraftable(_cellArray);
                 if (_craft._cellCraft[i].IsCraftable == true)
                 {
                     if(count == 0)
@@ -207,11 +172,6 @@ namespace Aviias
                             SpriteEffects.None, 0f);
                     }
                 }
-=======
-                spriteBatch.Draw(content.Load<Texture2D>(_cellArray[i]._name), _cellArray[i].Position, null, Color.White, 0f, Vector2.Zero, 0.8f,
-                        SpriteEffects.None, 0f);
-                text.DisplayText(_cellArray[i]._quantity.ToString(),new Vector2(_cellArray[i].Position.X, _cellArray[i].Position.Y + 20), spriteBatch, Color.White);
->>>>>>> gravity
             }
         }
     }

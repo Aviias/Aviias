@@ -286,7 +286,7 @@ namespace Aviias
                 //invenTimer.ReInit();
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.C) && _craftTimer < 1)
+            if (currentKeyboardState.IsKeyDown(Keys.C) && _craftTimer < 1 && IsInventoryOpen)
             {
                 for (int i = 0; i < _inv._craft._cellCraft.Length; i++)
                 {
@@ -306,7 +306,7 @@ namespace Aviias
             }
 
 
-            if (currentKeyboardState.IsKeyDown(Keys.Space))
+            if (currentKeyboardState.IsKeyDown(Keys.Space) /*|| currentKeyboardState.IsKeyDown(Keys.Up)*/)
             {
                 Jump(map);
             }
@@ -338,12 +338,12 @@ namespace Aviias
                 if (mouseState.LeftButton == ButtonState.Pressed && _blocBreakTimer < 1)
                 {
                     _blockDurationTimer -= elapsed;
-                    if (_blockDurationTimer < 1)
-                    {
+                    //if (_blockDurationTimer < 1)
+                    //{
                         map.FindBreakBlock(position, player, Content, log);
                         _blocBreakTimer = _blocBreakTIMER;
                         _blockDurationTimer = _blockDurationTIMER;
-                    }
+                    //}
                     
                 }
               
@@ -512,17 +512,37 @@ namespace Aviias
             return _blocs;
         }
 
+        public string ImageHealth(int health)
+        {
+            return (Math.Floor((double)health / 10)*10).ToString();
+        }
+
         internal void Draw(SpriteBatch spriteBatch, ContentManager content)
         {
             spriteBatch.Draw(PlayerTexture, Position, null, Color.White, 0f, Vector2.Zero, 1f,
                SpriteEffects.None, 0f);
+            spriteBatch.Draw(content.Load<Texture2D>(ImageHealth(_health)), new Vector2(Position.X - 950, Position.Y - 500), null, Color.White, 0f, Vector2.Zero, 1.1f,
+               SpriteEffects.None, 0f);
+            if (_displayPos) text.DisplayText((Position.X  + " - " + Position.Y), new Vector2(Position.X, Position.Y - 30), spriteBatch, Color.Red);
+            text.DisplayText(("" +_health + "/"  + "100"), new Vector2(Position.X - 785, Position.Y - 420), spriteBatch, Color.White);
 
-              if (_displayPos) text.DisplayText((Position.X  + " - " + Position.Y), new Vector2(Position.X, Position.Y - 30), spriteBatch, Color.Red);
-            text.DisplayText(("Life : " + _health), new Vector2(Position.X, Position.Y - 60), spriteBatch, Color.Orange);
             if(IsInventoryOpen)
             {
                 _inv.Draw(spriteBatch, content);
-            }
+            }else
+            {
+                spriteBatch.Draw(content.Load<Texture2D>("Barre d'inventaire"), new Vector2(Position.X - 400, Position.Y +474), null, Color.White, 0f, Vector2.Zero, 1f,
+                    SpriteEffects.None, 0f);
+                for(int i=0; i<10; i++)
+                {
+                    if (_inv.PositionToolBar(i).IsFull == true)
+                    {
+                        spriteBatch.Draw(content.Load<Texture2D>(_inv.PositionToolBar(i)._name), _inv.PositionToolBar(i).Position, null, Color.White, 0f, Vector2.Zero, 0.8f,
+                            SpriteEffects.None, 0f);
+                        text.DisplayText("" + _inv.PositionToolBar(i)._quantity, new Vector2(_inv.PositionToolBar(i).Position.X, _inv.PositionToolBar(i).Position.Y + 100), spriteBatch, Color.Black);
+                    }
+                }
+            }        
         }
 
         public void AddStr(string str)

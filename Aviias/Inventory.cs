@@ -55,6 +55,22 @@ namespace Aviias
             }
         }
 
+        public _cell PositionToolBar(int i)
+        {
+            int _difX = 77;
+            if (i == 0)
+            {
+                _cellArray[i].Position = new Vector2(_player.Position.X - 390, _player.Position.Y + 484);
+                return _cellArray[i];
+            }
+            else if (i > 0 && i < 10)
+            {
+                _cellArray[i].Position = new Vector2(_cellArray[i - 1].Position.X + _difX, _cellArray[0].Position.Y);
+                return _cellArray[i];
+            }
+            return _cellArray[40];
+        }
+
         public bool IsFull(int i)
         {
             if(_cellArray[i]._quantity == 0)
