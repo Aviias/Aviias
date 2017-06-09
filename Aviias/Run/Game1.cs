@@ -208,16 +208,16 @@ namespace Aviias
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            map.Draw(spriteBatch, (int)player.Position.X, (int)player.Position.Y);
-            for (int i = 0; i < monsters.Count; i++)
-            {
-                monsters[i].Draw(spriteBatch);
-            }
-            if (player.IsDie == false)
-            {
-                player.Draw(spriteBatch, Content);
-            }
+                spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+                map.Draw(spriteBatch, (int)player.Position.X, (int)player.Position.Y);
+                for (int i = 0; i < monsters.Count; i++)
+                {
+                    monsters[i].Draw(spriteBatch);
+                }
+                if (player.IsDie == false)
+                {
+                    player.Draw(spriteBatch, Content);
+                }
 
                 //   foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
                 foreach (NPC npc in _npc)
@@ -228,7 +228,6 @@ namespace Aviias
 
                 spriteBatch.End();
                 base.Draw(gameTime);
-            
         }
     }
 }
