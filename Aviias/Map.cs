@@ -299,28 +299,27 @@ namespace Aviias
                 j = 0;
                 while ((j < _worldWidth) && (isFind == false))
                 {
-                    if (_blocs[j, i].GetPosBlock == pos)
-                        if (_blocs[j, i].GetPosBlock == pos)
-                            /*
-                            if (blocs[i, j].IsBreakable )
-                                log.WriteLine("bloc[ " + i + "," + j + "] X = " + blocs[i, j].GetPosBlock.X + ", Y = " + blocs[i, j].GetPosBlock.Y + " Breakable, type = "+ blocs[i, j].Type );
-                            else
-                                log.WriteLine("bloc[ " + i + "," + j + "] X = " + blocs[i, j].GetPosBlock.X + ", Y = " + blocs[i, j].GetPosBlock.Y + " Not Breakable, type = " + blocs[i, j].Type);
-                            */
-                            if ((clickCoordX >= _blocs[i, j].GetPosBlock.X) && (clickCoordX < (_blocs[i, j].GetPosBlock.X + _scale)))
-                            {
-                                if ((clickCoordY >= _blocs[i, j].GetPosBlock.Y) && (clickCoordY < (_blocs[i, j].GetPosBlock.Y + _scale)))
-                                {
-                                    player.breakBloc(_blocs[j, i], Content, _blocs, i, j, 16, log);
-                                }
-                                //log.WriteLine("=========================   Trouve = i " + i + ", j = " + j);
-                                player.breakBloc(_blocs[i, j], Content, _blocs, i, j, _scale, log);
-                                isFind = true;
+                    /*
+                    if (blocs[i, j].IsBreakable )
+                        log.WriteLine("bloc[ " + i + "," + j + "] X = " + blocs[i, j].GetPosBlock.X + ", Y = " + blocs[i, j].GetPosBlock.Y + " Breakable, type = "+ blocs[i, j].Type );
+                    else
+                        log.WriteLine("bloc[ " + i + "," + j + "] X = " + blocs[i, j].GetPosBlock.X + ", Y = " + blocs[i, j].GetPosBlock.Y + " Not Breakable, type = " + blocs[i, j].Type);
+                    */
+                    if ((clickCoordX >= _blocs[i, j].GetPosBlock.X) && (clickCoordX < (_blocs[i, j].GetPosBlock.X + _scale)))
+                    {
+                        if ((clickCoordY >= _blocs[i, j].GetPosBlock.Y) && (clickCoordY < (_blocs[i, j].GetPosBlock.Y + _scale)))
+                        {
+                            //log.WriteLine("=========================   Trouve = i " + i + ", j = " + j);
+                            player.breakBloc(_blocs[i, j], Content, _blocs, i, j, _scale, log);
+                            isFind = true;
 
-                            }
+                        }
+                    }
+                    j++;
                 }
-                j++;
+                i++;
             }
+
         }
 
         public float GetDistance(Vector2 one, Vector2 two)

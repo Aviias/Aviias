@@ -18,6 +18,7 @@ namespace Aviias
             }
             AddCraft("oak_plank", 4, Add(1, "oak_wood"));
             AddCraft("stick", 4, Add(2, "oak_plank"));
+            AddCraft("wood_shovel", 1, Add(2, "stick"));
         }
 
         public struct _craft
