@@ -75,8 +75,8 @@ namespace Aviias
             else
             {
                 string goal = "Salut toi !\n";
-                goal += "Peux-tu aller voir d ";
-                goal += "pour moi ?\n";
+                goal += "Va voir mon ami\n";
+                goal += "pour moi.\n";
                 _spitch = goal;
             }
         }

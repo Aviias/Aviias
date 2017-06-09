@@ -82,7 +82,7 @@ namespace Aviias
             if (!_isQuestActive && _nbQuest > 0)
             {
                 int idEnd = trueid == 1 ? 2 : 1;
-                _questActive = new Quest(1, _id, idEnd, this);
+                _questActive = new Quest(rand.Next(1, 2), _id, idEnd, this);
                 player.AddQuest(_questActive);
                 //   Talk(_questActive, _spriteBatch);
                 _isQuestActive = true;

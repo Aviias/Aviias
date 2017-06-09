@@ -43,6 +43,7 @@ namespace Aviias
         public bool flyMod;
         public bool IsInventoryOpen;
         Map map;
+        public int luminosity;
 
         float _playerTimer = 1.2f;
         const float _playerTIMER = 1.2f;
@@ -117,6 +118,7 @@ namespace Aviias
             _moveSpeed = 0.8f;
             _activeQuest = new List<Quest>(8);
             _inv = new Inventory(this);
+            luminosity = 3;
             _inv.AddInventory(20, "oak_wood");
             _inv.AddInventory(30, "oak_plank");
             _inv.AddInventory(500, "dirt");
@@ -244,11 +246,11 @@ namespace Aviias
         {
             currentKeyboardState = Keyboard.GetState();
             mouseState = Mouse.GetState();
-            
+
 
             float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
             list = GetCollisionSide(GetBlocsAround(map));
-            
+
             _inventoryTimer -= elapsed;
             _craftTimer -= elapsed;
 
@@ -303,8 +305,8 @@ namespace Aviias
                 Jump(map);
             }
 
-               if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Left) == System.Windows.Forms.MouseButtons.Left)
-               {
+            if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Left) == System.Windows.Forms.MouseButtons.Left)
+            {
 
                 mouseState = Mouse.GetState();
                 Vector2 position = new Vector2(mouseState.X, mouseState.Y);
@@ -323,7 +325,7 @@ namespace Aviias
                             }
                             _playerTimer = _playerTIMER;
                         }
-                            
+
                     }
                 }
                 if (mouseState.LeftButton == ButtonState.Pressed && _blocBreakTimer < 1)
@@ -335,9 +337,9 @@ namespace Aviias
                         _blocBreakTimer = _blocBreakTIMER;
                         _blockDurationTimer = _blockDurationTIMER;
                     }
-                    
+
                 }
-              
+
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.P))
@@ -361,14 +363,27 @@ namespace Aviias
 
             if (currentKeyboardState.IsKeyDown(Keys.N))
             {
-                for(int i = 0; i < _inv._cellArray.Length; i++)
+                for (int i = 0; i < _inv._cellArray.Length; i++)
                 {
-                    if(_inv._cellArray[i]._name == "heal_potion" && _inv._cellArray[i]._quantity >= 1)
+                    if (_inv._cellArray[i]._name == "heal_potion" && _inv._cellArray[i]._quantity >= 1)
                     {
-                        Health += 50;
+                        RegenerateHealth(50);
                         _inv.DecreaseInventory(1, "heal_potion");
                     }
                 }
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.W))
+            {
+                map.skyLuminosity++;
+                if (map.skyLuminosity >= 8) map.skyLuminosity = 0;
+                map.ActualizeShadow((int)Position.X, (int)Position.Y);
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.X))
+            {
+                
+                map.ActualizeShadow((int)Position.X, (int)Position.Y);
             }
         }
 
