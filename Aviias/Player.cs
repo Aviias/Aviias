@@ -521,51 +521,7 @@ namespace Aviias
 
         public string ImageHealth(int health)
         {
-            if(_health == 100)
-            {
-                return "100";
-            }
-            else if (_health < 100 && _health > 89)
-            {
-                return "90";
-            }
-            else if(_health <= 89 && _health > 79)
-            {
-                return "80";
-            }
-            else if(_health <= 79 && _health > 69)
-            {
-                return "70";
-            }
-            else if (_health <= 69 && _health > 59)
-            {
-                return "60";
-            }
-            else if (_health <= 59 && _health > 49)
-            {
-                return "50";
-            }
-            else if (_health <= 49 && _health > 39)
-            {
-                return "40";
-            }
-            else if (_health <= 39 && _health > 29)
-            {
-                return "30";
-            }
-            else if (_health <= 29 && _health > 19)
-            {
-                return "20";
-            }
-
-            else if (_health <= 19 && _health > 9)
-            {
-                return "10";
-            }
-            else
-            {
-                return "0";
-            }
+            return (Math.Floor((double)(health/10))*10).ToString();
         }
 
         internal void Draw(SpriteBatch spriteBatch, ContentManager content)

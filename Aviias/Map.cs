@@ -53,6 +53,7 @@ namespace Aviias
             _worldWidth = worldWidth;
             columnHeight = worldHeight / 2;
             _caveWallRate = 2;
+            skyLuminosity = 6;
         }
 
         string id;
