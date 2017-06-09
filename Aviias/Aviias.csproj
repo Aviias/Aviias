@@ -58,6 +58,7 @@
     <Compile Include="Structure.cs" />
     <Compile Include="Stuff.cs" />
     <Compile Include="Text.cs" />
+    <Compile Include="Timer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Extended, Version=0.6.377.0, Culture=neutral, processorArchitecture=MSIL">

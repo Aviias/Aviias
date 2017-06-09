@@ -47,6 +47,7 @@ namespace Aviias
         float _playerTimer = 1.2f;
         const float _playerTIMER = 1.2f;
 
+        //Timer invenTimer = new Timer(1.0f);
         float _inventoryTimer = 1.3f;
         const float _inventoryTIMER = 1.3f;
 
@@ -117,6 +118,7 @@ namespace Aviias
             _moveSpeed = 0.8f;
             _activeQuest = new List<Quest>(8);
             _inv = new Inventory(this);
+            /*
             _inv.AddInventory(2, "oak_wood");
             _inv.AddInventory(4, "oak_plank");
             _inv.AddInventory(500, "dirt");
@@ -128,6 +130,7 @@ namespace Aviias
             _inv.AddInventory(80, "iron_ore");
             _inv.AddInventory(1000, "stonebrick");
             _inv.AddInventory(247, "oak_leaves");
+            */
         }
 
         public Vector2 PlayerPosition
@@ -189,7 +192,9 @@ namespace Aviias
                 if (bloc.IsBreakable)
                 {
                     bloc1 = new Bloc(blocs[i,j].GetPosBlock ,scale, "air", content);
+                    _inv.AddInventory(1, blocs[i, j].Type);
                     blocs[i, j] = bloc1;
+                    
                     //log.WriteLine("---- > breakBloc block.X = " + blocs[i, j].GetPosBlock.X + " block.Y = " + blocs[i, j].GetPosBlock.Y);
                 }
             }
@@ -278,6 +283,7 @@ namespace Aviias
             {
                 IsInventoryOpen = !IsInventoryOpen;
                 _inventoryTimer = _inventoryTIMER;
+                //invenTimer.ReInit();
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.C) && _craftTimer < 1)
@@ -332,12 +338,12 @@ namespace Aviias
                 if (mouseState.LeftButton == ButtonState.Pressed && _blocBreakTimer < 1)
                 {
                     _blockDurationTimer -= elapsed;
-                    //if (_blockDurationTimer < 1)
-                    //{
+                    if (_blockDurationTimer < 1)
+                    {
                         map.FindBreakBlock(position, player, Content, log);
                         _blocBreakTimer = _blocBreakTIMER;
                         _blockDurationTimer = _blockDurationTIMER;
-                    //}
+                    }
                     
                 }
               
