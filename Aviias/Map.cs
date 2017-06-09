@@ -35,6 +35,7 @@ namespace Aviias
         bool _isMountain;
         int _mountainSize;
         int _mtest;
+        public int skyLuminosity;
 
         public int WorldWidth
         {
@@ -137,6 +138,28 @@ namespace Aviias
                     }
                     else id = "air";
                     _blocs[i, j] = new Bloc(new Vector2(i * (_scale), j * (_scale)), _scale, id, content);
+                    if (j == 0)
+                    {
+                        _blocs[i, j]._isInContactWithTheSky = true;
+                    }
+                    else if (_blocs[i, j - 1] != null && _blocs[i, j - 1]._isInContactWithTheSky)
+                    {
+                        if (_blocs[i, j - 1].Type == "air")
+                        {
+                            if (_blocs[i, j].Type != "air")
+                            {
+                                _blocs[i, j]._isInContactWithTheSky = true;
+                            }
+                            else
+                            {
+                                _blocs[i, j]._isInContactWithTheSky = true;
+                            }
+                        }
+                        else
+                        {
+                            _blocs[i, j - 1].Luminosity = 4;
+                        }
+                    }
                 }
 
                 // Structures generation
@@ -336,7 +359,42 @@ namespace Aviias
         {
             return random.Next(min, max);
         }
-        
+
+
+        public void ActualizeShadow(int x, int y)
+        {
+            int xx = x / 16;
+            int yy = y / 16;
+            for (int i = yy - 60; i < yy + 60; i++)
+            {
+                for (int j = xx - 80; j < xx + 80; j++)
+                {
+                    if (i > 0 && j > 0 && j < _worldHeight && i < _worldWidth)
+                    {
+                        if (_blocs[i, j - 1] != null && _blocs[i, j - 1]._isInContactWithTheSky)
+                        {
+                            if (_blocs[i, j - 1].Type == "air")
+                            {
+                                if (_blocs[i, j].Type != "air")
+                                {
+                                    _blocs[i, j]._isInContactWithTheSky = true;
+                                }
+                                else
+                                {
+                                    _blocs[i, j]._isInContactWithTheSky = true;
+                                }
+                            }
+                            else
+                            {
+                                _blocs[i, j].Luminosity = (int)(skyLuminosity / 2);
+                            }
+                        }
+
+                        if (_blocs[j, i]._isInContactWithTheSky) _blocs[j, i].Luminosity = skyLuminosity;
+                    }
+                }
+            }
+        }
 
     }
 }

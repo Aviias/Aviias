@@ -373,6 +373,19 @@ namespace Aviias
                     }
                 }
             }
+
+            if (currentKeyboardState.IsKeyDown(Keys.W))
+            {
+                map.skyLuminosity++;
+                if (map.skyLuminosity >= 8) map.skyLuminosity = 0;
+                map.ActualizeShadow((int)Position.X, (int)Position.Y);
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.X))
+            {
+
+                map.ActualizeShadow((int)Position.X, (int)Position.Y);
+            }
         }
 
         internal void RegenerateHealth(int quantity)
