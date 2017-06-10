@@ -44,6 +44,7 @@
     <Compile Include="Bloc.cs" />
     <Compile Include="Chest.cs" />
     <Compile Include="Craft.cs" />
+    <Compile Include="Drake.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Inventory.cs" />
     <Compile Include="Map.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quest.cs" />
     <Compile Include="Ressource.cs" />
+    <Compile Include="Wolf.cs" />
     <Compile Include="Structure.cs" />
     <Compile Include="Stuff.cs" />
     <Compile Include="Text.cs" />

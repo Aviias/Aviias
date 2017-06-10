@@ -19,6 +19,8 @@ namespace Aviias
         SpriteBatch spriteBatch;
         Player player;
         Monster monster;
+        Wolf wolf;
+        Drake drake;
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
         // Texture2D texture;
@@ -26,18 +28,17 @@ namespace Aviias
         Random random = new Random();
         BoxingViewportAdapter _viewportAdapter;
         const int WindowWidth = 1920;
-        const int WindowHeight = 1080;
+        const int WindowHeight = 1088;
         Camera2D _camera;
         public List<NPC> _npc;
         SpriteFont font;
         List<Monster> monsters = new List<Monster>();
         StreamWriter log; // Debug file
         Random rnd = new Random();
-
-        float _spawnTimer = 10f;
+        Timer spawnTimer = new Timer(10f);
         List<int> list = new List<int>(16);
         //Ressource _testRessource = new Ressource();
-        const float _spawnTIMER = 10f;
+        
 
         public Game1()
         {
@@ -66,16 +67,19 @@ namespace Aviias
             player.PlayerMoveSpeed = 8.0f;
             Vector2 monsterPosition;
 
-            int monsterneed = 5 - monsters.Count;
+            int monsterneed = 2 - monsters.Count;
             if (monsterneed != 0)
             {
                 for (int i = 0; i < monsterneed; i++)
                 {
+                    
                     int posX = rnd.Next(0, map.WorldWidth * 10);
                     int posY = rnd.Next(0, map.WorldHeight * 10);
                     monsterPosition = new Vector2(posX, posY);
-                    monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
-                    monsters.Add(monster);
+                    wolf = new Wolf(Content, Content.Load<Texture2D>("loup"), monsterPosition);
+                    //monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
+                    
+                    monsters.Add(wolf);
                 }
             }
             /*
@@ -176,24 +180,24 @@ namespace Aviias
             player.Update(player, Camera, _npc, gameTime, Content, log, map, monsters);
             player.UpdatePlayerCollision(gameTime, player, monsters);
             base.Update(gameTime);
-        
 
-            float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
-            _spawnTimer -= elapsed;
 
-            if (_spawnTimer < 1)
+            spawnTimer.Decrem(gameTime);
+            
+
+            if (spawnTimer.IsDown())
 
             {
                 int posX = rnd.Next(0, map.WorldWidth * 10);
                 int posY = rnd.Next(0, map.WorldHeight * 10);
                 Vector2 monsterPosition = new Vector2(posX, posY);
-                monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
+                drake = new Drake(Content, Content.Load<Texture2D>("drake"), monsterPosition);
              /*   foreach (NPC npc in _npc)
                 {
                     if (map.GetDistance(player.PlayerPosition, npc.Position) < 400) npc.Interact(player);
                 }*/
-                monsters.Add(monster);
-                _spawnTimer = _spawnTIMER;
+                monsters.Add(drake);
+                spawnTimer.ReInit();
             }
             
            
@@ -218,7 +222,6 @@ namespace Aviias
             {
                 player.Draw(spriteBatch, Content);
             }
-
                 //   foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
                 foreach (NPC npc in _npc)
                 {

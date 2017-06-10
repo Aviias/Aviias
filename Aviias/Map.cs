@@ -287,7 +287,7 @@ namespace Aviias
         public void FindBreakBlock(Vector2 pos, Player player, ContentManager Content, StreamWriter log)
         {
             float clickCoordX = pos.X;
-            float clickCoordY = (float)1.007 * pos.Y + (float)8.06;
+            float clickCoordY = pos.Y; /* (float)1.007 * pos.Y + (float)8.06*/
             int i = 0;
             int j = 0;
             bool isFind = false;
@@ -305,7 +305,7 @@ namespace Aviias
                     else
                         log.WriteLine("bloc[ " + i + "," + j + "] X = " + blocs[i, j].GetPosBlock.X + ", Y = " + blocs[i, j].GetPosBlock.Y + " Not Breakable, type = " + blocs[i, j].Type);
                     */
-                    if ((clickCoordX >= _blocs[i, j].GetPosBlock.X) && (clickCoordX < (_blocs[i, j].GetPosBlock.X + _scale)))
+            if ((clickCoordX >= _blocs[i, j].GetPosBlock.X) && (clickCoordX < (_blocs[i, j].GetPosBlock.X + _scale)))
                     {
                         if ((clickCoordY >= _blocs[i, j].GetPosBlock.Y) && (clickCoordY < (_blocs[i, j].GetPosBlock.Y + _scale)))
                         {

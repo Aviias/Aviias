@@ -19,12 +19,11 @@ namespace Aviias
         float _speed;
         Vector2 _pos;
         bool _isDie;
-        readonly double _regenerationRate;
+        double _regenerationRate;
         int _damageDealing;
         int _resistance;
         Texture2D _texture;
-        float _monsterTimer = 2;         
-        const float _monsterTIMER = 2;
+        Timer monsterTimer = new Timer(2f);
 
         Random rnd = new Random();
 
@@ -47,24 +46,52 @@ namespace Aviias
             get { return _texture.Width; }
         }
 
+        public Text Txt
+        {
+            get { return text; }
+            set { text = value; }
+        }
+
         public int Height
         {
             get { return _texture.Height; }
+            
+        }
+
+        public Texture2D Texture
+        {
+            get { return _texture; }
+            set { _texture = value; }
         }
 
         public float moveSpeed
         {
             get { return _speed; }
+            set { _speed = value; }
         }
 
         public int ID
         {
             get { return _id; }
+            set { _id = value; }
+        }
+
+        public int Resistance
+        {
+            get { return _resistance; }
+            set { _resistance = value; }
         }
 
         public int Health
         {
             get { return _health; }
+            set { _health = value; }
+        }
+
+        public double RegenarationRate
+        {
+            get { return _regenerationRate; }
+            set { _regenerationRate = value; }
         }
 
         public Vector2 MonsterPosition
@@ -82,6 +109,7 @@ namespace Aviias
         public int Damage
         {
             get { return _damageDealing; }
+            set { _damageDealing = value; }
         }
 
         public void GetDamage(int damage)
@@ -121,8 +149,7 @@ namespace Aviias
         {
             Rectangle playerRect;
             Rectangle monsterRect;
-            float elapsed = (float)gametime.ElapsedGameTime.TotalMilliseconds / 1000;
-            _monsterTimer -= elapsed;
+            monsterTimer.Decrem(gametime);
 
             playerRect = new Rectangle((int)player.X, (int)player.Y, player.Width, player.Height);
             monsterRect = new Rectangle((int)posX, (int)posY, Width, Height);
@@ -130,10 +157,10 @@ namespace Aviias
             {
                 if (monsterRect.Left <= playerRect.Right || monsterRect.Right == playerRect.Left || monsterRect.Top <= playerRect.Bottom || monsterRect.Bottom == playerRect.Top)
                 {
-                    if (_monsterTimer < 1)
+                    if (monsterTimer.IsDown())
                     {
                         player.GetDamage(Damage);
-                        _monsterTimer = _monsterTIMER;
+                        monsterTimer.ReInit();
                     }
                 }
             }

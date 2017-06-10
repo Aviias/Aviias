@@ -44,20 +44,12 @@ namespace Aviias
         public bool IsInventoryOpen;
         Map map;
 
-        float _playerTimer = 1.2f;
-        const float _playerTIMER = 1.2f;
+        Timer playerTimer = new Timer(1.2f);
+        Timer invenTimer = new Timer(1.3f);
+        Timer craftTimer = new Timer(1.5f);
+        Timer blocBreakTimer = new Timer(1.5f);
+        Timer blockDurationTimer = new Timer(1.5f);
 
-        //Timer invenTimer = new Timer(1.0f);
-        float _inventoryTimer = 1.3f;
-        const float _inventoryTIMER = 1.3f;
-
-        float _craftTimer = 1.5f;
-        const float _craftTIMER = 1.5f;
-
-        float _blocBreakTimer = 1.5f;
-        const float _blocBreakTIMER = 1.5f;
-        float _blockDurationTimer = 1.5f;
-        const float _blockDurationTIMER = 1.5f;
         //   MonoGame.Extended.Camera2D Camera;
         float _playerMoveSpeed;
 
@@ -118,7 +110,7 @@ namespace Aviias
             _moveSpeed = 0.8f;
             _activeQuest = new List<Quest>(8);
             _inv = new Inventory(this);
-            /*
+            
             _inv.AddInventory(2, "oak_wood");
             _inv.AddInventory(4, "oak_plank");
             _inv.AddInventory(500, "dirt");
@@ -130,7 +122,7 @@ namespace Aviias
             _inv.AddInventory(80, "iron_ore");
             _inv.AddInventory(1000, "stonebrick");
             _inv.AddInventory(247, "oak_leaves");
-            */
+            
         }
 
         public Vector2 PlayerPosition
@@ -249,15 +241,13 @@ namespace Aviias
         {
             currentKeyboardState = Keyboard.GetState();
             mouseState = Mouse.GetState();
-            
+            invenTimer.Decrem(gameTime);
+            playerTimer.Decrem(gameTime);
+            craftTimer.Decrem(gameTime);
+            blocBreakTimer.Decrem(gameTime);
 
-            float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
             list = GetCollisionSide(GetBlocsAround(map));
-            
-            _inventoryTimer -= elapsed;
-            _craftTimer -= elapsed;
-            _playerTimer -= elapsed;
-            _blocBreakTimer -= elapsed;
+
 
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
@@ -279,14 +269,13 @@ namespace Aviias
                 player.Position.Y += _playerMoveSpeed;
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.E) && _inventoryTimer < 1)
+            if (currentKeyboardState.IsKeyDown(Keys.E) && invenTimer.IsDown())
             {
                 IsInventoryOpen = !IsInventoryOpen;
-                _inventoryTimer = _inventoryTIMER;
-                //invenTimer.ReInit();
+                invenTimer.ReInit();
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.C) && _craftTimer < 1 && IsInventoryOpen)
+            if (currentKeyboardState.IsKeyDown(Keys.C) && craftTimer.IsDown() && IsInventoryOpen)
             {
                 for (int i = 0; i < _inv._craft._cellCraft.Length; i++)
                 {
@@ -301,7 +290,7 @@ namespace Aviias
                         break;
                     }
                 }
-                _craftTimer = _craftTIMER;
+                craftTimer.ReInit();
 
             }
 
@@ -322,27 +311,27 @@ namespace Aviias
                 {
                     if (position.X >= monsters[i].MonsterPosition.X && position.X <= monsters[i].MonsterPosition.X + monsters[i].Width && position.Y >= monsters[i].MonsterPosition.Y && position.Y <= monsters[i].MonsterPosition.Y + monsters[i].Height)
                     {
-                        if (_playerTimer < 1 && Vector2.Distance(player.PlayerPosition, position) <= 400)
+                        if (playerTimer.IsDown() && Vector2.Distance(player.PlayerPosition, position) <= 400)
                         {
                             monsters[i].GetDamage(player.Damage);
                             if (monsters[i].IsDie)
                             {
                                 monsters.Remove(monsters[i]);
                             }
-                            _playerTimer = _playerTIMER;
+                            playerTimer.ReInit();
                         }
                             
                     }
                 }
                 
-                if (mouseState.LeftButton == ButtonState.Pressed && _blocBreakTimer < 1)
+                if (mouseState.LeftButton == ButtonState.Pressed && blocBreakTimer.IsDown())
                 {
-                    _blockDurationTimer -= elapsed;
-                    if (_blockDurationTimer < 1)
+                    blockDurationTimer.Decrem(gameTime);
+                    if (blockDurationTimer.IsDown())
                     {
                         map.FindBreakBlock(position, player, Content, log);
-                        _blocBreakTimer = _blocBreakTIMER;
-                        _blockDurationTimer = _blockDurationTIMER;
+                        blocBreakTimer.ReInit();
+                        blockDurationTimer.ReInit();
                     }
                     
                 }

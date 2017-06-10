@@ -4,27 +4,31 @@ using System;
 
 namespace Aviias
 {
-    class Timer
+    public class Timer
     {
         float _timeTo;
-        float _timeTO;
+        float _timeTOReinit;
          
         public Timer(float time)
         {
             _timeTo = time;
-            _timeTO = time;
+            _timeTOReinit = time;
         }
 
-        public bool IsDown(GameTime gameTime)
+        public void Decrem(GameTime gameTime)
         {
             float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
             _timeTo -= elapsed;
-            return _timeTo < 1;
+        }
+
+        public bool IsDown()
+        {
+            return (_timeTo < 1);
         }
 
         public void ReInit()
         {
-            _timeTo = _timeTO;
+            _timeTo = _timeTOReinit;
         }
 
     }
