@@ -110,7 +110,7 @@ namespace Aviias
             _moveSpeed = 0.8f;
             _activeQuest = new List<Quest>(8);
             _inv = new Inventory(this);
-            
+            /*
             _inv.AddInventory(2, "oak_wood");
             _inv.AddInventory(4, "oak_plank");
             _inv.AddInventory(500, "dirt");
@@ -122,7 +122,7 @@ namespace Aviias
             _inv.AddInventory(80, "iron_ore");
             _inv.AddInventory(1000, "stonebrick");
             _inv.AddInventory(247, "oak_leaves");
-            
+            */
         }
 
         public Vector2 PlayerPosition
@@ -139,17 +139,7 @@ namespace Aviias
         {
             _activeQuest.Remove(quest);
         }
-        /*
-        public Vector2 CursorPos()
-        {             
-            int posX = Cursor.Position.X;
-            int posY = Cursor.Position.Y;
-
-            Vector2 cursorPos = new Vector2(posX, posY);
-            return cursorPos;
-            
-        }
-        */
+       
         public float PlayerMoveSpeed
         {
             get { return _playerMoveSpeed; }
@@ -531,7 +521,13 @@ namespace Aviias
                         text.DisplayText("" + _inv.PositionToolBar(i)._quantity, new Vector2(_inv.PositionToolBar(i).Position.X, _inv.PositionToolBar(i).Position.Y + 100), spriteBatch, Color.Black);
                     }
                 }
-            }        
+            }
+
+            if (IsDie == true)
+            {
+                spriteBatch.Draw(content.Load<Texture2D>("gameover"), new Vector2(Position.X, Position.Y), null, Color.White, 0f, Vector2.Zero, 1f,
+                     SpriteEffects.None, 0f);
+            }
         }
 
         public void AddStr(string str)

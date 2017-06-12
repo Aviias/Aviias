@@ -37,6 +37,7 @@ namespace Aviias
         Random rnd = new Random();
         Timer spawnTimer = new Timer(10f);
         List<int> list = new List<int>(16);
+        Texture2D _gameover;
         //Ressource _testRessource = new Ressource();
         
 
@@ -82,17 +83,7 @@ namespace Aviias
                     monsters.Add(wolf);
                 }
             }
-            /*
-            if (!File.Exists("logfile.txt"))
-            {
-                log = new StreamWriter("logfile.txt");
-            }
-            else
-            {
-                log = File.AppendText("logfile.txt");
-            }
-            */
-            // Add a new monster in the list            
+               
             base.Initialize();
             map.GenerateMap(Content);
             IsMouseVisible = true;
@@ -115,6 +106,7 @@ namespace Aviias
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("font");
 
+            _gameover = Content.Load<Texture2D>("gameover3");
             Vector2 playerPosition = new Vector2(1500, 345 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
             player.Initialize(Content.Load<Texture2D>("babyplayer"), playerPosition, Content);
 
@@ -136,71 +128,72 @@ namespace Aviias
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (player.IsDie == false)
             {
-                log.Close(); // Debug close
-                Exit();
-            }
-
-            Camera.Position = new Vector2(player.Position.X - WindowWidth / 2, player.Position.Y - WindowHeight / 2);
-            // TODO: Add your update logic here
-            currentKeyboardState = Keyboard.GetState();
-            if (currentKeyboardState.IsKeyDown(Keys.M))
-            {
-                map = new Map(200, 200);
-                map.GenerateMap(Content);
-            }
-
-            previousKeyboardState = currentKeyboardState;
-            currentKeyboardState = Keyboard.GetState();
-
-            player.Update(map);
-            player.UpdatePlayerCollision(gameTime, player, monsters);
-            Camera.Position = new Vector2(player.Position.X - WindowWidth / 2, player.Position.Y - WindowHeight / 2);
-            for (int i = 0; i < monsters.Count; i++)
-            {
-                if (monsters[i].IsDie == false && monsters[i] != null)
+                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 {
-                    monsters[i].Update(player, gameTime);
+                    log.Close(); // Debug close
+                    Exit();
                 }
-                
+
+                Camera.Position = new Vector2(player.Position.X - WindowWidth / 2, player.Position.Y - WindowHeight / 2);
+                // TODO: Add your update logic here
+                currentKeyboardState = Keyboard.GetState();
+                if (currentKeyboardState.IsKeyDown(Keys.M))
+                {
+                    map = new Map(200, 200);
+                    map.GenerateMap(Content);
+                }
+
+                previousKeyboardState = currentKeyboardState;
+                currentKeyboardState = Keyboard.GetState();
+
+                player.Update(map);
+                player.UpdatePlayerCollision(gameTime, player, monsters);
+                Camera.Position = new Vector2(player.Position.X - WindowWidth / 2, player.Position.Y - WindowHeight / 2);
+                for (int i = 0; i < monsters.Count; i++)
+                {
+                    if (monsters[i].IsDie == false && monsters[i] != null)
+                    {
+                        monsters[i].Update(player, gameTime);
+                    }
+
                     list = player.GetCollisionSide(player.GetBlocsAround(map));
 
                     Camera.Move(new Vector2(-player.PlayerMoveSpeed, 0));
-                   // player.Position.X -= player.PlayerMoveSpeed;
-                //  if (player.GetCollisionSide(player.GetBlocsAround(map)) != 2) player.Position.X -= playerMoveSpeed;
-             /*       if (!list.Contains(2)) player.Position.X -= player.PlayerMoveSpeed;
-                    if (!list.Contains(1)) player.Position.X += player.PlayerMoveSpeed;*/
-           }
+                    // player.Position.X -= player.PlayerMoveSpeed;
+                    //  if (player.GetCollisionSide(player.GetBlocsAround(map)) != 2) player.Position.X -= playerMoveSpeed;
+                    /*       if (!list.Contains(2)) player.Position.X -= player.PlayerMoveSpeed;
+                           if (!list.Contains(1)) player.Position.X += player.PlayerMoveSpeed;*/
+                }
 
-            //     if (player.GetCollisionSide(player.GetBlocsAround(map)) != 3) player.Position.Y += playerMoveSpeed;
-            //  if (!list.Contains(3)) player.Position.Y += player.PlayerMoveSpeed;
+                //     if (player.GetCollisionSide(player.GetBlocsAround(map)) != 3) player.Position.Y += playerMoveSpeed;
+                //  if (!list.Contains(3)) player.Position.Y += player.PlayerMoveSpeed;
 
-            player.Update(player, Camera, _npc, gameTime, Content, log, map, monsters);
-            player.UpdatePlayerCollision(gameTime, player, monsters);
-            base.Update(gameTime);
+                player.Update(player, Camera, _npc, gameTime, Content, log, map, monsters);
+                player.UpdatePlayerCollision(gameTime, player, monsters);
+                base.Update(gameTime);
 
 
-            spawnTimer.Decrem(gameTime);
-            
+                spawnTimer.Decrem(gameTime);
 
-            if (spawnTimer.IsDown())
 
-            {
-                int posX = rnd.Next(0, map.WorldWidth * 10);
-                int posY = rnd.Next(0, map.WorldHeight * 10);
-                Vector2 monsterPosition = new Vector2(posX, posY);
-                drake = new Drake(Content, Content.Load<Texture2D>("drake"), monsterPosition);
-             /*   foreach (NPC npc in _npc)
+                if (spawnTimer.IsDown())
+
                 {
-                    if (map.GetDistance(player.PlayerPosition, npc.Position) < 400) npc.Interact(player);
-                }*/
-                monsters.Add(drake);
-                spawnTimer.ReInit();
+                    int posX = rnd.Next(0, map.WorldWidth * 10);
+                    int posY = rnd.Next(0, map.WorldHeight * 10);
+                    Vector2 monsterPosition = new Vector2(posX, posY);
+                    drake = new Drake(Content, Content.Load<Texture2D>("drake"), monsterPosition);
+                    /*   foreach (NPC npc in _npc)
+                       {
+                           if (map.GetDistance(player.PlayerPosition, npc.Position) < 400) npc.Interact(player);
+                       }*/
+                    monsters.Add(drake);
+                    spawnTimer.ReInit();
+                }
             }
-            
-           
+          
         }
 
         /// <summary>
@@ -218,10 +211,8 @@ namespace Aviias
             {
                 monsters[i].Draw(spriteBatch);
             }
-            if (player.IsDie == false)
-            {
-                player.Draw(spriteBatch, Content);
-            }
+            
+            
                 //   foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
                 foreach (NPC npc in _npc)
                 {
@@ -229,7 +220,17 @@ namespace Aviias
                     npc.Update();
                 }
 
-                spriteBatch.End();
+            if (player.IsDie == false)
+            {
+                player.Draw(spriteBatch, Content);
+            }
+            else
+            {
+                _camera.LookAt(new Vector2(player.Position.X, player.Position.Y));
+                spriteBatch.Draw(_gameover, new Rectangle((int)player.Position.X - 962, (int)player.Position.Y - 544, WindowWidth, WindowHeight), Color.White);
+            }
+
+            spriteBatch.End();
                 base.Draw(gameTime);
             
         }

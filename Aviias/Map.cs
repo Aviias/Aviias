@@ -286,39 +286,11 @@ namespace Aviias
 
         public void FindBreakBlock(Vector2 pos, Player player, ContentManager Content, StreamWriter log)
         {
-            float clickCoordX = pos.X;
-            float clickCoordY = pos.Y; /* (float)1.007 * pos.Y + (float)8.06*/
-            int i = 0;
-            int j = 0;
-            bool isFind = false;
+            float clickCoordY = (float)1.007 * pos.Y + (float)8.06;
+            int  i = (int)pos.X / _scale;
+            int j = (int)clickCoordY / _scale;
 
-            //log.WriteLine("=========================   clickCoordX = " + clickCoordX + ", clickCoordY = " + clickCoordY);
-
-            while ((i < _worldHeight) && (isFind == false))
-            {
-                j = 0;
-                while ((j < _worldWidth) && (isFind == false))
-                {
-                    /*
-                    if (blocs[i, j].IsBreakable )
-                        log.WriteLine("bloc[ " + i + "," + j + "] X = " + blocs[i, j].GetPosBlock.X + ", Y = " + blocs[i, j].GetPosBlock.Y + " Breakable, type = "+ blocs[i, j].Type );
-                    else
-                        log.WriteLine("bloc[ " + i + "," + j + "] X = " + blocs[i, j].GetPosBlock.X + ", Y = " + blocs[i, j].GetPosBlock.Y + " Not Breakable, type = " + blocs[i, j].Type);
-                    */
-            if ((clickCoordX >= _blocs[i, j].GetPosBlock.X) && (clickCoordX < (_blocs[i, j].GetPosBlock.X + _scale)))
-                    {
-                        if ((clickCoordY >= _blocs[i, j].GetPosBlock.Y) && (clickCoordY < (_blocs[i, j].GetPosBlock.Y + _scale)))
-                        {
-                            //log.WriteLine("=========================   Trouve = i " + i + ", j = " + j);
-                            player.breakBloc(_blocs[i, j], Content, _blocs, i, j, _scale, log);
-                            isFind = true;
-
-                        }
-                    }
-                    j++;
-                }
-                i++;
-            }
+            if ( (i>=0) && (i< _worldHeight) && (j>=0) && (j< _worldWidth) ) player.breakBloc(_blocs[i, j], Content, _blocs, i, j, _scale, log);
 
         }
 
