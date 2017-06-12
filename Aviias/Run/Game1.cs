@@ -33,6 +33,7 @@ namespace Aviias
         List<Monster> monsters = new List<Monster>();
         StreamWriter log; // Debug file
         Random rnd = new Random();
+        Menu _menu;
 
         float _spawnTimer = 10f;
         List<int> list = new List<int>(16);
@@ -65,6 +66,8 @@ namespace Aviias
             player = new Player();
             player.PlayerMoveSpeed = 8.0f;
             Vector2 monsterPosition;
+            _menu = new Menu();
+            _menu.Initialize();
 
             int monsterneed = 5 - monsters.Count;
             if (monsterneed != 0)
@@ -132,71 +135,78 @@ namespace Aviias
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (_menu.Jouer() == false)
             {
-                log.Close(); // Debug close
-                Exit();
+                _menu.Update(gameTime, Content);
             }
-
-            Camera.Position = new Vector2(player.Position.X - WindowWidth / 2, player.Position.Y - WindowHeight / 2);
-            // TODO: Add your update logic here
-            currentKeyboardState = Keyboard.GetState();
-            if (currentKeyboardState.IsKeyDown(Keys.M))
+            else
             {
-                map = new Map(200, 200);
-                map.GenerateMap(Content);
-            }
 
-            previousKeyboardState = currentKeyboardState;
-            currentKeyboardState = Keyboard.GetState();
 
-            player.Update(map);
-            player.UpdatePlayerCollision(gameTime, player, monsters);
-            Camera.Position = new Vector2(player.Position.X - WindowWidth / 2, player.Position.Y - WindowHeight / 2);
-            for (int i = 0; i < monsters.Count; i++)
-            {
-                if (monsters[i].IsDie == false && monsters[i] != null)
+                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 {
-                    monsters[i].Update(player, gameTime);
+                    log.Close(); // Debug close
+                    Exit();
                 }
-                
+
+                Camera.Position = new Vector2(player.Position.X - WindowWidth / 2, player.Position.Y - WindowHeight / 2);
+                // TODO: Add your update logic here
+                currentKeyboardState = Keyboard.GetState();
+                if (currentKeyboardState.IsKeyDown(Keys.M))
+                {
+                    map = new Map(200, 200);
+                    map.GenerateMap(Content);
+                }
+
+                previousKeyboardState = currentKeyboardState;
+                currentKeyboardState = Keyboard.GetState();
+
+                player.Update(map);
+                player.UpdatePlayerCollision(gameTime, player, monsters);
+                Camera.Position = new Vector2(player.Position.X - WindowWidth / 2, player.Position.Y - WindowHeight / 2);
+                for (int i = 0; i < monsters.Count; i++)
+                {
+                    if (monsters[i].IsDie == false && monsters[i] != null)
+                    {
+                        monsters[i].Update(player, gameTime);
+                    }
+
                     list = player.GetCollisionSide(player.GetBlocsAround(map));
 
                     Camera.Move(new Vector2(-player.PlayerMoveSpeed, 0));
-                   // player.Position.X -= player.PlayerMoveSpeed;
-                //  if (player.GetCollisionSide(player.GetBlocsAround(map)) != 2) player.Position.X -= playerMoveSpeed;
-             /*       if (!list.Contains(2)) player.Position.X -= player.PlayerMoveSpeed;
-                    if (!list.Contains(1)) player.Position.X += player.PlayerMoveSpeed;*/
-           }
+                    // player.Position.X -= player.PlayerMoveSpeed;
+                    //  if (player.GetCollisionSide(player.GetBlocsAround(map)) != 2) player.Position.X -= playerMoveSpeed;
+                    /*       if (!list.Contains(2)) player.Position.X -= player.PlayerMoveSpeed;
+                           if (!list.Contains(1)) player.Position.X += player.PlayerMoveSpeed;*/
+                }
 
-            //     if (player.GetCollisionSide(player.GetBlocsAround(map)) != 3) player.Position.Y += playerMoveSpeed;
-            //  if (!list.Contains(3)) player.Position.Y += player.PlayerMoveSpeed;
+                //     if (player.GetCollisionSide(player.GetBlocsAround(map)) != 3) player.Position.Y += playerMoveSpeed;
+                //  if (!list.Contains(3)) player.Position.Y += player.PlayerMoveSpeed;
 
-            player.Update(player, Camera, _npc, gameTime, Content, log, map, monsters);
-            player.UpdatePlayerCollision(gameTime, player, monsters);
-            base.Update(gameTime);
-        
+                player.Update(player, Camera, _npc, gameTime, Content, log, map, monsters);
+                player.UpdatePlayerCollision(gameTime, player, monsters);
+                base.Update(gameTime);
 
-            float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
-            _spawnTimer -= elapsed;
 
-            if (_spawnTimer < 1)
+                float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+                _spawnTimer -= elapsed;
 
-            {
-                int posX = rnd.Next(0, map.WorldWidth * 10);
-                int posY = rnd.Next(0, map.WorldHeight * 10);
-                Vector2 monsterPosition = new Vector2(posX, posY);
-                monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
-             /*   foreach (NPC npc in _npc)
+                if (_spawnTimer < 1)
+
                 {
-                    if (map.GetDistance(player.PlayerPosition, npc.Position) < 400) npc.Interact(player);
-                }*/
-                monsters.Add(monster);
-                _spawnTimer = _spawnTIMER;
+                    int posX = rnd.Next(0, map.WorldWidth * 10);
+                    int posY = rnd.Next(0, map.WorldHeight * 10);
+                    Vector2 monsterPosition = new Vector2(posX, posY);
+                    monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
+                    /*   foreach (NPC npc in _npc)
+                       {
+                           if (map.GetDistance(player.PlayerPosition, npc.Position) < 400) npc.Interact(player);
+                       }*/
+                    monsters.Add(monster);
+                    _spawnTimer = _spawnTIMER;
+                }
+
             }
-            
-           
         }
 
         /// <summary>
@@ -205,9 +215,16 @@ namespace Aviias
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            if (_menu.Jouer() == false)
+            {
+                spriteBatch.Begin();
+                _menu.Draw(spriteBatch, Content);
+                spriteBatch.End();
+            }
+            else
+            {
+                GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
                 spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
                 map.Draw(spriteBatch, (int)player.Position.X, (int)player.Position.Y);
                 for (int i = 0; i < monsters.Count; i++)
@@ -225,9 +242,10 @@ namespace Aviias
                     npc.Draw(spriteBatch);
                     npc.Update();
                 }
-
                 spriteBatch.End();
                 base.Draw(gameTime);
+                // TODO: Add your drawing code here
+            }
         }
     }
 }

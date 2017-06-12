@@ -41,6 +41,9 @@
     <ApplicationManifest>Run\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GUI\Button.cs" />
+    <Compile Include="GUI\Menu.cs" />
+    <Compile Include="GUI\Sprite.cs" />
     <Compile Include="Map\Bloc.cs" />
     <Compile Include="GUI\Chest.cs" />
     <Compile Include="GUI\Craft.cs" />
