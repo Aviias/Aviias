@@ -42,7 +42,7 @@ namespace Aviias
         internal void Draw(SpriteBatch spriteBatch, ContentManager content)
         {
 
-            spriteBatch.Draw(content.Load<Texture2D>(_texture), new Vector2(0, 0), null, Color.White, 0f, Vector2.Zero, 1f,
+            spriteBatch.Draw(content.Load<Texture2D>(_texture), new Vector2(305, 675), null, Color.White, 0f, Vector2.Zero, 1f,
                SpriteEffects.None, 0f);
         }
     }
