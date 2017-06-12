@@ -27,8 +27,8 @@ namespace Aviias
         Map map = new Map(200, 200);
         Random random = new Random();
         BoxingViewportAdapter _viewportAdapter;
-        const int WindowWidth = 1920;
-        const int WindowHeight = 1088;
+        const int WindowWidth = 1024;
+        const int WindowHeight = 768;
         Camera2D _camera;
         public List<NPC> _npc;
         SpriteFont font;
@@ -45,11 +45,8 @@ namespace Aviias
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
-            graphics.PreferredBackBufferHeight = WindowHeight;
-            graphics.PreferredBackBufferWidth = WindowWidth;
-
             Window.AllowUserResizing = true;
+            Window.Position = Point.Zero;
         }
 
         public Camera2D Camera
@@ -84,16 +81,23 @@ namespace Aviias
                 }
             }
                
-            base.Initialize();
+            
             map.GenerateMap(Content);
             IsMouseVisible = true;
 
-            _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, WindowWidth, WindowHeight);
-            _camera = new Camera2D(_viewportAdapter);
-            _camera.LookAt(new Vector2(player.Position.X + 10, player.Position.Y + 15));
+            
             _npc = new List<NPC>(8);
             _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(500, 250), 5));
             _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(1400, 300), 3));
+
+            base.Initialize();
+
+            graphics.IsFullScreen = true;
+            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            graphics.ApplyChanges();
+
+            _camera.LookAt(new Vector2(player.Position.X + 10, player.Position.Y + 15));
         }
 
         /// <summary>
@@ -102,6 +106,9 @@ namespace Aviias
         /// </summary>
         protected override void LoadContent()
         {
+
+            _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, WindowWidth, WindowHeight);
+            _camera = new Camera2D(_viewportAdapter);
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("font");
@@ -206,6 +213,7 @@ namespace Aviias
 
             // TODO: Add your drawing code here
             spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+
             map.Draw(spriteBatch, (int)player.Position.X, (int)player.Position.Y);
             for (int i = 0; i < monsters.Count; i++)
             {
@@ -231,7 +239,7 @@ namespace Aviias
             }
 
             spriteBatch.End();
-                base.Draw(gameTime);
+            base.Draw(gameTime);
             
         }
     }

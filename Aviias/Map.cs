@@ -286,9 +286,9 @@ namespace Aviias
 
         public void FindBreakBlock(Vector2 pos, Player player, ContentManager Content, StreamWriter log)
         {
-            float clickCoordY = (float)1.007 * pos.Y + (float)8.06;
+           // float clickCoordY = (float)1.007 * pos.Y + (float)8.06;
             int  i = (int)pos.X / _scale;
-            int j = (int)clickCoordY / _scale;
+            int j = (int)pos.Y / _scale;
 
             if ( (i>=0) && (i< _worldHeight) && (j>=0) && (j< _worldWidth) ) player.breakBloc(_blocs[i, j], Content, _blocs, i, j, _scale, log);
 
