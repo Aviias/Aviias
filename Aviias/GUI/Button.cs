@@ -17,6 +17,7 @@ namespace Aviias
         public int _height { get; set; }
         string _texture;
         MouseState mouseState = Mouse.GetState();
+        public bool IsTrue { get; set; }
 
         public Button(Vector2 position, int width, int height)
         {
@@ -33,9 +34,16 @@ namespace Aviias
 
         internal void Update(GameTime gameTime, ContentManager Content)
         {
-            if (IsPressed())
+            mouseState = Mouse.GetState();
+            if (IsPressed() && mouseState.Position.X >= _position.X && mouseState.Position.Y >= _position.Y && mouseState.Position.X <= _position.X + _width && mouseState.Position.Y <= _position.Y + _height )
             {
                 _texture = ".\\Menu\\Button\\jouer_rouge";
+                IsTrue = true;
+            }
+            else
+            { 
+                _texture = ".\\Menu\\Button\\jouer_gris";
+                IsTrue = false;
             }
         }
 

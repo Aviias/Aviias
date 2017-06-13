@@ -16,7 +16,7 @@ namespace Aviias
 
         public void Initialize()
         {
-            _jouer = new Button(new Vector2(0,0),600,100);
+            _jouer = new Button(new Vector2(305, 655),600,100);
         }
 
         internal void Update(GameTime gameTime, ContentManager Content)
@@ -26,7 +26,7 @@ namespace Aviias
 
         public bool Jouer()
         {
-            return false;
+            return _jouer.IsTrue;
         }
 
         internal void Draw(SpriteBatch spriteBatch, ContentManager content)
