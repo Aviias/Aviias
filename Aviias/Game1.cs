@@ -27,8 +27,8 @@ namespace Aviias
         Map map = new Map(200, 200);
         Random random = new Random();
         BoxingViewportAdapter _viewportAdapter;
-        const int WindowWidth = 1024;
-        const int WindowHeight = 768;
+        const int WindowWidth = 1920;
+        const int WindowHeight = 1080;
         Camera2D _camera;
         public List<NPC> _npc;
         SpriteFont font;
@@ -139,7 +139,6 @@ namespace Aviias
             {
                 if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 {
-                    log.Close(); // Debug close
                     Exit();
                 }
 
