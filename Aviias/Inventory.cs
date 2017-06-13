@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace Aviias
 {
@@ -10,7 +11,6 @@ namespace Aviias
         public _cell[]  _cellArray;
         private Text text;
         public Craft _craft;
-
         public Inventory(Player player)
         {
             _player = player;
@@ -20,6 +20,7 @@ namespace Aviias
             {
                 _cellArray[i] = new _cell();
                 _cellArray[i]._name = "";
+                _cellArray[i]._id = i;
                 _cellArray[i]._ressource = new Ressource("air");
 
                 UpdatePosition(i);
@@ -91,6 +92,7 @@ namespace Aviias
             public bool IsFull { get; set; }
             public string _name { get; set; }
             public int _quantity { get; set; }
+            public int _id { get; set; }
             public Ressource _ressource { get; set; }
         }
 
@@ -106,6 +108,38 @@ namespace Aviias
             {
                 if (!_cellArray[i].IsFull && _cellArray[i]._name != name) { _cellArray[i]._name = name; _cellArray[i]._quantity = quantity; _cellArray[i].IsFull = true; _cellArray[i]._ressource = new Ressource(name); break; }
             }
+        }
+
+        public bool IsOnInventory(string name)
+        {
+            int i = 0;
+            while (i < _cellArray.Length - 1 && _cellArray[i]._name != name)
+            {               
+                i++;
+            }
+
+            if (_cellArray[i]._name == name)
+            {
+                return true;
+
+            }else
+            {
+                return false;
+            }
+           
+        }
+
+        public string GetName(Vector2 pos)
+        {
+            for (int i = 0; i < _cellArray.Length; i++)
+            {
+                if (_cellArray[i].Position.X >= pos.X && _cellArray[i].Position.X < pos.X + 70 && _cellArray[i].Position.Y >= pos.Y && _cellArray[i].Position.Y < pos.Y + 69)
+                {
+                    return _cellArray[i]._name;
+                }
+            }
+
+            return null;
         }
         
 

@@ -161,14 +161,10 @@ namespace Aviias
                     list = player.GetCollisionSide(player.GetBlocsAround(map));
 
                     Camera.Move(new Vector2(-player.PlayerMoveSpeed, 0));
-                    // player.Position.X -= player.PlayerMoveSpeed;
-                    //  if (player.GetCollisionSide(player.GetBlocsAround(map)) != 2) player.Position.X -= playerMoveSpeed;
-                    /*       if (!list.Contains(2)) player.Position.X -= player.PlayerMoveSpeed;
-                           if (!list.Contains(1)) player.Position.X += player.PlayerMoveSpeed;*/
+                    
                 }
 
-                //     if (player.GetCollisionSide(player.GetBlocsAround(map)) != 3) player.Position.Y += playerMoveSpeed;
-                //  if (!list.Contains(3)) player.Position.Y += player.PlayerMoveSpeed;
+                
 
                 player.Update(player, Camera, _npc, gameTime, Content, log, map, monsters);
                 player.UpdatePlayerCollision(gameTime, player, monsters);
@@ -185,10 +181,6 @@ namespace Aviias
                     int posY = rnd.Next(0, map.WorldHeight * 10);
                     Vector2 monsterPosition = new Vector2(posX, posY);
                     drake = new Drake(Content, Content.Load<Texture2D>("drake"), monsterPosition);
-                    /*   foreach (NPC npc in _npc)
-                       {
-                           if (map.GetDistance(player.PlayerPosition, npc.Position) < 400) npc.Interact(player);
-                       }*/
                     monsters.Add(drake);
                     spawnTimer.ReInit();
                 }

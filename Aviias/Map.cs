@@ -294,6 +294,14 @@ namespace Aviias
 
         }
 
+        public void SetBloc(Vector2 pos, ContentManager Content, Player player, string name)
+        {
+            int i = (int)pos.X / _scale;
+            int j = (int)pos.Y / _scale;
+            if ((i >= 0) && (i < _worldHeight) && (j >= 0) && (j < _worldWidth)) player.setbloc(_blocs[i,j], Content, _blocs, i, j, _scale, name);
+
+        }
+
         public float GetDistance(Vector2 one, Vector2 two)
         {
             return (Math.Abs(one.X - two.X) + Math.Abs(one.Y - two.Y));

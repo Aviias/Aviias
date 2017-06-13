@@ -49,6 +49,7 @@ namespace Aviias
         Timer craftTimer = new Timer(1.5f);
         Timer blocBreakTimer = new Timer(1.5f);
         Timer blockDurationTimer = new Timer(1.5f);
+        Timer setBlocTimer = new Timer(1.2f);
 
         //   MonoGame.Extended.Camera2D Camera;
         float _playerMoveSpeed;
@@ -110,6 +111,7 @@ namespace Aviias
             _moveSpeed = 0.8f;
             _activeQuest = new List<Quest>(8);
             _inv = new Inventory(this);
+
             /*
             _inv.AddInventory(2, "oak_wood");
             _inv.AddInventory(4, "oak_plank");
@@ -182,6 +184,17 @@ namespace Aviias
             }
         }
 
+        public void setbloc(Bloc bloc, ContentManager content, Bloc[,] blocs, int i, int j, int scale, string name)
+        {
+            Bloc bloc1;
+            if (bloc != null)
+            {
+                bloc1 = new Bloc(blocs[i, j].GetPosBlock, scale, name, content);
+                _inv.DecreaseInventory(1, "dirt");
+                blocs[i, j] = bloc1;
+            }
+        }
+
         bool IsOnLadder(Map map)
         {
             for (int a = (int)(Position.Y / 16); a < (Position.Y / 16) + 3; a++)
@@ -235,6 +248,7 @@ namespace Aviias
             playerTimer.Decrem(gameTime);
             craftTimer.Decrem(gameTime);
             blocBreakTimer.Decrem(gameTime);
+            setBlocTimer.Decrem(gameTime);
 
             list = GetCollisionSide(GetBlocsAround(map));
 
@@ -314,7 +328,7 @@ namespace Aviias
                     }
                 }
                 
-                if (mouseState.LeftButton == ButtonState.Pressed && blocBreakTimer.IsDown())
+                if (mouseState.LeftButton == ButtonState.Pressed && blocBreakTimer.IsDown() && !IsInventoryOpen)
                 {
                     blockDurationTimer.Decrem(gameTime);
                     if (blockDurationTimer.IsDown())
@@ -328,7 +342,21 @@ namespace Aviias
               
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.P))
+            if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Right) == System.Windows.Forms.MouseButtons.Right && setBlocTimer.IsDown())
+            {
+                mouseState = Mouse.GetState();
+                Vector2 position = new Vector2(mouseState.X, mouseState.Y);
+                position = Camera.ScreenToWorld(position);
+                string name = _inv.GetName(position);
+
+                if (_inv.IsOnInventory("dirt"))
+                {
+                    map.SetBloc(position, Content, player, "dirt");
+                    setBlocTimer.ReInit();
+                }
+            }
+
+                if (currentKeyboardState.IsKeyDown(Keys.P))
             {
                 if (player._displayPos) player._displayPos = false;
                 else player._displayPos = true;
