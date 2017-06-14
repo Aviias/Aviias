@@ -83,6 +83,19 @@ namespace Aviias
             return _cellArray[i].IsFull;
         }
 
+        public Vector2 PositionCellToolBar()
+        {
+            float DifX = 100;
+            if (_actualCell == 0)
+            {
+                return new Vector2(_player.Position.X - 400, _player.Position.Y + 474);
+            }
+            else
+            {
+                return new Vector2(_player.Position.X - DifX * _actualCell, _player.Position.Y + 474);
+            }
+        }
+
         public _cell[] Array
         {
             get { return _cellArray; }

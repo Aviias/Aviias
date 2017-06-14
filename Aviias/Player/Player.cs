@@ -605,6 +605,9 @@ namespace Aviias
                         text.DisplayText("" + _inv.PositionToolBar(i)._quantity, new Vector2(_inv.PositionToolBar(i).Position.X, _inv.PositionToolBar(i).Position.Y + 100), spriteBatch, Color.Black);
                     }
                 }
+                spriteBatch.Draw(content.Load<Texture2D>("Roullette"), _inv.PositionCellToolBar(), null, Color.White, 0f, Vector2.Zero, 1f,
+                    SpriteEffects.None, 0f);
+
             }
 
             if (IsDie == true)
