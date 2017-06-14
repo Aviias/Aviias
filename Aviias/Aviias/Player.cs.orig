@@ -12,7 +12,6 @@ using MonoGame.Extended;
 
 namespace Aviias
 {
-    [Serializable]
     public class Player
     {
         Map _ctx;
@@ -29,7 +28,6 @@ namespace Aviias
         int _damage;
         bool _isDie;
         List<int> list = new List<int>(16);
-        Save save;
 
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
@@ -44,14 +42,21 @@ namespace Aviias
         float _moveSpeed;
         public bool flyMod;
         public bool IsInventoryOpen;
-        Map _map;
+        Map map;
 
-        Timer playerTimer = new Timer(1.2f);
-        Timer invenTimer = new Timer(1.3f);
-        Timer craftTimer = new Timer(1.5f);
-        Timer blocBreakTimer = new Timer(1.5f);
-        Timer blockDurationTimer = new Timer(1.5f);
+        float _playerTimer = 1.2f;
+        const float _playerTIMER = 1.2f;
 
+        float _inventoryTimer = 1.3f;
+        const float _inventoryTIMER = 1.3f;
+
+        float _craftTimer = 1.5f;
+        const float _craftTIMER = 1.5f;
+
+        float _blocBreakTimer = 1.5f;
+        const float _blocBreakTIMER = 1.5f;
+        float _blockDurationTimer = 1.5f;
+        const float _blockDurationTIMER = 1.5f;
         //   MonoGame.Extended.Camera2D Camera;
         float _playerMoveSpeed;
 
@@ -96,7 +101,7 @@ namespace Aviias
             set { _damage = value; }
         }
 
-        public void Initialize(Texture2D texture, Vector2 position, ContentManager content, Map map)
+        public void Initialize(Texture2D texture, Vector2 position, ContentManager content)
         {
             PlayerTexture = texture;
             Position = position;
@@ -110,11 +115,8 @@ namespace Aviias
             _gravity = 1;
             _jumpHeight = -12;
             _moveSpeed = 0.8f;
-            _map = map;
             _activeQuest = new List<Quest>(8);
             _inv = new Inventory(this);
-            save = new Save(map, this);
-            /*
             _inv.AddInventory(2, "oak_wood");
             _inv.AddInventory(4, "oak_plank");
             _inv.AddInventory(500, "dirt");
@@ -126,7 +128,6 @@ namespace Aviias
             _inv.AddInventory(80, "iron_ore");
             _inv.AddInventory(1000, "stonebrick");
             _inv.AddInventory(247, "oak_leaves");
-            */
         }
 
         public Vector2 PlayerPosition
@@ -143,8 +144,17 @@ namespace Aviias
         {
             _activeQuest.Remove(quest);
         }
+        /*
+        public Vector2 CursorPos()
+        {             
+            int posX = Cursor.Position.X;
+            int posY = Cursor.Position.Y;
 
+            Vector2 cursorPos = new Vector2(posX, posY);
+            return cursorPos;
             
+        }
+        */
         public float PlayerMoveSpeed
         {
             get { return _playerMoveSpeed; }
@@ -179,13 +189,10 @@ namespace Aviias
                 if (bloc.IsBreakable)
                 {
                     bloc1 = new Bloc(blocs[i,j].GetPosBlock ,scale, "air", content);
-                    _inv.AddInventory(1, blocs[i, j].Type);
                     blocs[i, j] = bloc1;
-                    
                     //log.WriteLine("---- > breakBloc block.X = " + blocs[i, j].GetPosBlock.X + " block.Y = " + blocs[i, j].GetPosBlock.Y);
                 }
             }
-            _map.ActualizeShadow((int)Position.X, (int)Position.Y);
         }
 
         bool IsOnLadder(Map map)
@@ -237,13 +244,15 @@ namespace Aviias
         {
             currentKeyboardState = Keyboard.GetState();
             mouseState = Mouse.GetState();
-            invenTimer.Decrem(gameTime);
-            playerTimer.Decrem(gameTime);
-            craftTimer.Decrem(gameTime);
-            blocBreakTimer.Decrem(gameTime);
+            
 
+            float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
             list = GetCollisionSide(GetBlocsAround(map));
-
+            
+            _inventoryTimer -= elapsed;
+            _craftTimer -= elapsed;
+            _playerTimer -= elapsed;
+            _blocBreakTimer -= elapsed;
 
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
@@ -265,13 +274,13 @@ namespace Aviias
                 player.Position.Y += _playerMoveSpeed;
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.E) && invenTimer.IsDown())
+            if (currentKeyboardState.IsKeyDown(Keys.E) && _inventoryTimer < 1)
             {
                 IsInventoryOpen = !IsInventoryOpen;
-                invenTimer.ReInit();
+                _inventoryTimer = _inventoryTIMER;
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.C) && craftTimer.IsDown() && IsInventoryOpen)
+            if (currentKeyboardState.IsKeyDown(Keys.C) && _craftTimer < 1)
             {
                 for (int i = 0; i < _inv._craft._cellCraft.Length; i++)
                 {
@@ -286,7 +295,7 @@ namespace Aviias
                         break;
                     }
                 }
-                craftTimer.ReInit();
+                _craftTimer = _craftTIMER;
 
             }
 
@@ -307,28 +316,28 @@ namespace Aviias
                 {
                     if (position.X >= monsters[i].MonsterPosition.X && position.X <= monsters[i].MonsterPosition.X + monsters[i].Width && position.Y >= monsters[i].MonsterPosition.Y && position.Y <= monsters[i].MonsterPosition.Y + monsters[i].Height)
                     {
-                        if (playerTimer.IsDown() && Vector2.Distance(player.PlayerPosition, position) <= 400)
+                        if (_playerTimer < 1 && Vector2.Distance(player.PlayerPosition, position) <= 400)
                         {
                             monsters[i].GetDamage(player.Damage);
                             if (monsters[i].IsDie)
                             {
                                 monsters.Remove(monsters[i]);
                             }
-                            playerTimer.ReInit();
+                            _playerTimer = _playerTIMER;
                         }
                             
                     }
                 }
                 
-                if (mouseState.LeftButton == ButtonState.Pressed && blocBreakTimer.IsDown())
+                if (mouseState.LeftButton == ButtonState.Pressed && _blocBreakTimer < 1)
                 {
-                    blockDurationTimer.Decrem(gameTime);
-                    if (blockDurationTimer.IsDown())
-                    {
+                    _blockDurationTimer -= elapsed;
+                    //if (_blockDurationTimer < 1)
+                    //{
                         map.FindBreakBlock(position, player, Content, log);
-                        blocBreakTimer.ReInit();
-                        blockDurationTimer.ReInit();
-                    }
+                        _blocBreakTimer = _blocBreakTIMER;
+                        _blockDurationTimer = _blockDurationTIMER;
+                    //}
                     
                 }
               
@@ -359,41 +368,14 @@ namespace Aviias
                 {
                     if(_inv._cellArray[i]._name == "heal_potion" && _inv._cellArray[i]._quantity >= 1)
                     {
+<<<<<<< HEAD
+                        Health += 50;
+=======
                         RegenerateHealth(50);
+>>>>>>> fusion
                         _inv.DecreaseInventory(1, "heal_potion");
                     }
                 }
-            }
-
-            if (currentKeyboardState.IsKeyDown(Keys.W))
-            {
-                map.skyLuminosity++;
-                if (map.skyLuminosity >= 8) map.skyLuminosity = 0;
-                map.ActualizeShadow((int)Position.X, (int)Position.Y);
-            }
-
-            if (currentKeyboardState.IsKeyDown(Keys.X))
-            {
-
-                map.ActualizeShadow((int)Position.X, (int)Position.Y);
-            }
-
-
-            if (currentKeyboardState.IsKeyDown(Keys.M))
-            {
-                /*  map = new Map(200, 200);
-                  map.GenerateMap(Content);*/
-
-                Game1.map = save.DeserializeMap();
-                Game1.map.Reload(Content);
-             //   Game1.player = save.DeserializePlayer();
-            }
-
-            if (currentKeyboardState.IsKeyDown(Keys.S))
-            {
-                save = new Save(map, player);
-                save.SerializeMap();
-             //   save.SerializePlayer();
             }
         }
 
@@ -530,41 +512,67 @@ namespace Aviias
 
         public string ImageHealth(int health)
         {
-            return (Math.Floor((double)health / 10)*10).ToString();
+            if(_health == 100)
+            {
+                return "100";
+            }
+            else if (_health < 100 && _health > 89)
+            {
+                return "90";
+            }
+            else if(_health <= 89 && _health > 79)
+            {
+                return "80";
+            }
+            else if(_health <= 79 && _health > 69)
+            {
+                return "70";
+            }
+            else if (_health <= 69 && _health > 59)
+            {
+                return "60";
+            }
+            else if (_health <= 59 && _health > 49)
+            {
+                return "50";
+            }
+            else if (_health <= 49 && _health > 39)
+            {
+                return "40";
+            }
+            else if (_health <= 39 && _health > 29)
+            {
+                return "30";
+            }
+            else if (_health <= 29 && _health > 19)
+            {
+                return "20";
+            }
+
+            else if (_health <= 19 && _health > 9)
+            {
+                return "10";
+            }
+            else
+            {
+                return "0";
+            }
         }
 
         internal void Draw(SpriteBatch spriteBatch, ContentManager content)
         {
             spriteBatch.Draw(PlayerTexture, Position, null, Color.White, 0f, Vector2.Zero, 1f,
                SpriteEffects.None, 0f);
-            spriteBatch.Draw(content.Load<Texture2D>(ImageHealth(_health)), new Vector2(Position.X - 950, Position.Y - 500), null, Color.White, 0f, Vector2.Zero, 1.1f,
+            string Update = ImageHealth(_health);
+            spriteBatch.Draw(content.Load<Texture2D>(Update), new Vector2(Position.X - 950, Position.Y - 500), null, Color.White, 0f, Vector2.Zero, 1.1f,
                SpriteEffects.None, 0f);
             if (_displayPos) text.DisplayText((Position.X  + " - " + Position.Y), new Vector2(Position.X, Position.Y - 30), spriteBatch, Color.Red);
             text.DisplayText(("" +_health + "/"  + "100"), new Vector2(Position.X - 785, Position.Y - 420), spriteBatch, Color.White);
-
             if(IsInventoryOpen)
             {
                 _inv.Draw(spriteBatch, content);
-            }else
-            {
-                spriteBatch.Draw(content.Load<Texture2D>("Barre d'inventaire"), new Vector2(Position.X - 400, Position.Y +474), null, Color.White, 0f, Vector2.Zero, 1f,
-                    SpriteEffects.None, 0f);
-                for(int i=0; i<10; i++)
-                {
-                    if (_inv.PositionToolBar(i).IsFull == true)
-                    {
-                        spriteBatch.Draw(content.Load<Texture2D>(_inv.PositionToolBar(i)._name), _inv.PositionToolBar(i).Position, null, Color.White, 0f, Vector2.Zero, 0.8f,
-                            SpriteEffects.None, 0f);
-                        text.DisplayText("" + _inv.PositionToolBar(i)._quantity, new Vector2(_inv.PositionToolBar(i).Position.X, _inv.PositionToolBar(i).Position.Y + 100), spriteBatch, Color.Black);
-                    }
-                }
             }
-
-            if (IsDie == true)
-            {
-                spriteBatch.Draw(content.Load<Texture2D>("gameover"), new Vector2(Position.X, Position.Y), null, Color.White, 0f, Vector2.Zero, 1f,
-                     SpriteEffects.None, 0f);
-            }
+            
         }
 
         public void AddStr(string str)

@@ -9,6 +9,8 @@ namespace Aviias
     [Serializable]
     public class Structure
     {
+        //  public Dictionary<string, string[,]> structures = new Dictionary<string, string[,]>(8);
+
         public Dictionary<string, string[,]> structures = new Dictionary<string, string[,]>(8);
 
         public Structure()

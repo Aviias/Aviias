@@ -13,28 +13,29 @@ namespace Aviias
     public class Bloc
     {
         [field: NonSerialized]
-        protected Vector2 _position;
+        public Vector2 _position;
         [field: NonSerialized]
         public Texture2D _texture;
         float _scale;
+        int _x;
+        int _y;
         string _type;
         bool _isBreakable;
         bool _isAir;
-        int x;
-        int y;
         public float moveSpeed = 0.1f;
         int _luminosity;
         public bool _isInContactWithTheSky;
 
-        public Bloc(Vector2 position, float scale, string type, ContentManager content)
+        public Bloc(Vector2 position, float scale, string type, ContentManager content, int x, int y)
         {
-            _position = position;
+            //_position = position;
+            _position = new Vector2(x, y);
+            _x = x;
+            _y = y;
             _texture = content.Load<Texture2D>(type);
             _scale = scale;
             _type = type;
-            x = (int)position.X;
-            y = (int)position.Y;
-            //_luminosity = 6;
+            _luminosity = 6;
             if (type != "air")
             {
                 _isBreakable = true;
@@ -47,15 +48,9 @@ namespace Aviias
             }
         }
 
-        public void Reload(ContentManager content)
+        public void Draw(SpriteBatch spriteBatch, ContentManager content)
         {
-            _texture = content.Load<Texture2D>(_type);
-            _position = new Vector2(x, y);
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(_texture, _position, null, new Color(_luminosity, _luminosity, _luminosity, 255), 0f, Vector2.Zero, _scale / 64, SpriteEffects.None, 0f);
+            spriteBatch.Draw(content.Load<Texture2D>(_type), new Vector2(_x, _y), null, new Color(_luminosity, _luminosity, _luminosity, 255), 0f, Vector2.Zero, _scale / 64, SpriteEffects.None, 0f);
         }
     
 
@@ -85,17 +80,7 @@ namespace Aviias
         public void ChangeBloc(string newTexture, ContentManager content)
         {
             _texture = content.Load<Texture2D>(newTexture);
-           /* if (newTexture == "ladder")*/ _type = newTexture;
-            if (newTexture != "air")
-            {
-                _isBreakable = true;
-                _isAir = false;
-            }
-            else
-            {
-                _isBreakable = false;
-                _isAir = true;
-            }
+            if (newTexture == "ladder") _type = newTexture;
         }
 
         public float posX
@@ -112,20 +97,20 @@ namespace Aviias
 
         public int Width
         {
-            get { return _texture.Width; }
+            get { return 16; }
         }
 
         public int Height
         {
-            get { return _texture.Height; }
+            get { return 16; }
         }
 
         public int Luminosity
         {
-            get { return _luminosity / 36; }
+            get { return _luminosity/36; }
         }
 
-        public void ChangeLuminosity(int luminosity)
+        public void DecreaseLuminosity(int luminosity)
         {
             if (luminosity < 0) luminosity = 0;
             _luminosity = luminosity * 36;

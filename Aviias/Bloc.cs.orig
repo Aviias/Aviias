@@ -32,9 +32,13 @@ namespace Aviias
             _texture = content.Load<Texture2D>(type);
             _scale = scale;
             _type = type;
+<<<<<<< Updated upstream
+            _luminosity = 6;
+=======
             x = (int)position.X;
             y = (int)position.Y;
             //_luminosity = 6;
+>>>>>>> Stashed changes
             if (type != "air")
             {
                 _isBreakable = true;
@@ -122,6 +126,10 @@ namespace Aviias
 
         public int Luminosity
         {
+<<<<<<< Updated upstream
+            get { return _luminosity; }
+            set { _luminosity = value * 36; }
+=======
             get { return _luminosity / 36; }
         }
 
@@ -129,6 +137,7 @@ namespace Aviias
         {
             if (luminosity < 0) luminosity = 0;
             _luminosity = luminosity * 36;
+>>>>>>> Stashed changes
         }
 
     }
