@@ -188,12 +188,12 @@ namespace Aviias
                     Vector2 monsterPosition = new Vector2(posX, posY);
                     drake = new Drake(Content, Content.Load<Texture2D>("drake"), monsterPosition);
 
-         //       monsters.Add(monster);
-               /// monsters.Add(monster);
-                  //  monsters.Add(drake);
-                   // spawnTimer.ReInit();
+         
+               // monsters.Add(monster);
+                    monsters.Add(drake);
+                    spawnTimer.ReInit();
                 }
-             //       spawnTimer.ReInit();
+           
             }
           
         }

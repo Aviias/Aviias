@@ -41,6 +41,7 @@
     <ApplicationManifest>Run\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="IA\Drake.cs" />
     <Compile Include="GUI\Button.cs" />
     <Compile Include="GUI\Menu.cs" />
     <Compile Include="GUI\Sprite.cs" />
@@ -60,10 +61,10 @@
     <Compile Include="Player\Ressource.cs" />
     <Compile Include="Map\Structure.cs" />
     <Compile Include="Player\Stuff.cs" />
-    <Compile Include="Save.cs" />
-    <Compile Include="Wolf.cs" />
-    <Compile Include="Text.cs" />
-    <Compile Include="Timer.cs" />
+    <Compile Include="Run\Save.cs" />
+    <Compile Include="IA\Wolf.cs" />
+    <Compile Include="IA\Text.cs" />
+    <Compile Include="Run\Timer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Extended, Version=0.6.377.0, Culture=neutral, processorArchitecture=MSIL">

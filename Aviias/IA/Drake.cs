@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Aviias
 {
-     class Drake : Monster
+    class Drake : Monster
     {
         public Drake(ContentManager content, Texture2D texture, Vector2 pos)
             : base(300, 1.6f, 0.10, 0, 2, content, texture, pos)
