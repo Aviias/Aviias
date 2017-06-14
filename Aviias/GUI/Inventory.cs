@@ -1,21 +1,24 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace Aviias
 {
     public class Inventory
     {
+        int _actualCell;
         Player _player;
         public _cell[]  _cellArray;
         private Text text;
         public Craft _craft;
-
         public Inventory(Player player)
         {
             _player = player;
             _cellArray = new _cell[40];
             _craft = new Craft();
+            _actualCell = 0;
+            
             for (int i = 0; i < 40; i++)
             {
                 _cellArray[i] = new _cell();
@@ -85,6 +88,40 @@ namespace Aviias
             get { return _cellArray; }
         }
 
+        public int ActualCell
+        {
+            get { return _actualCell; }            
+        }
+
+        public string GetNameBloc(int x)
+        {
+            return _cellArray[x]._name;
+        }
+
+        public void MoveLeftActualCell()
+        {
+            if(_actualCell < 9)
+            {
+                _actualCell += 1;
+            }
+            else
+            {
+                _actualCell = 0;
+            }
+        }
+
+        public void MoveRightActualCell()
+        {
+            if (_actualCell > 0)
+            {
+                _actualCell -= 1;
+            }
+            else
+            {
+                _actualCell = 9;
+            }
+        }
+
         public struct _cell
         {
             public Vector2 Position { get; set; }
@@ -99,7 +136,15 @@ namespace Aviias
             //foreach ( entry in _cellArray)
             for (int i = 0; i < _cellArray.Length; i++)
             {
-                if (_cellArray[i]._name == name) { _cellArray[i]._quantity += quantity; return; }
+                if (_cellArray[i]._name == name && _cellArray[i]._quantity == 0)
+                {
+                    _cellArray[i].IsFull = true;
+                    _cellArray[i]._quantity += quantity; return;
+                }
+                else if (_cellArray[i]._name == name)
+                {
+                    _cellArray[i]._quantity += quantity; return;
+                }
             }
 
             for (int i = 0; i < _cellArray.Length; i++)
@@ -107,13 +152,48 @@ namespace Aviias
                 if (!_cellArray[i].IsFull && _cellArray[i]._name != name) { _cellArray[i]._name = name; _cellArray[i]._quantity = quantity; _cellArray[i].IsFull = true; _cellArray[i]._ressource = new Ressource(name); break; }
             }
         }
+
+        public bool IsOnInventory(string name)
+        {
+            for (int i = 0; i < _cellArray.Length; i++)
+            {
+            if (_cellArray[i]._name == name && IsFull(i))
+                {
+                    return true;
+                }
+            }
+            return false;         
+        }
+
+        public string GetName(Vector2 pos)
+        {
+            for (int i = 0; i < _cellArray.Length; i++)
+            {
+                if (_cellArray[i].Position.X >= pos.X && _cellArray[i].Position.X < pos.X + 70 && _cellArray[i].Position.Y >= pos.Y && _cellArray[i].Position.Y < pos.Y + 69)
+                {
+                    return _cellArray[i]._name;
+                }
+            }
+
+            return null;
+        }
         
+        public void FixActualCell(int i)
+        {
+
+        }
 
         public void DecreaseInventory(int quantity, string name)
         {
             for (int i = 0; i < _cellArray.Length; i++)
             {
-                if (_cellArray[i]._name == name)
+                if(_cellArray[i]._name == name && _cellArray[i]._quantity == 1)
+                {
+                    _cellArray[i].IsFull = false;
+                    _cellArray[i]._quantity -= quantity;
+                    return;
+                }
+                else if (_cellArray[i]._name == name)
                 {
                     _cellArray[i]._quantity -= quantity;
                     return;

@@ -206,6 +206,7 @@ namespace Aviias
                     list = player.GetCollisionSide(player.GetBlocsAround(map));
 
                     Camera.Move(new Vector2(-player.PlayerMoveSpeed, 0));
+<<<<<<< HEAD:Aviias/Run/Game1.cs.orig
 <<<<<<< HEAD:Aviias/Game1.cs
                 }
 
@@ -220,6 +221,13 @@ namespace Aviias
                 if (spawnTimer.IsDown())
 
 =======
+                    // player.Position.X -= player.PlayerMoveSpeed;
+                    //  if (player.GetCollisionSide(player.GetBlocsAround(map)) != 2) player.Position.X -= playerMoveSpeed;
+                    /*       if (!list.Contains(2)) player.Position.X -= player.PlayerMoveSpeed;
+                           if (!list.Contains(1)) player.Position.X += player.PlayerMoveSpeed;*/
+=======
+                    
+>>>>>>> origin/f_scroll_:Aviias/Game1.cs
                 }
 
                 
@@ -241,6 +249,7 @@ namespace Aviias
                     Vector2 monsterPosition = new Vector2(posX, posY);
 <<<<<<< HEAD:Aviias/Game1.cs
                     drake = new Drake(Content, Content.Load<Texture2D>("drake"), monsterPosition);
+<<<<<<< HEAD:Aviias/Run/Game1.cs.orig
 
          //       monsters.Add(monster);
                /// monsters.Add(monster);
@@ -252,8 +261,16 @@ namespace Aviias
           
 =======
                     monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
+                    /*   foreach (NPC npc in _npc)
+                       {
+                           if (map.GetDistance(player.PlayerPosition, npc.Position) < 400) npc.Interact(player);
+                       }*/
                     monsters.Add(monster);
                     _spawnTimer = _spawnTIMER;
+=======
+                    monsters.Add(drake);
+                    spawnTimer.ReInit();
+>>>>>>> origin/f_scroll_:Aviias/Game1.cs
                 }
 
             }

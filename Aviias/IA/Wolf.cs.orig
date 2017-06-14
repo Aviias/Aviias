@@ -11,9 +11,16 @@ namespace Aviias
 {
     class Wolf : Monster
     {
+<<<<<<< HEAD:Aviias/IA/Wolf.cs
         public Wolf(ContentManager content, Texture2D texture, Vector2 pos)
-            : base(100, 1.5f, 0.10, 0, 5, content, texture, pos)
+            : base(100, 1.5f, 0.10, 300, 5, content, texture, pos)
         {
+=======
+           
+        public Wolf(ContentManager content,Texture2D texture, Vector2 pos)
+            : base(100, 1.5f, 0.10, 0, 5, content, texture, pos)
+        { 
+>>>>>>> origin/f_scroll_:Aviias/Wolf.cs
 
         }
     }
