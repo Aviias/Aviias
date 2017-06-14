@@ -27,8 +27,8 @@ namespace Aviias
         public static Map map;
         Random random = new Random();
         BoxingViewportAdapter _viewportAdapter;
-        const int WindowWidth = 1366;
-        const int WindowHeight = 768;
+        const int WindowWidth = 1920;
+        const int WindowHeight = 1080;
         Camera2D _camera;
         public List<NPC> _npc;
         SpriteFont font;
