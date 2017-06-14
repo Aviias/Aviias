@@ -64,6 +64,7 @@ namespace Aviias
             player = new Player();
             player.PlayerMoveSpeed = 8.0f;
             Vector2 monsterPosition;
+            map = new Map(200, 200);
 
             int monsterneed = 2 - monsters.Count;
             if (monsterneed != 0)
@@ -81,8 +82,6 @@ namespace Aviias
                 }
             }
                
-            
-            map = new Map(200, 200);
             Vector2 playerPosition = new Vector2(1500, 345 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
             player.Initialize(Content.Load<Texture2D>("babyplayer"), playerPosition, Content, map);
             map.GenerateMap(Content);
@@ -145,12 +144,6 @@ namespace Aviias
 
                 Camera.Position = new Vector2(player.Position.X - WindowWidth / 2, player.Position.Y - WindowHeight / 2);
                 // TODO: Add your update logic here
-                currentKeyboardState = Keyboard.GetState();
-                if (currentKeyboardState.IsKeyDown(Keys.M))
-                {
-                    map = new Map(200, 200);
-                    map.GenerateMap(Content);
-                }
 
                 previousKeyboardState = currentKeyboardState;
                 currentKeyboardState = Keyboard.GetState();
@@ -172,7 +165,7 @@ namespace Aviias
                 }
 
                 player.Update(player, Camera, _npc, gameTime, Content, log, map, monsters);
-                player.UpdatePlayerCollision(gameTime, player, monsters);
+         //       player.UpdatePlayerCollision(gameTime, player, monsters);
                 base.Update(gameTime);
 
 
@@ -188,9 +181,9 @@ namespace Aviias
                     drake = new Drake(Content, Content.Load<Texture2D>("drake"), monsterPosition);
 
          //       monsters.Add(monster);
-                monsters.Add(monster);
-                    monsters.Add(drake);
-                    spawnTimer.ReInit();
+               /// monsters.Add(monster);
+                  //  monsters.Add(drake);
+                   // spawnTimer.ReInit();
                 }
              //       spawnTimer.ReInit();
             }
