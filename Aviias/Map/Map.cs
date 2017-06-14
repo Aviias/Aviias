@@ -148,19 +148,12 @@ namespace Aviias
                     {
                         if (_blocs[i, j - 1].Type == "air")
                         {
-                            if (_blocs[i, j].Type != "air")
-                            {
                                 _blocs[i, j]._isInContactWithTheSky = true;
-                            }
-                            else
-                            {
-                                _blocs[i, j]._isInContactWithTheSky = true;
-                            }
                         }
-                        else
+                    /*    else
                         {
                             _blocs[i, j - 1].ChangeLuminosity(4);
-                        }
+                        }*/
                     }
                 }
 
@@ -352,7 +345,7 @@ namespace Aviias
                 {
                     if (i > 0 && j > 0 && j < _worldHeight && i < _worldWidth)
                     {
-                        if (_blocs[i, j].Type == "air")
+                        if (_blocs[i, j] != null && _blocs[i, j - 1]!= null && _blocs[i, j].Type == "air")
                         {
                             if (_blocs[i, j - 1].Type == "air" && _blocs[i, j - 1]._isInContactWithTheSky)
                             {
@@ -367,7 +360,7 @@ namespace Aviias
             {
                 for (int j = xx - 80; j < xx + 80; j++)
                 {
-                    if (i > 0 && j > 0 && j < _worldHeight && i < _worldWidth)
+                    if (i > 2 && j > 2 && j < _worldHeight - 2 && i < _worldWidth - 2 && _blocs[i, j-1] != null && _blocs[i, j] != null)
                     {
                         if (_blocs[i, j]._isInContactWithTheSky)
                         {
