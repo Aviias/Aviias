@@ -101,7 +101,15 @@ namespace Aviias
             //foreach ( entry in _cellArray)
             for (int i = 0; i < _cellArray.Length; i++)
             {
-                if (_cellArray[i]._name == name) { _cellArray[i]._quantity += quantity; return; }
+                if (_cellArray[i]._name == name && _cellArray[i]._quantity == 0)
+                {
+                    _cellArray[i].IsFull = true;
+                    _cellArray[i]._quantity += quantity; return;
+                }
+                else if (_cellArray[i]._name == name)
+                {
+                    _cellArray[i]._quantity += quantity; return;
+                }
             }
 
             for (int i = 0; i < _cellArray.Length; i++)
@@ -118,7 +126,7 @@ namespace Aviias
                 i++;
             }
 
-            if (_cellArray[i]._name == name)
+            if (_cellArray[i]._name == name && IsFull(i))
             {
                 return true;
 
@@ -147,7 +155,13 @@ namespace Aviias
         {
             for (int i = 0; i < _cellArray.Length; i++)
             {
-                if (_cellArray[i]._name == name)
+                if(_cellArray[i]._name == name && _cellArray[i]._quantity == 1)
+                {
+                    _cellArray[i].IsFull = false;
+                    _cellArray[i]._quantity -= quantity;
+                    return;
+                }
+                else if (_cellArray[i]._name == name)
                 {
                     _cellArray[i]._quantity -= quantity;
                     return;
