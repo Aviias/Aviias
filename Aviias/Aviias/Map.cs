@@ -7,6 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace Aviias
 {
@@ -15,6 +17,7 @@ namespace Aviias
     {
         public readonly int _worldWidth;
         public readonly int _worldHeight;
+      //  [XmlArray("Blocs")]
         public Bloc[,] _blocs;
         const int _scale = 16;
         Random random = new Random();
@@ -139,7 +142,7 @@ namespace Aviias
                         prob++;
                     }
                     else id = "air";
-                    _blocs[i, j] = new Bloc(new Vector2(i * (_scale), j * (_scale)), _scale, id, content);
+                    _blocs[i, j] = new Bloc(new Vector2(i * (_scale), j * (_scale)), _scale, id, content, i * _scale, j * _scale);
                     if (j == 0)
                     {
                         _blocs[i, j]._isInContactWithTheSky = true;
@@ -159,7 +162,7 @@ namespace Aviias
                         }
                         else
                         {
-                            _blocs[i, j - 1].ChangeLuminosity(4);
+                            _blocs[i, j - 1].DecreaseLuminosity(4);
                         }
                     }
                 }
@@ -184,7 +187,7 @@ namespace Aviias
                             }
                         }
 
-                        if (k > 6 && l > 6 && _blocs[k - 3, l] != null && _blocs[k - 3, l].Type == "grass_side")
+                            if (k > 6 && l > 6 && _blocs[k - 3, l] != null && _blocs[k - 3, l].Type == "grass_side")
                         {
                             _treeGeneration = NextInt(1, 2300);
                             if (_treeGeneration <= _treeRate)
@@ -193,13 +196,13 @@ namespace Aviias
                                 if (_treeGeneration == 1) _structureModel = structures.structures["treeA"];
                                 else _structureModel = structures.structures["treeB"];
                                 AddTree(k, l, _structureModel, content);
-
+                               
                             }
                         }
                     }
                 }
 
-                _blocs[0, 0] = new Bloc(new Vector2(0, 0), _scale, "bedrock", content);
+                _blocs[0, 0] = new Bloc(new Vector2(0, 0), _scale, "bedrock", content, 0, 0);
                 // Cave generation
                 for (int o = 130; o < _worldHeight; o++)
                 {
@@ -256,7 +259,7 @@ namespace Aviias
             return wallCounter;
         }
 
-        public void Draw(SpriteBatch spriteBatch, int x, int y)
+        public void Draw(SpriteBatch spriteBatch, int x, int y, ContentManager content)
         {
             int xx = x / 16;
             int yy = y / 16;
@@ -264,7 +267,7 @@ namespace Aviias
             {
                 for (int j = xx - 80; j < xx + 80; j++)
                 {
-                    if (i >= 0 && j >= 0 && i < _worldHeight && j < _worldWidth && _blocs[j, i] != null) _blocs[j, i].Draw(spriteBatch);
+                    if (i >= 0 && j >= 0 && i < _worldHeight && j < _worldWidth && _blocs[j, i] != null) _blocs[j, i].Draw(spriteBatch, content);
                 }
             }
         }
@@ -354,13 +357,14 @@ namespace Aviias
 
         public void DebugBloc(int i, int j, StreamWriter log)
         {
-            log.WriteLine("bloc[ " + i + "," + j + "] X = " + _blocs[i, j].GetPosBlock.X + ", Y = " + _blocs[i, j].GetPosBlock.Y);
+            log.WriteLine("bloc[ " + i + "," + j +"] X = " + _blocs[i, j].GetPosBlock.X + ", Y = " + _blocs[i, j].GetPosBlock.Y);
         }
 
         int NextInt(int min, int max)
         {
             return random.Next(min, max);
         }
+
 
         public void ActualizeShadow(int x, int y)
         {
@@ -383,69 +387,106 @@ namespace Aviias
                 }
             }
 
-            for (int i = yy - 60; i < yy + 60; i++)
+          /*  for (int i = yy - 60; i < yy + 60; i++)
             {
                 for (int j = xx - 80; j < xx + 80; j++)
                 {
                     if (i > 0 && j > 0 && j < _worldHeight && i < _worldWidth)
                     {
-                        if (_blocs[i, j]._isInContactWithTheSky)
-                        {
-                            _blocs[i, j].ChangeLuminosity(skyLuminosity);
-                        }
 
-                        if (_blocs[i, j].Type == "air")
+            /* if (_blocs[i, j - 1] != null && _blocs[i, j - 1]._isInContactWithTheSky)
+             {
+                      if (_blocs[i, j - 1].Type == "air")
+                      {
+                          if (_blocs[i, j].Type != "air")
+                          {
+                              _blocs[i, j]._isInContactWithTheSky = true;
+                          }
+                          else if (_blocs[i, j-1].Type != "air" && _blocs[i, j].)
+                          {
+                              _blocs[i, j]._isInContactWithTheSky = true;
+                          }
+                          else
+                          {
+
+                          }
+                      }
+                      else
+                      {
+                          _blocs[i, j].Luminosity = (int)(skyLuminosity / 2);
+                      }*/
+
+
+
+
+
+
+
+
+            /*  if (_blocs[i, j].Type == "air")
+              {
+                  if (_blocs[i, j - 1].Type == "air" && _blocs[i, j - 1]._isInContactWithTheSky)
+                  {
+                      _blocs[i, j]._isInContactWithTheSky = true;
+                  }
+                  else if (_blocs[i, j - 1].Type != "air" && _blocs[i, j - 1]._isInContactWithTheSky)
+                  {
+                      if (_blocs[i-1, j]._isInContactWithTheSky)
+                      {
+                          _blocs[i, j].DecreaseLuminosity (_blocs[i - 1, j].Luminosity - 1);
+                      }
+                      else if (_blocs[i + 1, j]._isInContactWithTheSky)
+                      {
+                          _blocs[i, j].DecreaseLuminosity( _blocs[i + 1, j].Luminosity - 1);
+                      }
+                  }
+              }
+              else
+              {
+              if (_blocs[i, j - 1].Type == "air" && _blocs[i, j - 1]._isInContactWithTheSky)
+              {
+                  _blocs[i, j]._isInContactWithTheSky = true;
+              }
+              else if (_blocs[i, j - 1].Type != "air" && _blocs[i, j - 1]._isInContactWithTheSky)
+              {
+                  _blocs[i, j].DecreaseLuminosity((int)(skyLuminosity / 2));
+              }
+              else if (_blocs[i, j - 1].Type != "air")
+              {
+                  if (_blocs[i - 1, j]._isInContactWithTheSky)
+                  {
+                      //  _blocs[i, j].DecreaseLuminosity(_blocs[i - 1, j].Luminosity - 1);
+                      //    _blocs[i, j].DecreaseLuminosity(6);
+                      // _blocs[i, j]._isInContactWithTheSky = true;
+                      _blocs[i, j].DecreaseLuminosity((int)(skyLuminosity / 2));
+                  }
+                  else if (_blocs[i + 1, j]._isInContactWithTheSky)
+                  {
+                      //  _blocs[i, j].DecreaseLuminosity(_blocs[i + 1, j].Luminosity - 1);
+                      //  _blocs[i, j].DecreaseLuminosity(6);*/
+            // _blocs[i, j]._isInContactWithTheSky = true;
+            /*   _blocs[i, j].DecreaseLuminosity((int)(skyLuminosity / 2));
+           }
+       }*/
+          /*  if (_blocs[i, j].Type == "air")
                         {
                             if (_blocs[i, j - 1].Type == "air" && _blocs[i, j - 1]._isInContactWithTheSky)
                             {
                                 _blocs[i, j]._isInContactWithTheSky = true;
                             }
-
-                            if (!_blocs[i, j]._isInContactWithTheSky)
-                            {
-
-                                _blocs[i, j].ChangeLuminosity(GetBiggestNumber(_blocs[i - 1, j].Luminosity, _blocs[i + 1, j].Luminosity, _blocs[i, j - 1].Luminosity, _blocs[i, j + 1].Luminosity) - 1);
-                            }
-
-                            /*  if (!_blocs[i, j]._isInContactWithTheSky)
-                              {
-                                  _blocs[i, j].ChangeLuminosity(_blocs[i, j - 1].Luminosity - 1);
-                              }*/
                         }
                         else
                         {
-                            if (_blocs[i, j - 1].Type == "air" && _blocs[i, j - 1]._isInContactWithTheSky)
-                            {
-                                _blocs[i, j]._isInContactWithTheSky = true;
-                            }
 
-                            if (!_blocs[i, j]._isInContactWithTheSky)
-                            {
-
-                                _blocs[i, j].ChangeLuminosity(GetBiggestNumber(_blocs[i - 1, j].Luminosity, _blocs[i + 1, j].Luminosity, _blocs[i, j - 1].Luminosity, _blocs[i, j + 1].Luminosity) - 2);
-                            }
                         }
-                        if (_blocs[j, i]._isInContactWithTheSky) _blocs[j, i].ChangeLuminosity(skyLuminosity);
+
+
+                        }
+
+                        if (_blocs[j, i]._isInContactWithTheSky) _blocs[j, i].DecreaseLuminosity(skyLuminosity);
                     }
-
-                   
-                }
+                }*/
             }
-        }
 
-        public void Reload(ContentManager content)
-        {
-            foreach(Bloc bloc in _blocs)
-            {
-                bloc.Reload(content);
-            }
-        }
-
-        int GetBiggestNumber(int a, int b, int c, int d)
-        {
-            int[] num = new int[4] {a, b, c, d};
-
-            return num.Max();
-        }
     }
 }

@@ -17,16 +17,21 @@ namespace Aviias
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Player player;
+        public static Player player;
         Monster monster;
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
         // Texture2D texture;
-        Map map = new Map(200, 200);
+        public static Map map;
         Random random = new Random();
         BoxingViewportAdapter _viewportAdapter;
+<<<<<<< Updated upstream
         const int WindowWidth = 1920;
-        const int WindowHeight = 1080;
+        const int WindowHeight = 1088;
+=======
+        const int WindowWidth = 1366;
+        const int WindowHeight = 768;
+>>>>>>> Stashed changes
         Camera2D _camera;
         public List<NPC> _npc;
         SpriteFont font;
@@ -35,16 +40,9 @@ namespace Aviias
         Random rnd = new Random();
 
         float _spawnTimer = 10f;
-        const float _spawnTIMER = 10f;
-        SpriteFont msg_font;
-        public List<NPC> _npc;
-        SpriteFont font;
-        List<Monster> monsters = new List<Monster>();
-        MouseState mouseState = Mouse.GetState();
-        Bloc bloc;
         List<int> list = new List<int>(16);
-        Ressource _testRessource = new Ressource();
->>>>>>> origin/gravity
+        //Ressource _testRessource = new Ressource();
+        const float _spawnTIMER = 10f;
 
         public Game1()
         {
@@ -68,13 +66,16 @@ namespace Aviias
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            
+
             player = new Player();
-            playerMoveSpeed = 8.0f;
             player.PlayerMoveSpeed = 8.0f;
             Vector2 monsterPosition;
-            
+
+<<<<<<< Updated upstream
             int monsterneed = 5 - monsters.Count;
+=======
+            int monsterneed = 0 - monsters.Count;
+>>>>>>> Stashed changes
             if (monsterneed != 0)
             {
                 for (int i = 0; i < monsterneed; i++)
@@ -82,11 +83,11 @@ namespace Aviias
                     int posX = rnd.Next(0, map.WorldWidth * 10);
                     int posY = rnd.Next(0, map.WorldHeight * 10);
                     monsterPosition = new Vector2(posX, posY);
-                    monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);   
+                    monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
                     monsters.Add(monster);
                 }
             }
-            
+            /*
             if (!File.Exists("logfile.txt"))
             {
                 log = new StreamWriter("logfile.txt");
@@ -95,23 +96,26 @@ namespace Aviias
             {
                 log = File.AppendText("logfile.txt");
             }
-            
+            */
             // Add a new monster in the list            
-            playerMoveSpeed = 6.0f;
-            monster = new Monster(100, 1.0f, 0.05, 10, 5 );
-
-            // Add a new monster in the list
-            monsters.Add(monster);
             base.Initialize();
+<<<<<<< Updated upstream
+=======
+            map = new Map(200, 200);
+            Vector2 playerPosition = new Vector2(1500, 345 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
+            player.Initialize(Content.Load<Texture2D>("babyplayer"), playerPosition, Content, map);
+
+>>>>>>> Stashed changes
             map.GenerateMap(Content);
+            map.ActualizeShadow((int)player.Position.X, (int)player.Position.Y);
             IsMouseVisible = true;
-            
+
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, WindowWidth, WindowHeight);
             _camera = new Camera2D(_viewportAdapter);
             _camera.LookAt(new Vector2(player.Position.X + 10, player.Position.Y + 15));
             _npc = new List<NPC>(8);
-            _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(500, 250), 1));
-            _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(1400, 300), 0));
+            _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(500, 250), 5));
+            _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(1400, 300), 3));
         }
 
         /// <summary>
@@ -123,18 +127,13 @@ namespace Aviias
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("font");
-           
-<<<<<<< HEAD
-            Vector2 playerPosition = new Vector2(1500, 945 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
+
+<<<<<<< Updated upstream
+            Vector2 playerPosition = new Vector2(1500, 345 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
             player.Initialize(Content.Load<Texture2D>("babyplayer"), playerPosition, Content);
+
 =======
-            Vector2 playerPosition = new Vector2(1500, 45 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
-            player.Initialize(Content.Load<Texture2D>("tt"), playerPosition, Content);
-
-            Vector2 monsterPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
-            monster.Initialize(Content.Load<Texture2D>("mob"), monsterPosition);
->>>>>>> origin/gravity
-
+>>>>>>> Stashed changes
         }
 
         /// <summary>
@@ -171,133 +170,82 @@ namespace Aviias
 
             previousKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
-<<<<<<< HEAD
-=======
-           
-            UpdatePlayer(gameTime);          
-            UpdateMonster(gameTime);
-            UpdateCollision(gameTime);
+
             player.Update(map);
-            player.UpdateCollision(map, player);
+            player.UpdatePlayerCollision(gameTime, player, monsters);
             Camera.Position = new Vector2(player.Position.X - WindowWidth / 2, player.Position.Y - WindowHeight / 2);
-            base.Update(gameTime);
-        }
+<<<<<<< Updated upstream
+=======
 
-        private void UpdateCollision(GameTime gameTime)
-        {
-            Rectangle playerRect;
-            Rectangle monsterRect;
-
-            playerRect = new Rectangle((int)player.X, (int)player.Y, player.Width, player.Height);
->>>>>>> origin/gravity
-
+>>>>>>> Stashed changes
             for (int i = 0; i < monsters.Count; i++)
             {
                 if (monsters[i].IsDie == false && monsters[i] != null)
                 {
+<<<<<<< Updated upstream
                     monsters[i].Update(player, gameTime);
-                }
-<<<<<<< HEAD
-                else
-                {
-                    monsters.RemoveAt(i);
-                }
-                    
 =======
+            //        monsters[i].Update(player, gameTime);
+>>>>>>> Stashed changes
+                }
                 
-            }
+                    list = player.GetCollisionSide(player.GetBlocsAround(map));
 
-        }
-
-        private void UpdateMonster(GameTime gameTime)
-        {
-            monster.Update(player);
-        }
-
-        private void UpdatePlayer(GameTime gameTime)
-        {
-
-            //player.Position.X = MathHelper.Clamp(player.Position.X, 0, GraphicsDevice.Viewport.Width - player.Width);
-            //player.Position.Y = MathHelper.Clamp(player.Position.Y, 0, GraphicsDevice.Viewport.Height - player.Height);
-
-
-            list = player.GetCollisionSide(player.GetBlocsAround(map));
-
-            if (currentKeyboardState.IsKeyDown(Keys.Left))
-            {
+                    Camera.Move(new Vector2(-player.PlayerMoveSpeed, 0));
+<<<<<<< Updated upstream
+                   // player.Position.X -= player.PlayerMoveSpeed;
                 //  if (player.GetCollisionSide(player.GetBlocsAround(map)) != 2) player.Position.X -= playerMoveSpeed;
-                if (!list.Contains(2)) player.Position.X -= playerMoveSpeed;
-            }
+             /*       if (!list.Contains(2)) player.Position.X -= player.PlayerMoveSpeed;
+                    if (!list.Contains(1)) player.Position.X += player.PlayerMoveSpeed;*/
+           }
 
-            if (currentKeyboardState.IsKeyDown(Keys.Right))
-            {
-                //Camera.Move(new Vector2(+playerMoveSpeed, 0));
-              //  if (player.GetCollisionSide(player.GetBlocsAround(map)) != 1) player.Position.X += playerMoveSpeed;
-                if (!list.Contains(1)) player.Position.X += playerMoveSpeed;
-            }
+            //     if (player.GetCollisionSide(player.GetBlocsAround(map)) != 3) player.Position.Y += playerMoveSpeed;
+            //  if (!list.Contains(3)) player.Position.Y += player.PlayerMoveSpeed;
 
-            if (currentKeyboardState.IsKeyDown(Keys.Up))
-            {
-                //Camera.Move(new Vector2(0, -playerMoveSpeed));
-                player.Position.Y -= playerMoveSpeed;
-            }
+=======
+           }
 
-            if (currentKeyboardState.IsKeyDown(Keys.Down))
-            {
-                //Camera.Move(new Vector2(0, +playerMoveSpeed));
-                /*   if (player.IsInAir())*/
-           //     if (player.GetCollisionSide(player.GetBlocsAround(map)) != 3) player.Position.Y += playerMoveSpeed;
-                if (!list.Contains(3)) player.Position.Y += playerMoveSpeed;
->>>>>>> origin/gravity
-            }
+>>>>>>> Stashed changes
+            player.Update(player, Camera, _npc, gameTime, Content, log, map, monsters);
+            player.UpdatePlayerCollision(gameTime, player, monsters);
+            base.Update(gameTime);
+        
+<<<<<<< Updated upstream
 
-            if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Left) == System.Windows.Forms.MouseButtons.Left)
-            {
-                
-                    Vector2 posBloc = new Vector2(mouseState.X, mouseState.Y);
-                    map.FindBreakBlock(posBloc, player, Content);
-                    //player.breakBloc(bloc, player.CursorPos(), Content);
-                
-                 
-            }
+            float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+            _spawnTimer -= elapsed;
+
+            if (_spawnTimer < 1)
 
             {
                 int posX = rnd.Next(0, map.WorldWidth * 10);
                 int posY = rnd.Next(0, map.WorldHeight * 10);
                 Vector2 monsterPosition = new Vector2(posX, posY);
-                monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);               
-                monsters.Add(monster);
-                _spawnTimer = _spawnTIMER;
-            }
-<<<<<<< HEAD
-
-            player.UpdatePlayer(gameTime, monsters, map, player, Content, log, _npc, _camera);          
-            player.UpdatePlayerCollision(gameTime, player, monsters);
-            base.Update(gameTime);
-=======
-            if (currentKeyboardState.IsKeyDown(Keys.A))
-            {
-                player.AddStr("a");
-            }
-
-            if (currentKeyboardState.IsKeyDown(Keys.I))
-            {
-                foreach (NPC npc in _npc)
+                monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
+             /*   foreach (NPC npc in _npc)
                 {
                     if (map.GetDistance(player.PlayerPosition, npc.Position) < 400) npc.Interact(player);
-                }
-            }
+                }*/
+                monsters.Add(monster);
+=======
 
-            if (currentKeyboardState.IsKeyDown(Keys.Space))
-            {
-                player.Jump(map);
-            }
+            float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+            _spawnTimer -= elapsed;
 
-            if (currentKeyboardState.IsKeyDown(Keys.G))
+            if (_spawnTimer < 1)
+
             {
-                player.flyMod = !player.flyMod;
+                int posX = rnd.Next(0, map.WorldWidth * 10);
+                int posY = rnd.Next(0, map.WorldHeight * 10);
+                Vector2 monsterPosition = new Vector2(posX, posY);
+                monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
+
+         //       monsters.Add(monster);
+>>>>>>> Stashed changes
+                _spawnTimer = _spawnTIMER;
             }
->>>>>>> origin/gravity
+            
+           
         }
 
         /// <summary>
@@ -309,63 +257,27 @@ namespace Aviias
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
             spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
             map.Draw(spriteBatch, (int)player.Position.X, (int)player.Position.Y);
-<<<<<<< HEAD
             for (int i = 0; i < monsters.Count; i++)
             {
-               monsters[i].Draw(spriteBatch);
+                monsters[i].Draw(spriteBatch);
             }
             if (player.IsDie == false)
             {
-            	player.Draw(spriteBatch);
+                player.Draw(spriteBatch, Content);
             }
-            foreach (NPC npc in _npc) npc.Draw(spriteBatch);
-            foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
-                npc.Update();
-            }
-            /*      if (list.Contains(1)) spriteBatch.DrawString(font, "1", new Vector2(player.Position.X - 20, player.Position.Y - 20), Color.Red);
-              foreach (KeyValuePair<Ressource, int> entry in player._inventory)
-              {
-                  if (entry.Key.Name == "dirt")
-                  {
-                      spriteBatch.DrawString(font, entry.Value.ToString(), new Vector2(player.Position.X - 10, player.Position.Y - 100), Color.Black);
-                  }
-  <<<<<<< Updated upstream
-  =======
-            map.Draw(spriteBatch, font);
-                  if (list.Contains(2)) spriteBatch.DrawString(font, "2", new Vector2(player.Position.X - 20, player.Position.Y - 40), Color.Red);
-                  if (list.Contains(3)) spriteBatch.DrawString(font, "3", new Vector2(player.Position.X - 20, player.Position.Y - 60), Color.Red);
 
-                npc.Update();
-             }
-            foreach (KeyValuePair<Ressource, int> entry in player._inventory)
-            {
-                if (entry.Key.Name == "dirt")
+                //   foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
+                foreach (NPC npc in _npc)
                 {
-                    spriteBatch.DrawString(font, entry.Value.ToString(), new Vector2(player.Position.X - 10, player.Position.Y - 100), Color.Black);
+                    npc.Draw(spriteBatch);
+                    npc.Update();
                 }
-            }
-            spriteBatch.DrawString(font,Convert.ToString(player.CursorPos().X), new Vector2(10, 10), Color.Red);
-            spriteBatch.DrawString(font, Convert.ToString(player.CursorPos().Y), new Vector2(200, 10), Color.Red);
-            if (bloc != null)
->>>>>>> origin/gravity
-            {
-                player.Draw(spriteBatch);
-            }
-            if (list.Contains(2)) spriteBatch.DrawString(font, "2", new Vector2(player.Position.X - 20, player.Position.Y - 40), Color.Red);
 
+                spriteBatch.End();
+                base.Draw(gameTime);
             
-
-=======
-            if (list.Contains(1)) spriteBatch.DrawString(font, "1", new Vector2(player.Position.X - 20, player.Position.Y - 20), Color.Red);
-            if (list.Contains(2)) spriteBatch.DrawString(font, "2", new Vector2(player.Position.X - 20, player.Position.Y - 40), Color.Red);
-            if (list.Contains(3)) spriteBatch.DrawString(font, "3", new Vector2(player.Position.X - 20, player.Position.Y - 60), Color.Red);
-            if (list.Contains(4)) spriteBatch.DrawString(font, "4", new Vector2(player.Position.X - 20, player.Position.Y - 80), Color.Red);
->>>>>>> origin/gravity
-            spriteBatch.End();
-            base.Draw(gameTime);
         }
     }
 }

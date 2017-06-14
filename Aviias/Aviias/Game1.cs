@@ -6,6 +6,7 @@ using MonoGame.Extended.ViewportAdapters;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Input;
 
 namespace Aviias
@@ -17,12 +18,12 @@ namespace Aviias
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        public static Player player;
+        Player player;
         Monster monster;
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
         // Texture2D texture;
-        public static Map map;
+        Map map = new Map(200, 200);
         Random random = new Random();
         BoxingViewportAdapter _viewportAdapter;
         const int WindowWidth = 1366;
@@ -33,6 +34,7 @@ namespace Aviias
         List<Monster> monsters = new List<Monster>();
         StreamWriter log; // Debug file
         Random rnd = new Random();
+        Save save;
 
         float _spawnTimer = 10f;
         List<int> list = new List<int>(16);
@@ -66,7 +68,7 @@ namespace Aviias
             player.PlayerMoveSpeed = 8.0f;
             Vector2 monsterPosition;
 
-            int monsterneed = 5 - monsters.Count;
+            int monsterneed = 0 - monsters.Count;
             if (monsterneed != 0)
             {
                 for (int i = 0; i < monsterneed; i++)
@@ -78,24 +80,11 @@ namespace Aviias
                     monsters.Add(monster);
                 }
             }
-            /*
-            if (!File.Exists("logfile.txt"))
-            {
-                log = new StreamWriter("logfile.txt");
-            }
-            else
-            {
-                log = File.AppendText("logfile.txt");
-            }
-            */
-            // Add a new monster in the list            
+        
             base.Initialize();
-            map = new Map(200, 200);
-            Vector2 playerPosition = new Vector2(1500, 345 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
-            player.Initialize(Content.Load<Texture2D>("babyplayer"), playerPosition, Content, map);
             map.GenerateMap(Content);
-            map.ActualizeShadow((int)player.Position.X, (int)player.Position.Y);
             IsMouseVisible = true;
+            save = new Save(map, player);
 
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, WindowWidth, WindowHeight);
             _camera = new Camera2D(_viewportAdapter);
@@ -114,6 +103,9 @@ namespace Aviias
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("font");
+
+            Vector2 playerPosition = new Vector2(1500, 345 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
+            player.Initialize(Content.Load<Texture2D>("babyplayer"), playerPosition, Content, map);
 
         }
 
@@ -145,8 +137,18 @@ namespace Aviias
             currentKeyboardState = Keyboard.GetState();
             if (currentKeyboardState.IsKeyDown(Keys.M))
             {
-                map = new Map(200, 200);
-                map.GenerateMap(Content);
+                /*  map = new Map(200, 200);
+                  map.GenerateMap(Content);*/
+                
+                map = save.DeserializeMap();
+                player = save.DeserializePlayer();
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.S))
+            {
+                save = new Save(map, player);
+                save.SerializeMap();
+                save.SerializePlayer();
             }
 
             previousKeyboardState = currentKeyboardState;
@@ -155,12 +157,11 @@ namespace Aviias
             player.Update(map);
             player.UpdatePlayerCollision(gameTime, player, monsters);
             Camera.Position = new Vector2(player.Position.X - WindowWidth / 2, player.Position.Y - WindowHeight / 2);
-
             for (int i = 0; i < monsters.Count; i++)
             {
                 if (monsters[i].IsDie == false && monsters[i] != null)
                 {
-                        monsters[i].Update(player, gameTime);
+            //        monsters[i].Update(player, gameTime);
                 }
                 
                     list = player.GetCollisionSide(player.GetBlocsAround(map));
@@ -186,8 +187,6 @@ namespace Aviias
 
          //       monsters.Add(monster);
                 _spawnTimer = _spawnTIMER;
-            //        monsters.Add(drake);
-             //       spawnTimer.ReInit();
             }
             
            
@@ -203,7 +202,7 @@ namespace Aviias
 
             // TODO: Add your drawing code here
             spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-            map.Draw(spriteBatch, (int)player.Position.X, (int)player.Position.Y);
+            map.Draw(spriteBatch, (int)player.Position.X, (int)player.Position.Y, Content);
             for (int i = 0; i < monsters.Count; i++)
             {
                 monsters[i].Draw(spriteBatch);

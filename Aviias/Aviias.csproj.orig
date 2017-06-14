@@ -55,12 +55,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quest.cs" />
     <Compile Include="Ressource.cs" />
+<<<<<<< Updated upstream
+=======
     <Compile Include="Save.cs" />
-    <Compile Include="Wolf.cs" />
+>>>>>>> Stashed changes
     <Compile Include="Structure.cs" />
     <Compile Include="Stuff.cs" />
     <Compile Include="Text.cs" />
-    <Compile Include="Timer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Extended, Version=0.6.377.0, Culture=neutral, processorArchitecture=MSIL">

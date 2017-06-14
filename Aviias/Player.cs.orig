@@ -12,6 +12,7 @@ using MonoGame.Extended;
 
 namespace Aviias
 {
+    [Serializable]
     public class Player
     {
         Map _ctx;
@@ -28,6 +29,7 @@ namespace Aviias
         int _damage;
         bool _isDie;
         List<int> list = new List<int>(16);
+        Save save;
 
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
@@ -42,7 +44,7 @@ namespace Aviias
         float _moveSpeed;
         public bool flyMod;
         public bool IsInventoryOpen;
-        Map map;
+        Map _map;
 
         float _playerTimer = 1.2f;
         const float _playerTIMER = 1.2f;
@@ -101,7 +103,7 @@ namespace Aviias
             set { _damage = value; }
         }
 
-        public void Initialize(Texture2D texture, Vector2 position, ContentManager content)
+        public void Initialize(Texture2D texture, Vector2 position, ContentManager content, Map map)
         {
             PlayerTexture = texture;
             Position = position;
@@ -115,8 +117,13 @@ namespace Aviias
             _gravity = 1;
             _jumpHeight = -12;
             _moveSpeed = 0.8f;
+            _map = map;
             _activeQuest = new List<Quest>(8);
             _inv = new Inventory(this);
+<<<<<<< Updated upstream
+=======
+            save = new Save(map, this);
+>>>>>>> Stashed changes
             _inv.AddInventory(2, "oak_wood");
             _inv.AddInventory(4, "oak_plank");
             _inv.AddInventory(500, "dirt");
@@ -190,9 +197,14 @@ namespace Aviias
                 {
                     bloc1 = new Bloc(blocs[i,j].GetPosBlock ,scale, "air", content);
                     blocs[i, j] = bloc1;
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
                     //log.WriteLine("---- > breakBloc block.X = " + blocs[i, j].GetPosBlock.X + " block.Y = " + blocs[i, j].GetPosBlock.Y);
                 }
             }
+            _map.ActualizeShadow((int)Position.X, (int)Position.Y);
         }
 
         bool IsOnLadder(Map map)
@@ -368,15 +380,45 @@ namespace Aviias
                 {
                     if(_inv._cellArray[i]._name == "heal_potion" && _inv._cellArray[i]._quantity >= 1)
                     {
-<<<<<<< HEAD
-                        Health += 50;
-=======
                         RegenerateHealth(50);
->>>>>>> fusion
                         _inv.DecreaseInventory(1, "heal_potion");
                     }
                 }
             }
+
+            if (currentKeyboardState.IsKeyDown(Keys.W))
+            {
+                map.skyLuminosity++;
+                if (map.skyLuminosity >= 8) map.skyLuminosity = 0;
+                map.ActualizeShadow((int)Position.X, (int)Position.Y);
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.X))
+            {
+
+                map.ActualizeShadow((int)Position.X, (int)Position.Y);
+            }
+<<<<<<< Updated upstream
+=======
+
+
+            if (currentKeyboardState.IsKeyDown(Keys.M))
+            {
+                /*  map = new Map(200, 200);
+                  map.GenerateMap(Content);*/
+
+                Game1.map = save.DeserializeMap();
+                Game1.map.Reload(Content);
+             //   Game1.player = save.DeserializePlayer();
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.S))
+            {
+                save = new Save(map, player);
+                save.SerializeMap();
+             //   save.SerializePlayer();
+            }
+>>>>>>> Stashed changes
         }
 
         internal void RegenerateHealth(int quantity)
@@ -512,51 +554,7 @@ namespace Aviias
 
         public string ImageHealth(int health)
         {
-            if(_health == 100)
-            {
-                return "100";
-            }
-            else if (_health < 100 && _health > 89)
-            {
-                return "90";
-            }
-            else if(_health <= 89 && _health > 79)
-            {
-                return "80";
-            }
-            else if(_health <= 79 && _health > 69)
-            {
-                return "70";
-            }
-            else if (_health <= 69 && _health > 59)
-            {
-                return "60";
-            }
-            else if (_health <= 59 && _health > 49)
-            {
-                return "50";
-            }
-            else if (_health <= 49 && _health > 39)
-            {
-                return "40";
-            }
-            else if (_health <= 39 && _health > 29)
-            {
-                return "30";
-            }
-            else if (_health <= 29 && _health > 19)
-            {
-                return "20";
-            }
-
-            else if (_health <= 19 && _health > 9)
-            {
-                return "10";
-            }
-            else
-            {
-                return "0";
-            }
+            return (Math.Floor((double)(health/10))*10).ToString();
         }
 
         internal void Draw(SpriteBatch spriteBatch, ContentManager content)
