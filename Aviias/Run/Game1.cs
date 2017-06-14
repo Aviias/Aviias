@@ -185,12 +185,12 @@ namespace Aviias
                     {
                         int posX = rnd.Next(0, map.WorldWidth * 10);
                         int posY = rnd.Next(0, map.WorldHeight * 10);
-                        Vector2 monsterPosition = new Vector2(posX, posY);
-                        drake = new Drake(Content, Content.Load<Texture2D>("drake"), monsterPosition);
+                        //ctor2 monsterPosition = new Vector2(posX, posY);
+                        //drake = new Drake(Content, Content.Load<Texture2D>("drake"), monsterPosition);
 
 
                         // monsters.Add(monster);
-                        monsters.Add(drake);
+                        //monsters.Add(drake);
                         spawnTimer.ReInit();
                     }
                 }

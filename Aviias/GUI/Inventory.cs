@@ -190,11 +190,7 @@ namespace Aviias
 
             return null;
         }
-        
-        public void FixActualCell(int i)
-        {
-
-        }
+       
 
         public void DecreaseInventory(int quantity, string name)
         {

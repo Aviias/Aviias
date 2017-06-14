@@ -36,7 +36,7 @@ namespace Aviias
         List<Monster> monsters = new List<Monster>();
         MouseState mouseState = Mouse.GetState();
         MouseState currentMouseState = Mouse.GetState();
-        MouseState originalMouseState = Mouse.GetState();
+        int previousMouseState;
         public bool isInAir;
         public float _yVelocity;
         public double _gravity;
@@ -118,6 +118,7 @@ namespace Aviias
             _activeQuest = new List<Quest>(8);
             _inv = new Inventory(this);
             save = new Save(map, this);
+            previousMouseState = currentMouseState.ScrollWheelValue;
             /*
             _inv.AddInventory(2, "oak_wood");
             _inv.AddInventory(4, "oak_plank");
@@ -352,20 +353,20 @@ namespace Aviias
               
             }
 
-            if (currentMouseState.ScrollWheelValue > originalMouseState.ScrollWheelValue && scrollToolBarTimer.IsDown())
+            if (currentMouseState.ScrollWheelValue > previousMouseState && scrollToolBarTimer.IsDown())
             {
                 _inv.MoveLeftActualCell();
                 scrollToolBarTimer.ReInit();
                 
-            }
-
-            if (currentMouseState.ScrollWheelValue < originalMouseState.ScrollWheelValue && scrollToolBarTimer.IsDown())
+            } else if (currentMouseState.ScrollWheelValue < previousMouseState && scrollToolBarTimer.IsDown())
             {
                 _inv.MoveRightActualCell();
                 scrollToolBarTimer.ReInit();
             }
 
-                if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Right) == System.Windows.Forms.MouseButtons.Right && setBlocTimer.IsDown())
+            previousMouseState = currentMouseState.ScrollWheelValue;
+
+            if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Right) == System.Windows.Forms.MouseButtons.Right && setBlocTimer.IsDown())
             {
                 mouseState = Mouse.GetState();
                 Vector2 position = new Vector2(mouseState.X, mouseState.Y);
