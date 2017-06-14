@@ -23,7 +23,6 @@ namespace Aviias
             {
                 _cellArray[i] = new _cell();
                 _cellArray[i]._name = "";
-                _cellArray[i]._id = i;
                 _cellArray[i]._ressource = new Ressource("air");
 
                 UpdatePosition(i);
@@ -89,9 +88,14 @@ namespace Aviias
             get { return _cellArray; }
         }
 
-        public int ActualCellMore
+        public int ActualCell
         {
             get { return _actualCell; }            
+        }
+
+        public string GetNameBloc(int x)
+        {
+            return _cellArray[x]._name;
         }
 
         public void MoveLeftActualCell()
@@ -124,7 +128,6 @@ namespace Aviias
             public bool IsFull { get; set; }
             public string _name { get; set; }
             public int _quantity { get; set; }
-            public int _id { get; set; }
             public Ressource _ressource { get; set; }
         }
 

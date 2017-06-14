@@ -52,6 +52,7 @@ namespace Aviias
         Timer blocBreakTimer = new Timer(1.5f);
         Timer blockDurationTimer = new Timer(1.5f);
         Timer setBlocTimer = new Timer(1.2f);
+        Timer scrollToolBarTimer = new Timer(1.1f);
 
         //   MonoGame.Extended.Camera2D Camera;
         float _playerMoveSpeed;
@@ -251,6 +252,8 @@ namespace Aviias
             craftTimer.Decrem(gameTime);
             blocBreakTimer.Decrem(gameTime);
             setBlocTimer.Decrem(gameTime);
+            scrollToolBarTimer.Decrem(gameTime);
+            
 
             list = GetCollisionSide(GetBlocsAround(map));
 
@@ -344,14 +347,17 @@ namespace Aviias
               
             }
 
-            if (currentMouseState.ScrollWheelValue > originalMouseState.ScrollWheelValue)
+            if (currentMouseState.ScrollWheelValue > originalMouseState.ScrollWheelValue && scrollToolBarTimer.IsDown())
             {
                 _inv.MoveLeftActualCell();
+                scrollToolBarTimer.ReInit();
+                
             }
 
-            if (currentMouseState.ScrollWheelValue < originalMouseState.ScrollWheelValue)
+            if (currentMouseState.ScrollWheelValue < originalMouseState.ScrollWheelValue && scrollToolBarTimer.IsDown())
             {
                 _inv.MoveRightActualCell();
+                scrollToolBarTimer.ReInit();
             }
 
                 if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Right) == System.Windows.Forms.MouseButtons.Right && setBlocTimer.IsDown())
@@ -359,7 +365,8 @@ namespace Aviias
                 mouseState = Mouse.GetState();
                 Vector2 position = new Vector2(mouseState.X, mouseState.Y);
                 position = Camera.ScreenToWorld(position);
-                string name = _inv.GetName(position);
+                int cell = _inv.ActualCell;
+                string name = _inv.GetNameBloc(cell);
 
                 if (_inv.IsOnInventory(name))
                 {
