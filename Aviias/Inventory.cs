@@ -7,6 +7,7 @@ namespace Aviias
 {
     public class Inventory
     {
+        int _actualCell;
         Player _player;
         public _cell[]  _cellArray;
         private Text text;
@@ -16,6 +17,8 @@ namespace Aviias
             _player = player;
             _cellArray = new _cell[40];
             _craft = new Craft();
+            _actualCell = 0;
+            
             for (int i = 0; i < 40; i++)
             {
                 _cellArray[i] = new _cell();
@@ -86,6 +89,35 @@ namespace Aviias
             get { return _cellArray; }
         }
 
+        public int ActualCellMore
+        {
+            get { return _actualCell; }            
+        }
+
+        public void MoveLeftActualCell()
+        {
+            if(_actualCell < 9)
+            {
+                _actualCell += 1;
+            }
+            else
+            {
+                _actualCell = 0;
+            }
+        }
+
+        public void MoveRightActualCell()
+        {
+            if (_actualCell > 0)
+            {
+                _actualCell -= 1;
+            }
+            else
+            {
+                _actualCell = 9;
+            }
+        }
+
         public struct _cell
         {
             public Vector2 Position { get; set; }
@@ -112,21 +144,14 @@ namespace Aviias
 
         public bool IsOnInventory(string name)
         {
-            int i = 0;
-            while (i < _cellArray.Length - 1 && _cellArray[i]._name != name)
-            {               
-                i++;
-            }
-
-            if (_cellArray[i]._name == name)
+            for (int i = 0; i < _cellArray.Length; i++)
             {
-                return true;
-
-            }else
-            {
-                return false;
+                if (_cellArray[i]._name == name)
+                {
+                    return true;
+                }
             }
-           
+            return false;         
         }
 
         public string GetName(Vector2 pos)
@@ -142,6 +167,10 @@ namespace Aviias
             return null;
         }
         
+        public void FixActualCell(int i)
+        {
+
+        }
 
         public void DecreaseInventory(int quantity, string name)
         {

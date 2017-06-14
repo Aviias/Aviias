@@ -33,6 +33,8 @@ namespace Aviias
         KeyboardState previousKeyboardState;
         List<Monster> monsters = new List<Monster>();
         MouseState mouseState = Mouse.GetState();
+        MouseState currentMouseState = Mouse.GetState();
+        MouseState originalMouseState = Mouse.GetState();
         public bool isInAir;
         public float _yVelocity;
         public double _gravity;
@@ -190,7 +192,7 @@ namespace Aviias
             if (bloc != null)
             {
                 bloc1 = new Bloc(blocs[i, j].GetPosBlock, scale, name, content);
-                _inv.DecreaseInventory(1, "dirt");
+                _inv.DecreaseInventory(1, name);
                 blocs[i, j] = bloc1;
             }
         }
@@ -342,16 +344,26 @@ namespace Aviias
               
             }
 
-            if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Right) == System.Windows.Forms.MouseButtons.Right && setBlocTimer.IsDown())
+            if (currentMouseState.ScrollWheelValue > originalMouseState.ScrollWheelValue)
+            {
+                _inv.MoveLeftActualCell();
+            }
+
+            if (currentMouseState.ScrollWheelValue < originalMouseState.ScrollWheelValue)
+            {
+                _inv.MoveRightActualCell();
+            }
+
+                if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Right) == System.Windows.Forms.MouseButtons.Right && setBlocTimer.IsDown())
             {
                 mouseState = Mouse.GetState();
                 Vector2 position = new Vector2(mouseState.X, mouseState.Y);
                 position = Camera.ScreenToWorld(position);
                 string name = _inv.GetName(position);
 
-                if (_inv.IsOnInventory("dirt"))
+                if (_inv.IsOnInventory(name))
                 {
-                    map.SetBloc(position, Content, player, "dirt");
+                    map.SetBloc(position, Content, player, name);
                     setBlocTimer.ReInit();
                 }
             }
