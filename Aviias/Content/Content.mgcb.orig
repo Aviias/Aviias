@@ -375,8 +375,6 @@
 /processorParam:TextureFormat=Color
 /build:wood_shovel.png
 
-<<<<<<< HEAD
-=======
 #begin 0.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -521,4 +519,95 @@
 /processorParam:TextureFormat=Color
 /build:Barre d'inventaire.png
 
->>>>>>> fusion
+<<<<<<< HEAD
+#begin loup.png
+=======
+#begin menu.png
+>>>>>>> origin/f_menu
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+<<<<<<< HEAD
+/build:loup.png
+
+#begin drake.png
+=======
+/build:menu.png
+
+#begin jouer.png
+>>>>>>> origin/f_menu
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+<<<<<<< HEAD
+/build:drake.png
+
+#begin gameover.jpg
+=======
+/build:jouer.png
+
+#begin Menu/Background/menuv2.png
+>>>>>>> origin/f_menu
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+<<<<<<< HEAD
+/build:gameover.jpg
+
+#begin gameover2.jpg
+=======
+/build:Menu/Background/menuv2.png
+
+#begin Menu/Button/jouer_gris.png
+>>>>>>> origin/f_menu
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+<<<<<<< HEAD
+/build:gameover2.jpg
+
+#begin gameover3.png
+=======
+/build:Menu/Button/jouer_gris.png
+
+#begin Menu/Button/jouer_rouge.png
+>>>>>>> origin/f_menu
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+<<<<<<< HEAD
+/build:gameover3.png
+=======
+/build:Menu/Button/jouer_rouge.png
+>>>>>>> origin/f_menu
+

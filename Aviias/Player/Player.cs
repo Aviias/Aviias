@@ -535,6 +535,7 @@ namespace Aviias
 
         internal void Draw(SpriteBatch spriteBatch, ContentManager content)
         {
+            
             spriteBatch.Draw(PlayerTexture, Position, null, Color.White, 0f, Vector2.Zero, 1f,
                SpriteEffects.None, 0f);
             spriteBatch.Draw(content.Load<Texture2D>(ImageHealth(_health)), new Vector2(Position.X - 950, Position.Y - 500), null, Color.White, 0f, Vector2.Zero, 1.1f,

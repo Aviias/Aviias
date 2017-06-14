@@ -36,6 +36,7 @@ namespace Aviias
         StreamWriter log; // Debug file
         Random rnd = new Random();
         Timer spawnTimer = new Timer(10f);
+        Menu _menu;
         List<int> list = new List<int>(16);
         Texture2D _gameover;
         //Ressource _testRessource = new Ressource();
@@ -65,6 +66,8 @@ namespace Aviias
             player.PlayerMoveSpeed = 8.0f;
             Vector2 monsterPosition;
             map = new Map(200, 200);
+            _menu = new Menu();
+            _menu.Initialize();
 
             int monsterneed = 2 - monsters.Count;
             if (monsterneed != 0)
@@ -135,8 +138,13 @@ namespace Aviias
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (player.IsDie == false)
+            if (_menu.Jouer() == false)
             {
+                _menu.Update(gameTime, Content);
+            }
+            else
+            {
+
                 if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 {
                     Exit();
@@ -165,7 +173,7 @@ namespace Aviias
                 }
 
                 player.Update(player, Camera, _npc, gameTime, Content, log, map, monsters);
-         //       player.UpdatePlayerCollision(gameTime, player, monsters);
+                player.UpdatePlayerCollision(gameTime, player, monsters);
                 base.Update(gameTime);
 
 
@@ -196,17 +204,27 @@ namespace Aviias
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
-            spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-
-            map.Draw(spriteBatch, (int)player.Position.X, (int)player.Position.Y);
-            for (int i = 0; i < monsters.Count; i++)
+            if (_menu.Jouer() == false)
             {
-                monsters[i].Draw(spriteBatch);
+                spriteBatch.Begin();
+                _menu.Draw(spriteBatch, Content);
+                spriteBatch.End();
             }
-            
+            else
+            {
+                GraphicsDevice.Clear(Color.CornflowerBlue);
+
+                spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+
+                map.Draw(spriteBatch, (int)player.Position.X, (int)player.Position.Y);
+                for (int i = 0; i < monsters.Count; i++)
+                {
+                    monsters[i].Draw(spriteBatch);
+                }
+                if (player.IsDie == false)
+                {
+                    player.Draw(spriteBatch, Content);
+                }
             
                 //   foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
                 foreach (NPC npc in _npc)
@@ -214,7 +232,6 @@ namespace Aviias
                     npc.Draw(spriteBatch);
                     npc.Update();
                 }
-
             if (player.IsDie == false)
             {
                 player.Draw(spriteBatch, Content);
@@ -227,7 +244,8 @@ namespace Aviias
 
             spriteBatch.End();
             base.Draw(gameTime);
-            
+                // TODO: Add your drawing code here
+            }
         }
     }
 }
