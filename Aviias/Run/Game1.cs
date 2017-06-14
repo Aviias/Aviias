@@ -39,6 +39,7 @@ namespace Aviias
         Menu _menu;
         List<int> list = new List<int>(16);
         Texture2D _gameover;
+        Timer _nightDay = new Timer(5f);
         //Ressource _testRessource = new Ressource();
 
 
@@ -176,9 +177,14 @@ namespace Aviias
                     player.UpdatePlayerCollision(gameTime, player, monsters);
                     base.Update(gameTime);
 
-
                     spawnTimer.Decrem(gameTime);
-
+                    _nightDay.Decrem(gameTime);
+                    if (_nightDay.IsDown())
+                    {
+                        map.TimeForward();
+                        _nightDay.ReInit();
+                        map.ActualizeShadow((int)player.Position.X, (int)player.Position.Y);
+                    }
 
                     if (spawnTimer.IsDown())
 

@@ -36,6 +36,7 @@ namespace Aviias
         bool _isMountain;
         int _mountainSize;
         int _mtest;
+        bool _isNight;
         public int skyLuminosity;
 
         public int WorldWidth
@@ -158,13 +159,13 @@ namespace Aviias
                 }
 
                 // Structures generation
-                for (int k = 5; k < _worldWidth - 5; k++)
+                for (int l = 5; l < _worldWidth - 5; l++)
                 {
-                    for (int l = 5; l < _worldHeight - 5; l++)
+                    for (int k = 5; k < _worldHeight - 5; k++)
                     {
-                        if (k > 6 && l > 6 && _blocs[k - 3, l] != null && _blocs[k - 3, l].Type == "grass_side")
+                        if (k > 6 && l > 6 && l < 200 && _blocs[k - 3, l] != null && _blocs[k - 3, l].Type == "grass_side")
                         {
-                            int rand = random.Next(1, 8500);
+                            int rand = NextInt(1, 8500);
                             if (rand == 1)
                             {
                                 rand = NextInt(1, 3);
@@ -174,10 +175,12 @@ namespace Aviias
                                 }
                                 else _structureModel = structures.structures["mobTowerA"];
                                 AddHouse(k, l, _structureModel, content);
+                                k += _structureModel.Length * 2;
+                                l += _structureModel.Length * 2;
                             }
                         }
 
-                        if (k > 6 && l > 6 && _blocs[k - 3, l] != null && _blocs[k - 3, l].Type == "grass_side")
+                        if (k > 6 && l > 6 && l < 200 && _blocs[k - 3, l] != null && _blocs[k - 3, l].Type == "grass_side")
                         {
                             _treeGeneration = NextInt(1, 2300);
                             if (_treeGeneration <= _treeRate)
@@ -186,13 +189,15 @@ namespace Aviias
                                 if (_treeGeneration == 1) _structureModel = structures.structures["treeA"];
                                 else _structureModel = structures.structures["treeB"];
                                 AddTree(k, l, _structureModel, content);
-
+                                k += _structureModel.Length * 2;
+                                l += _structureModel.Length * 2;
                             }
                         }
                     }
                 }
 
                 _blocs[0, 0] = new Bloc(new Vector2(0, 0), _scale, "bedrock", content);
+                _blocs[20, 20] = new Bloc(new Vector2(20*16, 20*16), _scale, "bedrock", content);
                 // Cave generation
                 for (int o = 130; o < _worldHeight; o++)
                 {
@@ -399,11 +404,44 @@ namespace Aviias
                             }
                         }
                         if (_blocs[j, i]._isInContactWithTheSky) _blocs[j, i].ChangeLuminosity(skyLuminosity);
+                        if (TorchUpdate(j, i) > _blocs[j, i].Luminosity) _blocs[j, i].ChangeLuminosity(TorchUpdate(i, j));
                     }
 
                    
                 }
             }
+        }
+
+        public int TorchUpdate(int x, int y)
+        {
+            int xx = x - 6;
+            int yy = y - 6;
+            int shortest = 7;
+
+            for (int i = xx; i < x + 6; i++)
+            {
+                for (int j = yy; j < y + 6; j++)
+                {
+                    if (i > 0 && j > 0 && _blocs[j, i] != null && _blocs[j, i].Type == "bedrock")
+                    {
+                        if (Math.Abs((i + j) - (x + y)) < shortest) shortest = Math.Abs((i + j) - (x + y));
+                    } 
+                }
+            }
+            return Math.Abs(shortest - 7);
+        }
+
+        public void TimeForward()
+        {
+            if (_isNight)
+            {
+                skyLuminosity++;
+            }
+            else
+            {
+                skyLuminosity--;
+            }
+            if (skyLuminosity == 1 || skyLuminosity == 7) _isNight = !_isNight;
         }
 
         public void Reload(ContentManager content)
