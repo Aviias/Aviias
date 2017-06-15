@@ -37,6 +37,7 @@ namespace Aviias
         Random rnd = new Random();
         Timer spawnTimer = new Timer(10f);
         Menu _menu;
+        MenuPlay _menuPlay;
         List<int> list = new List<int>(16);
         Texture2D _gameover;
         //Ressource _testRessource = new Ressource();
@@ -98,7 +99,7 @@ namespace Aviias
 
             base.Initialize();
 
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
             graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
             graphics.ApplyChanges();
@@ -138,16 +139,17 @@ namespace Aviias
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) || _menu._close)
+            {
+                Exit();
+            }
+
             if (_menu.Jouer() == false)
             {
                 _menu.Update(gameTime, Content);
             }
             else
             {
-                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                {
-                    Exit();
-                }
                 if (player.IsDie == false)
                 {
                     Camera.Position = new Vector2(player.Position.X - WindowWidth / 2, player.Position.Y - WindowHeight / 2);

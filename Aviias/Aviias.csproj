@@ -43,11 +43,12 @@
   <ItemGroup>
     <Compile Include="IA\Drake.cs" />
     <Compile Include="GUI\Button.cs" />
-    <Compile Include="GUI\Menu.cs" />
+    <Compile Include="GUI\Menu\Menu.cs" />
     <Compile Include="GUI\Sprite.cs" />
     <Compile Include="Map\Bloc.cs" />
     <Compile Include="GUI\Chest.cs" />
     <Compile Include="GUI\Craft.cs" />
+    <Compile Include="GUI\Menu\MenuPlay.cs" />
     <Compile Include="Run\Game1.cs" />
     <Compile Include="GUI\Inventory.cs" />
     <Compile Include="Map\Map.cs" />

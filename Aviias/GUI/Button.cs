@@ -15,7 +15,7 @@ namespace Aviias
         public Vector2 _position { get; set; }
         public int _width { get; set; }
         public int _height { get; set; }
-        string _texture;
+        public string _texture;
         MouseState mouseState = Mouse.GetState();
         public bool IsTrue { get; set; }
 
@@ -24,33 +24,19 @@ namespace Aviias
             _position = position;
             _width = width;
             _height = height;
-            _texture = ".\\Menu\\Button\\jouer_gris";
+            _texture = "";
         }
 
-        public bool IsPressed()
+        public bool IsPressed(MouseState mouseState)
         {
             return mouseState.LeftButton == ButtonState.Pressed;           
         }
 
-        internal void Update(GameTime gameTime, ContentManager Content)
-        {
-            mouseState = Mouse.GetState();
-            if (IsPressed() && mouseState.Position.X >= _position.X && mouseState.Position.Y >= _position.Y && mouseState.Position.X <= _position.X + _width && mouseState.Position.Y <= _position.Y + _height )
-            {
-                _texture = ".\\Menu\\Button\\jouer_rouge";
-                IsTrue = true;
-            }
-            else
-            { 
-                _texture = ".\\Menu\\Button\\jouer_gris";
-                IsTrue = false;
-            }
-        }
 
-        internal void Draw(SpriteBatch spriteBatch, ContentManager content)
+        internal void Draw(SpriteBatch spriteBatch, ContentManager content , Vector2 pos)
         {
 
-            spriteBatch.Draw(content.Load<Texture2D>(_texture), new Vector2(305, 675), null, Color.White, 0f, Vector2.Zero, 1f,
+            spriteBatch.Draw(content.Load<Texture2D>(_texture), pos, null, Color.White, 0f, Vector2.Zero, 1f,
                SpriteEffects.None, 0f);
         }
     }
