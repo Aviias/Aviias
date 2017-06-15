@@ -39,7 +39,7 @@ namespace Aviias
         Menu _menu;
         List<int> list = new List<int>(16);
         Texture2D _gameover;
-        Timer _nightDay = new Timer(5f);
+        Timer _nightDay = new Timer(2f);
         //Ressource _testRessource = new Ressource();
 
 
@@ -99,7 +99,7 @@ namespace Aviias
 
             base.Initialize();
 
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
             graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
             graphics.ApplyChanges();

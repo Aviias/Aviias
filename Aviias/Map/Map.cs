@@ -403,8 +403,8 @@ namespace Aviias
                                 _blocs[i, j].ChangeLuminosity(GetBiggestNumber(_blocs[i - 1, j].Luminosity, _blocs[i + 1, j].Luminosity, _blocs[i, j - 1].Luminosity, _blocs[i, j + 1].Luminosity) - 2);
                             }
                         }
-                        if (_blocs[j, i]._isInContactWithTheSky) _blocs[j, i].ChangeLuminosity(skyLuminosity);
-                        if (TorchUpdate(j, i) > _blocs[j, i].Luminosity) _blocs[j, i].ChangeLuminosity(TorchUpdate(i, j));
+                        if (_blocs[i, j]._isInContactWithTheSky) _blocs[i, j].ChangeLuminosity(skyLuminosity);
+                        if (TorchUpdate(i, j) > _blocs[i, j].Luminosity) _blocs[i, j].ChangeLuminosity(TorchUpdate(i, j));
                     }
 
                    
@@ -414,21 +414,21 @@ namespace Aviias
 
         public int TorchUpdate(int x, int y)
         {
-            int xx = x - 6;
-            int yy = y - 6;
-            int shortest = 7;
+             int xx = x - 6;
+             int yy = y - 6;
+             int shortest = 7;
 
-            for (int i = xx; i < x + 6; i++)
-            {
-                for (int j = yy; j < y + 6; j++)
-                {
-                    if (i > 0 && j > 0 && _blocs[j, i] != null && _blocs[j, i].Type == "bedrock")
-                    {
-                        if (Math.Abs((i + j) - (x + y)) < shortest) shortest = Math.Abs((i + j) - (x + y));
-                    } 
-                }
-            }
-            return Math.Abs(shortest - 7);
+             for (int i = xx; i < x + 6; i++)
+             {
+                 for (int j = yy; j < y + 6; j++)
+                 {
+                     if (i > 0 && j > 0 && _blocs[i, j] != null && _blocs[i, j].Type == "torche")
+                     {
+                       if (Math.Abs(x - i) + Math.Abs(y - j) < shortest) shortest = (Math.Abs(x - i) + Math.Abs(y - j));
+                     } 
+                 }
+             }
+                  return Math.Abs(shortest - 7);
         }
 
         public void TimeForward()
