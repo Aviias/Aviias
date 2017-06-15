@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Aviias
 {
+    [Serializable]
     public class Craft
     {
         public _craft[] _cellCraft;
@@ -21,6 +23,7 @@ namespace Aviias
             AddCraft("wood_shovel", 1, Add(2, "stick"));
         }
 
+        [Serializable]
         public struct _craft
         {
             public string _name { get; set; }

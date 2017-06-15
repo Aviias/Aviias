@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Aviias
 {
+    [Serializable]
     public class Ressource
     {
         string _name;

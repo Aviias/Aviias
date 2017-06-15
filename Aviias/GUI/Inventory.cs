@@ -1,10 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace Aviias
 {
+    [Serializable]
     public class Inventory
     {
         int _actualCell;
@@ -135,14 +137,18 @@ namespace Aviias
             }
         }
 
+        [Serializable]
         public struct _cell
         {
-            public Vector2 Position { get; set; }
+            [field: NonSerialized]
+            public Vector2 Position;
             public bool IsFull { get; set; }
             public string _name { get; set; }
             public int _quantity { get; set; }
             public Ressource _ressource { get; set; }
         }
+
+        public Vector2 Position { get { return Position; } set { Position = value; } }
 
         public void AddInventory(int quantity, string name)
         {

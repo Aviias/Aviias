@@ -30,7 +30,7 @@ namespace Aviias
         const int WindowWidth = 1920;
         const int WindowHeight = 1080;
         Camera2D _camera;
-        public List<NPC> _npc;
+        public static List<NPC> _npc;
         SpriteFont font;
         List<Monster> monsters = new List<Monster>();
         StreamWriter log; // Debug file

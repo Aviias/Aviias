@@ -422,7 +422,7 @@ namespace Aviias
              {
                  for (int j = yy; j < y + 6; j++)
                  {
-                     if (i > 0 && j > 0 && _blocs[i, j] != null && _blocs[i, j].Type == "torche")
+                     if (i > 0 && j > 0 && i < _worldWidth && j < _worldHeight && _blocs[i, j] != null && _blocs[i, j].Type == "torche")
                      {
                        if (Math.Abs(x - i) + Math.Abs(y - j) < shortest) shortest = (Math.Abs(x - i) + Math.Abs(y - j));
                      } 

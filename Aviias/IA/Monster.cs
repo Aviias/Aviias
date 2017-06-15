@@ -10,18 +10,20 @@ using MonoGame.Extended.Timers;
 
 namespace Aviias
 {
+    [Serializable]
     class Monster 
     {
         Text text;
-        Player _ctx;
         int _id;
         int _health;
         float _speed;
+        [field: NonSerialized]
         Vector2 _pos;
         bool _isDie;
         double _regenerationRate;
         int _damageDealing;
         int _resistance;
+        [field: NonSerialized]
         Texture2D _texture;
         Timer monsterTimer = new Timer(2f);
 

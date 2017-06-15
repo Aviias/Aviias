@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Aviias
 {
+    [Serializable]
     public class Quest
     {
         Dictionary <string, int> _reward;
@@ -16,6 +17,7 @@ namespace Aviias
         string _spitch;
         int _id;
         internal Dictionary<string, int> _goal;
+        [field: NonSerialized]
         Random rand = new Random();
 
         public Quest(int type, int idStartNpc, int idEndNpc, NPC startNPC)

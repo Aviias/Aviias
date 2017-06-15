@@ -8,15 +8,18 @@ using System.Threading.Tasks;
 
 namespace Aviias
 {
+    [Serializable]
     public class Save
     {
         Map _map;
         Player _player;
+        List<NPC> _npc;
 
-        public Save(Map map, Player player)
+        public Save(Map map, Player player, List<NPC> npc)
         {
             _map = map;
             _player = player;
+            _npc = npc;
         }
 
         public Map DeserializeMap()
@@ -61,6 +64,28 @@ namespace Aviias
 
             fs.Close();
             return player;
+        }
+
+        public void SerializeNpc()
+        {
+            FileStream fs = new FileStream("save_npc.bin", FileMode.Create);
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(fs, _npc);
+            fs.Flush();
+            fs.Close();
+        }
+
+        public List<NPC> DeserializeNpc()
+        {
+
+            List<NPC> npc;
+
+            FileStream fs = new FileStream("save_npc.bin", FileMode.Open);
+            BinaryFormatter formatter = new BinaryFormatter();
+            npc = (List<NPC>)formatter.Deserialize(fs);
+
+            fs.Close();
+            return npc;
         }
     }
 }

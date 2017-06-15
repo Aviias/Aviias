@@ -9,19 +9,26 @@ using System.Threading.Tasks;
 
 namespace Aviias
 {
+    [Serializable]
     public class NPC
     {
+        [field: NonSerialized]
         Texture2D _texture;
+        [field: NonSerialized]
         Vector2 _position;
         public bool _isQuestActive;
         public int _nbQuest;
         Text _text;
         Quest _questActive;
+        [field: NonSerialized]
         SpriteBatch _spriteBatch;
         public bool _isTalking;
         static int _id;
         int trueid = 0;
         Random rand = new Random();
+        string _textureName;
+        float x;
+        float y;
         
 
         public NPC(ContentManager content, string texture, SpriteBatch spriteBatch, Vector2 position, int nbQuest)
@@ -33,6 +40,9 @@ namespace Aviias
             _nbQuest = nbQuest;
             _id++;
             trueid = _id;
+            x = position.X;
+            y = position.Y;
+            _textureName = texture;
         }
 
         public void Interact(Player player)
@@ -114,6 +124,12 @@ namespace Aviias
         public void Talk(Quest quest, SpriteBatch spriteBatch)
         {
             _text.DisplayText(quest.Spitch, new Vector2(_position.X, _position.Y - 50), spriteBatch, Color.Black);
+        }
+
+        public void Reload(ContentManager content)
+        {
+            _position = new Vector2(x, y);
+            _texture = content.Load<Texture2D>(_textureName);
         }
 
         public Vector2 Position => _position;
