@@ -14,6 +14,7 @@ namespace Aviias
     {
         Button _new;
         Button _load;
+        Timer Button = new Timer(1.5f);
         
 
         public MenuPlay()
@@ -26,10 +27,12 @@ namespace Aviias
         internal void Update(GameTime gameTime, ContentManager Content)
         {
             MouseState mouseState = Mouse.GetState();
-            if (_new.IsPressed(mouseState) && mouseState.Position.X >= _new._position.X && mouseState.Position.Y >= _new._position.Y && mouseState.Position.X <= _new._position.X + _new._width && mouseState.Position.Y <= _new._position.Y + _new._height)
+            Button.Decrem(gameTime);
+            if (_new.IsPressed(mouseState) && mouseState.Position.X >= _new._position.X && mouseState.Position.Y >= _new._position.Y && mouseState.Position.X <= _new._position.X + _new._width && mouseState.Position.Y <= _new._position.Y + _new._height && Button.IsDown())
             {
                 _new._texture = ".\\Menu\\Button\\nouvelle_rouge";
                 _new.IsTrue = true;
+                Button.ReInit();
             }
             else
             {

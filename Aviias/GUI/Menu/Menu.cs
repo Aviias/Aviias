@@ -17,6 +17,8 @@ namespace Aviias
         MenuPlay _menuPlay;
         public bool _close { get; set; }
         bool Swap;
+        Timer buttonTimer = new Timer(1.2f);
+
         public void Initialize()
         {
             _menuPlay = new MenuPlay();
@@ -27,6 +29,7 @@ namespace Aviias
         internal void Update(GameTime gameTime, ContentManager Content)
         {
             MouseState mouseState = Mouse.GetState();
+            buttonTimer.Decrem(gameTime);
             if (_jouer.IsPressed(mouseState) && mouseState.Position.X >= _jouer._position.X && mouseState.Position.Y >= _jouer._position.Y && mouseState.Position.X <= _jouer._position.X + _jouer._width && mouseState.Position.Y <= _jouer._position.Y + _jouer._height)
             {
                 _jouer._texture = ".\\Menu\\Button\\jouer_rouge";
@@ -36,9 +39,10 @@ namespace Aviias
             {
                 _jouer._texture = ".\\Menu\\Button\\jouer_gris";
             }
-            if(Swap == true)
+            if(Swap == true && buttonTimer.IsDown())
             {
                 _menuPlay.Update(gameTime, Content);
+                buttonTimer.ReInit();
             }
             else
             {
