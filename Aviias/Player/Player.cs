@@ -211,14 +211,15 @@ namespace Aviias
             _map.ActualizeShadow((int)Position.X, (int)Position.Y);
         }
 
-        public void setbloc(Bloc bloc, ContentManager content, Bloc[,] blocs, int i, int j, int scale, string name)
+        public void setbloc(Bloc bloc, ContentManager content, Bloc[,] blocs, int i, int j, int scale, string name, Map map)
         {
             Bloc bloc1;
-            if (bloc != null)
+            if (bloc != null && blocs[i, j].Type == "air" && Vector2.Distance(PlayerPosition, bloc.GetPosBlock) <= 400) 
             {
                 bloc1 = new Bloc(blocs[i, j].GetPosBlock, scale, name, content);
                 _inv.DecreaseInventory(1, name);
                 blocs[i, j] = bloc1;
+                map.ActualizeShadow((int)PlayerPosition.X,(int)PlayerPosition.Y);
             }
         }
 
@@ -360,7 +361,7 @@ namespace Aviias
                 if (mouseState.LeftButton == ButtonState.Pressed && blocBreakTimer.IsDown() && !IsInventoryOpen)
                 {
                     blockDurationTimer.Decrem(gameTime);
-                    if (blockDurationTimer.IsDown())
+                    if (blockDurationTimer.IsDown() && Vector2.Distance(player.PlayerPosition, position) <= 100)
                     {
                         map.FindBreakBlock(position, player, Content, log);
                         blocBreakTimer.ReInit();
@@ -392,9 +393,9 @@ namespace Aviias
                 int cell = _inv.ActualCell;
                 string name = _inv.GetNameBloc(cell);
 
-                if (_inv.IsOnInventory(name))
+                if (_inv.IsOnInventory(name) && _inv._craft._cellCraft[cell+1]._isSetable)
                 {
-                    map.SetBloc(position, Content, player, name);
+                    map.SetBloc(position, Content, player, name, map);
                     setBlocTimer.ReInit();
                 }
             }
@@ -577,7 +578,9 @@ namespace Aviias
             }
             return result;
         }
-
+        
+        
+        
         internal List<Bloc> GetBlocsAround(Map map)
         {
             _nbBlocs = 0;

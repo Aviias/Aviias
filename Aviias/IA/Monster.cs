@@ -7,11 +7,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Timers;
+using Aviias.IA;
 
 namespace Aviias
 {
     [Serializable]
-    class Monster 
+    class Monster : Physics
     {
         Text text;
         int _id;
@@ -30,6 +31,7 @@ namespace Aviias
         Random rnd = new Random();
 
         public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos)
+            : base(false,4,-12)
         {
             _id = rnd.Next(0, int.MaxValue);
             _health = health;
@@ -102,6 +104,12 @@ namespace Aviias
             set { _pos = value; }
         }
 
+        public float Y
+        {
+            get { return _pos.Y; }
+            set { _pos.Y = value; }
+        }
+
         public bool IsDie
         {
             get { return _isDie; }
@@ -143,8 +151,8 @@ namespace Aviias
         {
             float alpha = (float)Math.Atan2((player.Y - posY), (player.X - posX));
             Vector2 direction = AngleToVector(alpha);
-            Vector2 move = new Vector2(direction.X * _speed, direction.Y * _speed);
-            _pos = new Vector2(posX + move.X, posY + move.Y);
+            Vector2 move = new Vector2(direction.X * _speed, /*direction.Y * _speed*/0);
+            _pos = new Vector2(posX + move.X, posY /*+ move.Y*/);
         }
 
         public void Fight(Player player, GameTime gametime)
@@ -171,6 +179,7 @@ namespace Aviias
         
         internal void Update(Player player, GameTime gametime)
         {
+            UpdatePhysics(Game1.map, this);
             MoveOnPlayer(player);
             Fight(player, gametime);                                  
         }

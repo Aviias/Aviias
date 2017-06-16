@@ -317,11 +317,11 @@ namespace Aviias
 
         }
 
-        public void SetBloc(Vector2 pos, ContentManager Content, Player player, string name)
+        public void SetBloc(Vector2 pos, ContentManager Content, Player player, string name,Map map)
         {
             int i = (int)pos.X / _scale;
             int j = (int)pos.Y / _scale;
-            if ((i >= 0) && (i < _worldHeight) && (j >= 0) && (j < _worldWidth)) player.setbloc(_blocs[i, j], Content, _blocs, i, j, _scale, name);
+            if ((i >= 0) && (i < _worldHeight) && (j >= 0) && (j < _worldWidth)) player.setbloc(_blocs[i, j], Content, _blocs, i, j, _scale, name, map);
 
         }
 

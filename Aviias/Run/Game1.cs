@@ -39,7 +39,7 @@ namespace Aviias
         Menu _menu;
         List<int> list = new List<int>(16);
         Texture2D _gameover;
-        Timer _nightDay = new Timer(2f);
+        Timer _nightDay = new Timer(150f);
         //Ressource _testRessource = new Ressource();
 
 

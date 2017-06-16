@@ -18,9 +18,9 @@ namespace Aviias
                 _cellCraft[i]._quantity = -1;
                 
             }
-            AddCraft("oak_plank", 4, Add(1, "oak_wood"));
-            AddCraft("stick", 4, Add(2, "oak_plank"));
-            AddCraft("wood_shovel", 1, Add(2, "stick"));
+            AddCraft("oak_plank", 4, Add(1, "oak_wood"), true);
+            AddCraft("stick", 4, Add(2, "oak_plank"), false);
+            AddCraft("wood_shovel", 1, Add(2, "stick"), false);
         }
 
         [Serializable]
@@ -29,6 +29,7 @@ namespace Aviias
             public string _name { get; set; }
             public bool IsCraftable { get; set; }
             public int _quantity { get; set; }
+            public bool _isSetable { get; set; }
             public Dictionary<int, Ressource> _ressource { get; set; }
         }
 
@@ -41,7 +42,7 @@ namespace Aviias
             return _ressource;
         }
 
-        public void AddCraft(string name, int quantity, Dictionary<int, Ressource> ressource)
+        public void AddCraft(string name, int quantity, Dictionary<int, Ressource> ressource, bool setable)
         {
             for(int i=0; i<_cellCraft.Length; i++)
             {
@@ -50,6 +51,7 @@ namespace Aviias
                     _cellCraft[i]._name = name;
                     _cellCraft[i]._quantity = quantity;
                     _cellCraft[i]._ressource = ressource;
+                    _cellCraft[i]._isSetable = setable;
                     break;
                 }
             }
