@@ -87,7 +87,7 @@ namespace Aviias
             }
 
             Vector2 playerPosition = new Vector2(1500, 345 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
-            player.Initialize(Content.Load<Texture2D>("babyplayer"), playerPosition, Content, map);
+            player.Initialize(Content.Load<Texture2D>("face"), playerPosition, Content, map);
             map.GenerateMap(Content);
             map.ActualizeShadow((int)player.Position.X, (int)player.Position.Y);
             IsMouseVisible = true;
@@ -119,7 +119,7 @@ namespace Aviias
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("font");
-
+            player.LoadContent(Content);
             _gameover = Content.Load<Texture2D>("gameover3");
         }
 

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using MonoGame.Extended;
+using Aviias.GUI;
 
 namespace Aviias
 {
@@ -57,6 +58,9 @@ namespace Aviias
         public bool flyMod;
         public bool IsInventoryOpen;
         Map _map;
+        Animation PMoveLeft;
+        Animation PMoveRight;
+        Animation CurrentAnim;
       //  [field: NonSerialized]
         Timer playerTimer = new Timer(1.2f);
       //  [field: NonSerialized]
@@ -113,6 +117,12 @@ namespace Aviias
         {
             get { return _damage; }
             set { _damage = value; }
+        }
+
+        public void LoadContent(ContentManager content)
+        {
+            PMoveLeft = new Animation(content, "gauche", 50f,3,Position);
+            PMoveRight = new Animation(content, "droite", 50f, 3, Position);
         }
 
         public void Initialize(Texture2D texture, Vector2 position, ContentManager content, Map map)
@@ -285,12 +295,23 @@ namespace Aviias
 
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
-                if (!list.Contains(2)) Position.X -= _playerMoveSpeed;
+                if (!list.Contains(2))
+                {
+                    Position.X -= _playerMoveSpeed;
+                    PMoveLeft.PlayAnim(gameTime);
+                    CurrentAnim = PMoveLeft;
+                }
+                
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Right))
             {
-                if (!list.Contains(1)) Position.X += _playerMoveSpeed;
+                if (!list.Contains(1))
+                {
+                    Position.X += _playerMoveSpeed;
+                    PMoveRight.PlayAnim(gameTime);
+                    CurrentAnim = PMoveRight;
+                }
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Up))
@@ -609,9 +630,9 @@ namespace Aviias
 
         internal void Draw(SpriteBatch spriteBatch, ContentManager content)
         {
-            
-            spriteBatch.Draw(PlayerTexture, Position, null, Color.White, 0f, Vector2.Zero, 1f,
-               SpriteEffects.None, 0f);
+            if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, Position);
+            else spriteBatch.Draw(PlayerTexture, Position, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
             spriteBatch.Draw(content.Load<Texture2D>(ImageHealth(_health)), new Vector2(Position.X - 950, Position.Y - 500), null, Color.White, 0f, Vector2.Zero, 1.1f,
                SpriteEffects.None, 0f);
         //    if (_displayPos) text.DisplayText((Position.X  + " - " + Position.Y), new Vector2(Position.X, Position.Y - 30), spriteBatch, Color.Red);
@@ -643,6 +664,9 @@ namespace Aviias
                 spriteBatch.Draw(content.Load<Texture2D>("gameover"), new Vector2(Position.X, Position.Y), null, Color.White, 0f, Vector2.Zero, 1f,
                      SpriteEffects.None, 0f);
             }
+            
+            
+
         }
 
         public void AddStr(string str)

@@ -41,6 +41,7 @@
     <ApplicationManifest>Run\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GUI\Animation.cs" />
     <Compile Include="IA\Drake.cs" />
     <Compile Include="GUI\Button.cs" />
     <Compile Include="GUI\Menu.cs" />
