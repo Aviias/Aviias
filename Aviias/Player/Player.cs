@@ -36,6 +36,7 @@ namespace Aviias
         bool _collisions;
         bool Active;
         float _moveSpeed;
+        bool _stopDamage;
         List<int> list = new List<int>(16);
       //  [field: NonSerialized]
         Save save;
@@ -75,6 +76,11 @@ namespace Aviias
         Timer setBlocTimer = new Timer(1.2f);
         //[field: NonSerialized]
         Timer scrollToolBarTimer = new Timer(1.1f);
+        Timer stopDamageTimer = new Timer(1.2f);
+        Timer stopDamageCDTimer = new Timer(5f);
+
+
+
         internal Dictionary<Ressource, int> _inventory;
         //   MonoGame.Extended.Camera2D Camera;
         float _playerMoveSpeed;
@@ -147,6 +153,7 @@ namespace Aviias
             x = position.X;
             y = position.Y;
             _texture = texture.Name;
+            _stopDamage = false;
             /*
             _inv.AddInventory(2, "oak_wood");
             _inv.AddInventory(4, "oak_plank");
@@ -254,6 +261,12 @@ namespace Aviias
             }
         }
 
+        internal bool IsStopDamage
+        {
+            get { return _stopDamage; }
+            set { _stopDamage = value; }
+        }
+
         internal void Update(Map map)
         {
             if (!flyMod && !IsOnLadder(map))
@@ -288,10 +301,16 @@ namespace Aviias
             blocBreakTimer.Decrem(gameTime);
             setBlocTimer.Decrem(gameTime);
             scrollToolBarTimer.Decrem(gameTime);
-            
+            stopDamageCDTimer.Decrem(gameTime);
+            stopDamageTimer.Decrem(gameTime);
 
             list = GetCollisionSide(GetBlocsAround(map));
 
+            if(stopDamageTimer.IsDown())
+            {
+                _stopDamage = false;
+                stopDamageTimer.ReInit();
+            }
 
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
@@ -457,6 +476,13 @@ namespace Aviias
                 map.TimeForward();
                 map.ActualizeShadow((int)Position.X, (int)Position.Y);
             }
+
+            if (currentKeyboardState.IsKeyDown(Keys.F) && stopDamageCDTimer.IsDown())
+            {
+                _stopDamage = true;
+                stopDamageCDTimer.ReInit();
+            }
+
 
             if (currentKeyboardState.IsKeyDown(Keys.X))
             {

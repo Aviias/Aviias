@@ -167,7 +167,7 @@ namespace Aviias
             {
                 if (monsterRect.Left <= playerRect.Right || monsterRect.Right == playerRect.Left || monsterRect.Top <= playerRect.Bottom || monsterRect.Bottom == playerRect.Top)
                 {
-                    if (monsterTimer.IsDown())
+                    if (monsterTimer.IsDown() && player.IsStopDamage == false)
                     {
                         player.GetDamage(Damage);
                         monsterTimer.ReInit();
