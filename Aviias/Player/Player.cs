@@ -76,7 +76,7 @@ namespace Aviias
         Timer setBlocTimer = new Timer(1.2f);
         //[field: NonSerialized]
         Timer scrollToolBarTimer = new Timer(1.1f);
-        Timer stopDamageTimer = new Timer(1.2f);
+        Timer stopDamageTimer = new Timer(12f);
         Timer stopDamageCDTimer = new Timer(5f);
 
 
@@ -308,7 +308,7 @@ namespace Aviias
 
             if(stopDamageTimer.IsDown())
             {
-                _stopDamage = false;
+                IsStopDamage = false;
                 stopDamageTimer.ReInit();
             }
 
@@ -479,7 +479,7 @@ namespace Aviias
 
             if (currentKeyboardState.IsKeyDown(Keys.F) && stopDamageCDTimer.IsDown())
             {
-                _stopDamage = true;
+                IsStopDamage = true;
                 stopDamageCDTimer.ReInit();
             }
 
