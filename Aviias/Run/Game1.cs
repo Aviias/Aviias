@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Aviias.IA;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -21,6 +22,7 @@ namespace Aviias
         Monster monster;
         Wolf wolf;
         Drake drake;
+        Gloutogobe glouto;
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
         // Texture2D texture;
@@ -81,11 +83,14 @@ namespace Aviias
                     monsterPosition = new Vector2(posX, posY);
                     wolf = new Wolf(Content, Content.Load<Texture2D>("loup"), monsterPosition);
                     //monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
-
                     monsters.Add(wolf);
                 }
             }
+            int posgloutX = rnd.Next(0, map.WorldWidth * 10);
+            int posgloutY = rnd.Next(0, map.WorldHeight * 10);
+            Vector2 gloutoPos = new Vector2(posgloutX, posgloutY);
 
+            glouto = new Gloutogobe(Content, Content.Load<Texture2D>("Blopred"), gloutoPos);
             Vector2 playerPosition = new Vector2(1500, 345 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
             player.Initialize(Content.Load<Texture2D>("face"), playerPosition, Content, map);
             map.GenerateMap(Content);
@@ -165,13 +170,14 @@ namespace Aviias
                     {
                         if (monsters[i].IsDie == false && monsters[i] != null)
                         {
-                            monsters[i].Update(player, gameTime);
+                          monsters[i].Update(player, gameTime);
                         }
 
                         list = player.GetCollisionSide(player.GetBlocsAround(map));
 
                         Camera.Move(new Vector2(-player.PlayerMoveSpeed, 0));
                     }
+                    glouto.Update(monsters, player, Content, gameTime);
 
                     player.Update(player, Camera, _npc, gameTime, Content, log, map, monsters);
                     player.UpdatePlayerCollision(gameTime, player, monsters);
@@ -191,12 +197,12 @@ namespace Aviias
                     {
                         int posX = rnd.Next(0, map.WorldWidth * 10);
                         int posY = rnd.Next(0, map.WorldHeight * 10);
-                        //ctor2 monsterPosition = new Vector2(posX, posY);
+                        Vector2 monsterPosition = new Vector2(posX, posY);
                         //drake = new Drake(Content, Content.Load<Texture2D>("drake"), monsterPosition);
-
-
+                        
                         // monsters.Add(monster);
                         //monsters.Add(drake);
+                        
                         spawnTimer.ReInit();
                     }
                 }
@@ -228,6 +234,8 @@ namespace Aviias
                 {
                     monsters[i].Draw(spriteBatch);
                 }
+
+                glouto.Draw(spriteBatch);
                 if (player.IsDie == false)
                 {
                     player.Draw(spriteBatch, Content);

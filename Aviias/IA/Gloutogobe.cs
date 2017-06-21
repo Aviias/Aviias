@@ -14,14 +14,20 @@ namespace Aviias.IA
         int _stepEvolve;
 
         public Gloutogobe(ContentManager content, Texture2D texture, Vector2 pos)
-            : base(100, 1.5f, 0.10, 0, 5, content, texture, pos)
+            : base(100, 1.5f, 0.10, 20, 5, content, texture, pos)
         {
             _stepEvolve = 1;
         }
 
+        public int StepEvolve
+        {
+            get { return _stepEvolve; }
+            set { _stepEvolve = value; }
+        }
+
         public bool GobMonster(List<Monster> monsters,int i)
         {
-            if(this.MonsterPosition.X <= monsters[i].MonsterPosition.X - 15 && this.MonsterPosition.X >= monsters[i].MonsterPosition.X + monsters[i].Width + 15 && this.MonsterPosition.Y <= monsters[i].MonsterPosition.Y - 15 && this.MonsterPosition.Y <= monsters[i].MonsterPosition.Y + monsters[i].Height + 15 && _stepEvolve <= 3)
+            if( Vector2.Distance(this.MonsterPosition, monsters[i].MonsterPosition) <= 400 && _stepEvolve <= 3)
             {
                 monsters.Remove(monsters[i]);
                 return true;
@@ -44,6 +50,27 @@ namespace Aviias.IA
                 _stepEvolve += 1;
             }
             
+        }
+
+        public string GetTexture(int x)
+        {
+            if(x == 2)
+            {
+                return "Blopmulti";
+            }
+            else if (x == 3)
+            {
+                return "glouto";
+            }
+            else
+            {
+                return "Blopred";
+            }
+        }
+
+        public bool ClosestPlayer(Player player)
+        {
+            return Vector2.Distance(this.MonsterPosition, player.PlayerPosition) <= 500;
         }
 
         public int ClosestMonster(Vector2 pos, List<Monster> monsters)
@@ -70,8 +97,8 @@ namespace Aviias.IA
             {
                 float alpha = (float)Math.Atan2((pos.Y - this.MonsterPosition.Y), (pos.X - this.MonsterPosition.X));
                 Vector2 direction = AngleToVector(alpha);
-                Vector2 move = new Vector2(direction.X * this.moveSpeed, /*direction.Y * _speed*/0);
-                this.MonsterPosition = new Vector2(this.MonsterPosition.X + move.X, this.MonsterPosition.Y /*+ move.Y*/);
+                Vector2 move = new Vector2(direction.X * this.moveSpeed, direction.Y * this.moveSpeed);
+                this.MonsterPosition = new Vector2(this.MonsterPosition.X + move.X, this.MonsterPosition.Y + move.Y);
             }
             
         }
@@ -79,6 +106,25 @@ namespace Aviias.IA
         Vector2 AngleToVector(float angle)
         {
             return new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
+        }
+
+        public void Update(List<Monster> monsters, Player player, ContentManager content, GameTime gametime)
+        {
+            if(_stepEvolve < 3 && ClosestPlayer(player) == false)
+            {
+                int i = ClosestMonster(this.MonsterPosition, monsters);
+                MoveOnClosestMonster(monsters[i].MonsterPosition);
+                if (GobMonster(monsters,i))
+                {
+                    GloutoEvolve(content, GetTexture(_stepEvolve));
+                }
+            }
+            else
+            {
+                UpdatePhysics(Game1.map, this);
+                MoveOnPlayer(player);
+                Fight(player, gametime);
+            }
         }
     }
 }
