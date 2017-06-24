@@ -279,7 +279,17 @@ namespace Aviias
             blocBreakTimer.Decrem(gameTime);
             setBlocTimer.Decrem(gameTime);
             scrollToolBarTimer.Decrem(gameTime);
-            
+            bool tmp = false;
+            foreach (Soul soul in _souls)
+            {
+                soul.Update(gameTime);
+                if (soul.IsDown())
+                {
+                    _souls.Remove(soul);
+                    tmp = true;
+                }
+                if (tmp) break;
+            }
 
             list = GetCollisionSide(GetBlocsAround(map));
 

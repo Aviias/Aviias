@@ -16,6 +16,7 @@ namespace Aviias.IA
         Texture2D _texture;
         int _damages;
         int _health;
+        Timer _lifeTime = new Timer(3f);
 
         public Soul(Vector2 position, ContentManager content, int damages, int health)
         {
@@ -29,6 +30,15 @@ namespace Aviias.IA
         public Texture2D Texture => _texture;
         public int Damages => _damages;
         public int Health => _health;
+        public bool IsDown()
+        {
+            return _lifeTime.IsDown();
+        }
+
+        public void Update(GameTime gametime)
+        {
+            _lifeTime.Decrem(gametime);
+        }
 
         public void Draw(SpriteBatch spriteBatch)
         {
