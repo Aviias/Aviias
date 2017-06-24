@@ -47,6 +47,7 @@
     <Compile Include="GUI\Menu.cs" />
     <Compile Include="GUI\Sprite.cs" />
     <Compile Include="IA\Gloutogobe.cs" />
+    <Compile Include="IA\Soul.cs" />
     <Compile Include="IA\Physics.cs" />
     <Compile Include="Map\Bloc.cs" />
     <Compile Include="GUI\Chest.cs" />

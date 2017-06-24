@@ -76,7 +76,7 @@ namespace Aviias
             {
                 if (_questActive.CheckGoal(player, _id)) EndQuest(player);
             }
-            else GiveQuest(player);
+            else if (_isTalking == false) GiveQuest(player);
          //   _isTalking = true;
         }
 

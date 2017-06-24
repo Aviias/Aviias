@@ -141,7 +141,7 @@ namespace Aviias
                     }
                     else id = "air";
                     _blocs[i, j] = new Bloc(new Vector2(i * (_scale), j * (_scale)), _scale, id, content);
-                    if (j == 0)
+                    if (j >= 0 && j <= 3)
                     {
                         _blocs[i, j]._isInContactWithTheSky = true;
                     }
