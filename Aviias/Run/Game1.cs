@@ -151,7 +151,7 @@ namespace Aviias
                 }
                 if (player.IsDie == false)
                 {
-                    Camera.Position = new Vector2(player.Position.X - WindowWidth / 2, player.Position.Y - WindowHeight / 2);
+                   // Camera.Position = new Vector2(player.Position.X - WindowWidth / 2, player.Position.Y - WindowHeight / 2);
                     // TODO: Add your update logic here
 
                     previousKeyboardState = currentKeyboardState;
@@ -159,7 +159,9 @@ namespace Aviias
 
                     player.Update(map);
                     player.UpdatePlayerCollision(gameTime, player, monsters);
-                    Camera.Position = new Vector2(player.Position.X - WindowWidth / 2, player.Position.Y - WindowHeight / 2);
+                    if (player.Position.X >= map._worldWidth*16 - WindowWidth / 2 - 64) Camera.Position = new Vector2(map._worldWidth*16 - WindowWidth - 64, player.Position.Y - WindowHeight / 2);
+                    else if (player.Position.X <= WindowWidth / 2 + 64) Camera.Position = new Vector2(64, player.Position.Y - WindowHeight / 2);
+                    else Camera.Position = new Vector2(player.Position.X - WindowWidth / 2, player.Position.Y - WindowHeight / 2);
 
                     for (int i = 0; i < monsters.Count; i++)
                     {

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using MonoGame.Extended;
+using Aviias.IA;
 
 namespace Aviias
 {
@@ -75,6 +76,7 @@ namespace Aviias
         //   MonoGame.Extended.Camera2D Camera;
         float _playerMoveSpeed;
         internal Inventory _inv;
+        List<Soul> _souls = new List<Soul>(32);
 
         public int Width
         {
@@ -349,6 +351,8 @@ namespace Aviias
                             monsters[i].GetDamage(player.Damage);
                             if (monsters[i].IsDie)
                             {
+                                Soul soul = new Soul(monsters[i].MonsterPosition, Content, monsters[i].BaseDamage, monsters[i].BaseHealth);
+                                _souls.Add(soul);
                                 monsters.Remove(monsters[i]);
                             }
                             playerTimer.ReInit();
@@ -633,6 +637,11 @@ namespace Aviias
                 spriteBatch.Draw(content.Load<Texture2D>("Roullette"), _inv.PositionCellToolBar(), null, Color.White, 0f, Vector2.Zero, 1f,
                     SpriteEffects.None, 0f);
 
+            }
+
+            foreach(Soul soul in _souls)
+            {
+                soul.Draw(spriteBatch);
             }
 
             if (IsDie == true)

@@ -79,17 +79,11 @@ namespace Aviias
             {"stonebrick", "ladder", "air", "air", "air", "air", "air", "air", "air", "air", "air", "air", "stonebrick" },
             {"stonebrick", "ladder", "air", "air", "air", "air", "air", "air", "air", "air", "air", "air", "stonebrick" },
 
-
             {"stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "ladder", "stonebrick", "stonebrick" },
             {"stonebrick", "air", "air", "air", "air", "air", "air", "air", "air", "air", "ladder", "air", "stonebrick" },
             {"stonebrick", "air", "air", "air", "air", "air", "air", "air", "air", "air", "ladder", "air", "stonebrick" },
             {"stonebrick", "air", "air", "air", "air", "air", "air", "air", "air", "air", "ladder", "air", "stonebrick" },
             {"stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick", "stonebrick" }
-
-
-
-
-
         };
     }
 }
