@@ -80,7 +80,8 @@ namespace Aviias
         Timer stopDamageTimer = new Timer(12f);
         Timer stopDamageCDTimer = new Timer(5f);
 
-
+        List<string> CraftNotPutable = new List<string>();
+        
 
         internal Dictionary<Ressource, int> _inventory;
         //   MonoGame.Extended.Camera2D Camera;
@@ -156,6 +157,9 @@ namespace Aviias
             y = position.Y;
             _texture = texture.Name;
             _stopDamage = false;
+            CraftNotPutable.Add("stick");
+            CraftNotPutable.Add("wood_shovel");
+            CraftNotPutable.Add("heal_potion");
             /*
             _inv.AddInventory(2, "oak_wood");
             _inv.AddInventory(4, "oak_plank");
@@ -221,7 +225,7 @@ namespace Aviias
                 if (bloc.IsBreakable)
                 {
                     bloc1 = new Bloc(blocs[i,j].GetPosBlock ,scale, "air", content);
-                    _inv.AddInventory(1, blocs[i, j].Type, false);
+                    _inv.AddInventory(1, blocs[i, j].Type);
                     blocs[i, j] = bloc1;
                     
                     //log.WriteLine("---- > breakBloc block.X = " + blocs[i, j].GetPosBlock.X + " block.Y = " + blocs[i, j].GetPosBlock.Y);
@@ -290,6 +294,19 @@ namespace Aviias
             List<int> list = new List<int>(16);
             list = GetCollisionSide(GetBlocsAround(map));
             if (list.Contains(3)) return false;
+            return true;
+        }
+
+        public bool PutableBloc(List<string> list, string name)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if(list[i] == name)
+                {
+                    return false;
+                }
+            }
+
             return true;
         }
 
@@ -368,7 +385,7 @@ namespace Aviias
                 {
                     if (_inv._craft._cellCraft[i].IsCraftable == true)
                     {
-                        _inv.AddInventory(_inv._craft._cellCraft[i]._quantity, _inv._craft._cellCraft[i]._name, true);
+                        _inv.AddInventory(_inv._craft._cellCraft[i]._quantity, _inv._craft._cellCraft[i]._name);
 
                         foreach (KeyValuePair<int, Ressource> element in _inv._craft._cellCraft[i]._ressource)
                         {
@@ -448,7 +465,7 @@ namespace Aviias
                 int cell = _inv.ActualCell;
                 string name = _inv.GetNameBloc(cell);
                 // Type is true when it is a craft
-                if (_inv.IsOnInventory(name) && !_inv.Type(cell))
+                if (_inv.IsOnInventory(name) && PutableBloc(CraftNotPutable, name))
                 {
                     map.SetBloc(position, Content, player, name, map);
                     setBlocTimer.ReInit();

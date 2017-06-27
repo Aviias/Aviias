@@ -25,7 +25,6 @@ namespace Aviias
             {
                 _cellArray[i] = new _cell();
                 _cellArray[i]._name = "";
-                _cellArray[i]._type = false;
                 _cellArray[i]._ressource = new Ressource("air");
 
                 UpdatePosition(i);
@@ -109,11 +108,6 @@ namespace Aviias
             get { return _actualCell; }            
         }
 
-        public bool Type(int i)
-        {
-            return _cellArray[i]._type;
-        }
-
         public string GetNameBloc(int x)
         {
             return _cellArray[x]._name;
@@ -151,13 +145,12 @@ namespace Aviias
             public bool IsFull { get; set; }
             public string _name { get; set; }
             public int _quantity { get; set; }
-            public bool _type { get; set; }
             public Ressource _ressource { get; set; }
         }
 
         public Vector2 Position { get { return Position; } set { Position = value; } }
 
-        public void AddInventory(int quantity, string name, bool type)
+        public void AddInventory(int quantity, string name)
         {
             //foreach ( entry in _cellArray)
             for (int i = 0; i < _cellArray.Length; i++)
@@ -165,19 +158,17 @@ namespace Aviias
                 if (_cellArray[i]._name == name && _cellArray[i]._quantity == 0)
                 {
                     _cellArray[i].IsFull = true;
-                    _cellArray[i]._type = type;
                     _cellArray[i]._quantity += quantity; return;
                 }
                 else if (_cellArray[i]._name == name)
                 {
-                    _cellArray[i]._type = type;
                     _cellArray[i]._quantity += quantity; return;
                 }
             }
 
             for (int i = 0; i < _cellArray.Length; i++)
             {
-                if (!_cellArray[i].IsFull && _cellArray[i]._name != name) { _cellArray[i]._name = name; _cellArray[i]._quantity = quantity; _cellArray[i].IsFull = true; _cellArray[i]._ressource = new Ressource(name); _cellArray[i]._type = type; break; }
+                if (!_cellArray[i].IsFull && _cellArray[i]._name != name) { _cellArray[i]._name = name; _cellArray[i]._quantity = quantity; _cellArray[i].IsFull = true; _cellArray[i]._ressource = new Ressource(name); break; }
             }
         }
 
