@@ -41,30 +41,17 @@
     <ApplicationManifest>Run\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-<<<<<<< HEAD
-    <Compile Include="Bloc.cs" />
-    <Compile Include="Chest.cs" />
-    <Compile Include="Craft.cs" />
-    <Compile Include="Drake.cs" />
-    <Compile Include="Game1.cs" />
-    <Compile Include="Inventory.cs" />
-    <Compile Include="Map.cs" />
-    <Compile Include="Monster.cs" />
-    <Compile Include="NeuronalNetwork.cs" />
-    <Compile Include="NPC.cs" />
-    <Compile Include="Player.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Quest.cs" />
-    <Compile Include="Ressource.cs" />
-    <Compile Include="Save.cs" />
-    <Compile Include="Wolf.cs" />
-    <Compile Include="Structure.cs" />
-    <Compile Include="Stuff.cs" />
-=======
+    <Compile Include="GUI\Animation.cs" />
+    <Compile Include="IA\Drake.cs" />
     <Compile Include="GUI\Button.cs" />
     <Compile Include="GUI\Menu.cs" />
     <Compile Include="GUI\Sprite.cs" />
+<<<<<<< HEAD
+    <Compile Include="IA\Gloutogobe.cs" />
+    <Compile Include="IA\Physics.cs" />
+=======
+    <Compile Include="IA\Soul.cs" />
+>>>>>>> f_souls
     <Compile Include="Map\Bloc.cs" />
     <Compile Include="GUI\Chest.cs" />
     <Compile Include="GUI\Craft.cs" />
@@ -81,13 +68,14 @@
     <Compile Include="Player\Ressource.cs" />
     <Compile Include="Map\Structure.cs" />
     <Compile Include="Player\Stuff.cs" />
->>>>>>> origin/f_menu
-    <Compile Include="Text.cs" />
-    <Compile Include="Timer.cs" />
+    <Compile Include="Run\Save.cs" />
+    <Compile Include="IA\Wolf.cs" />
+    <Compile Include="IA\Text.cs" />
+    <Compile Include="Run\Timer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="MonoGame.Extended, Version=0.6.377.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoGame.Extended.0.6.377\lib\MonoGame.Extended.dll</HintPath>
+    <Reference Include="MonoGame.Extended, Version=0.6.568.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Extended.0.6.568\lib\portable-net45+win8+wpa81\MonoGame.Extended.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MonoGame.Framework">
@@ -108,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
+    <None Include="packages.config" />
     <None Include="Run\app.manifest" />
     <None Include="Run\packages.config" />
   </ItemGroup>
