@@ -87,14 +87,14 @@ namespace Aviias
 
         public Vector2 PositionCellToolBar()
         {
-            float DifX = 100;
+            float DifX = 77;
             if (_actualCell == 0)
             {
                 return new Vector2(_player.Position.X - 400, _player.Position.Y + 474);
             }
             else
             {
-                return new Vector2(_player.Position.X - DifX * _actualCell, _player.Position.Y + 474);
+                return new Vector2(_player.Position.X - 400 + DifX * _actualCell, _player.Position.Y + 474);
             }
         }
 
@@ -105,7 +105,8 @@ namespace Aviias
 
         public int ActualCell
         {
-            get { return _actualCell; }            
+            get { return _actualCell; } 
+            set { _actualCell = value; }           
         }
 
         public string GetNameBloc(int x)

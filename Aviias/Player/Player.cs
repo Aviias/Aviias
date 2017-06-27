@@ -444,14 +444,54 @@ namespace Aviias
               
             }
 
-            if (currentMouseState.ScrollWheelValue > previousMouseState && scrollToolBarTimer.IsDown())
+            if (currentKeyboardState.IsKeyDown(Keys.NumPad1) && scrollToolBarTimer.IsDown())
             {
-                _inv.MoveLeftActualCell();
+                _inv.ActualCell = 0;
                 scrollToolBarTimer.ReInit();
                 
-            } else if (currentMouseState.ScrollWheelValue < previousMouseState && scrollToolBarTimer.IsDown())
+            } else if (currentKeyboardState.IsKeyDown(Keys.NumPad2) && scrollToolBarTimer.IsDown())
             {
-                _inv.MoveRightActualCell();
+                _inv.ActualCell = 1;
+                scrollToolBarTimer.ReInit();
+            }
+            else if (currentKeyboardState.IsKeyDown(Keys.NumPad3) && scrollToolBarTimer.IsDown())
+            {
+                _inv.ActualCell = 2;
+                scrollToolBarTimer.ReInit();
+            }
+            else if (currentKeyboardState.IsKeyDown(Keys.NumPad4) && scrollToolBarTimer.IsDown())
+            {
+                _inv.ActualCell = 3;
+                scrollToolBarTimer.ReInit();
+            }
+            else if (currentKeyboardState.IsKeyDown(Keys.NumPad5) && scrollToolBarTimer.IsDown())
+            {
+                _inv.ActualCell = 4;
+                scrollToolBarTimer.ReInit();
+            }
+            else if (currentKeyboardState.IsKeyDown(Keys.NumPad6) && scrollToolBarTimer.IsDown())
+            {
+                _inv.ActualCell = 5;
+                scrollToolBarTimer.ReInit();
+            }
+            else if (currentKeyboardState.IsKeyDown(Keys.NumPad7) && scrollToolBarTimer.IsDown())
+            {
+                _inv.ActualCell = 6;
+                scrollToolBarTimer.ReInit();
+            }
+            else if (currentKeyboardState.IsKeyDown(Keys.NumPad8) && scrollToolBarTimer.IsDown())
+            {
+                _inv.ActualCell = 7;
+                scrollToolBarTimer.ReInit();
+            }
+            else if (currentKeyboardState.IsKeyDown(Keys.NumPad9) && scrollToolBarTimer.IsDown())
+            {
+                _inv.ActualCell = 8;
+                scrollToolBarTimer.ReInit();
+            }
+            else if (currentKeyboardState.IsKeyDown(Keys.NumPad0) && scrollToolBarTimer.IsDown())
+            {
+                _inv.ActualCell = 9;
                 scrollToolBarTimer.ReInit();
             }
 
