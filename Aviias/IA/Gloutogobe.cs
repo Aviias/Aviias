@@ -110,7 +110,7 @@ namespace Aviias.IA
 
         public void Update(List<Monster> monsters, Player player, ContentManager content, GameTime gametime)
         {
-            if(_stepEvolve < 3 && ClosestPlayer(player) == false)
+            if(_stepEvolve <= 3 && ClosestPlayer(player) == false)
             {
                 int i = ClosestMonster(this.MonsterPosition, monsters);
                 MoveOnClosestMonster(monsters[i].MonsterPosition);
@@ -121,7 +121,7 @@ namespace Aviias.IA
             }
             else
             {
-                UpdatePhysics(Game1.map, this);
+                //UpdatePhysics(Game1.map, this);
                 MoveOnPlayer(player);
                 Fight(player, gametime);
             }

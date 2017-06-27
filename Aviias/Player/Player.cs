@@ -219,7 +219,7 @@ namespace Aviias
                 if (bloc.IsBreakable)
                 {
                     bloc1 = new Bloc(blocs[i,j].GetPosBlock ,scale, "air", content);
-                    _inv.AddInventory(1, blocs[i, j].Type);
+                    _inv.AddInventory(1, blocs[i, j].Type, false);
                     blocs[i, j] = bloc1;
                     
                     //log.WriteLine("---- > breakBloc block.X = " + blocs[i, j].GetPosBlock.X + " block.Y = " + blocs[i, j].GetPosBlock.Y);
@@ -355,7 +355,7 @@ namespace Aviias
                 {
                     if (_inv._craft._cellCraft[i].IsCraftable == true)
                     {
-                        _inv.AddInventory(_inv._craft._cellCraft[i]._quantity, _inv._craft._cellCraft[i]._name);
+                        _inv.AddInventory(_inv._craft._cellCraft[i]._quantity, _inv._craft._cellCraft[i]._name, true);
 
                         foreach (KeyValuePair<int, Ressource> element in _inv._craft._cellCraft[i]._ressource)
                         {
@@ -432,8 +432,8 @@ namespace Aviias
                 position = Camera.ScreenToWorld(position);
                 int cell = _inv.ActualCell;
                 string name = _inv.GetNameBloc(cell);
-
-                if (_inv.IsOnInventory(name) && _inv._craft._cellCraft[cell+1]._isSetable)
+                // Type is true when it is a craft
+                if (_inv.IsOnInventory(name) && !_inv.Type(cell))
                 {
                     map.SetBloc(position, Content, player, name, map);
                     setBlocTimer.ReInit();

@@ -72,7 +72,7 @@ namespace Aviias
             _menu = new Menu();
             _menu.Initialize();
 
-            int monsterneed = 2 - monsters.Count;
+            int monsterneed = 1 - monsters.Count;
             if (monsterneed != 0)
             {
                 for (int i = 0; i < monsterneed; i++)
@@ -86,11 +86,13 @@ namespace Aviias
                     monsters.Add(wolf);
                 }
             }
+            /*
             int posgloutX = rnd.Next(0, map.WorldWidth * 10);
             int posgloutY = rnd.Next(0, map.WorldHeight * 10);
             Vector2 gloutoPos = new Vector2(posgloutX, posgloutY);
 
             glouto = new Gloutogobe(Content, Content.Load<Texture2D>("Blopred"), gloutoPos);
+            */
             Vector2 playerPosition = new Vector2(1500, 345 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
             player.Initialize(Content.Load<Texture2D>("face"), playerPosition, Content, map);
             map.GenerateMap(Content);
@@ -177,7 +179,7 @@ namespace Aviias
 
                         Camera.Move(new Vector2(-player.PlayerMoveSpeed, 0));
                     }
-                    glouto.Update(monsters, player, Content, gameTime);
+                    //glouto.Update(monsters, player, Content, gameTime);
 
                     player.Update(player, Camera, _npc, gameTime, Content, log, map, monsters);
                     player.UpdatePlayerCollision(gameTime, player, monsters);
@@ -235,7 +237,7 @@ namespace Aviias
                     monsters[i].Draw(spriteBatch);
                 }
 
-                glouto.Draw(spriteBatch);
+                //glouto.Draw(spriteBatch);
                 if (player.IsDie == false)
                 {
                     player.Draw(spriteBatch, Content);
