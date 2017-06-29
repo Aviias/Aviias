@@ -60,6 +60,8 @@ namespace Aviias
             }
         }
 
+
+
         public _cell PositionToolBar(int i)
         {
             int _difX = 77;
@@ -112,30 +114,6 @@ namespace Aviias
         public string GetNameBloc(int x)
         {
             return _cellArray[x]._name;
-        }
-
-        public void MoveLeftActualCell()
-        {
-            if(_actualCell < 9)
-            {
-                _actualCell += 1;
-            }
-            else
-            {
-                _actualCell = 0;
-            }
-        }
-
-        public void MoveRightActualCell()
-        {
-            if (_actualCell > 0)
-            {
-                _actualCell -= 1;
-            }
-            else
-            {
-                _actualCell = 9;
-            }
         }
 
         [Serializable]

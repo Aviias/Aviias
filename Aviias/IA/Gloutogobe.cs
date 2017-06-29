@@ -14,7 +14,7 @@ namespace Aviias.IA
         int _stepEvolve;
 
         public Gloutogobe(ContentManager content, Texture2D texture, Vector2 pos)
-            : base(100, 1.5f, 0.10, 20, 5, content, texture, pos)
+            : base(100, 1.5f, 0.10, 20, 5, content, texture, pos, 100)
         {
             _stepEvolve = 1;
         }

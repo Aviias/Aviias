@@ -24,6 +24,7 @@ namespace Aviias
         double _regenerationRate;
         int _damageDealing;
         int _baseHealth;
+        float _baseEnergy;
         int _baseDamageDealing;
         int _resistance;
         [field: NonSerialized]
@@ -33,10 +34,11 @@ namespace Aviias
         bool _bonusLightGiven;
         List<Soul> _souls = new List<Soul>(16);
         public Timer _healthRegenerationTimer = new Timer(4f);
-
+        Timer _energyRegenTimer = new Timer(2f);
+        float _energy;
         Random rnd = new Random();
 
-        public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos)
+        public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy)
             : base(false,4,-12)
         {
             _id = rnd.Next(0, int.MaxValue);
@@ -51,6 +53,8 @@ namespace Aviias
             _texture = texture;
             _baseDamageDealing = damageDealing;
             _baseHealth = health;
+            _baseEnergy = energy;
+            _energy = energy;
         }
 
         public int BaseHealth => _baseHealth;
@@ -158,6 +162,12 @@ namespace Aviias
             set { _pos.Y = value; }
         }
 
+        public float Energy
+        {
+            get { return _energy; }
+            set { _energy = value; }
+        }
+
         public void ReactToLight()
         {
             if (Game1.map._blocs[(int)MonsterPosition.X / 16, (int)MonsterPosition.Y / 16].Luminosity < 3) _reactToLight = true;
@@ -206,6 +216,15 @@ namespace Aviias
             return false;
         }
 
+        public void ActualizeEnergieRegeneration(GameTime gametime)
+        {
+            _energyRegenTimer.Decrem(gametime);
+            if (_energyRegenTimer.IsDown() && _energy < _baseEnergy)
+            {
+                _energy += 1.5f;
+            }
+        }
+
         public void ActualizeHealthRegeneration(GameTime gametime)
         {
             _healthRegenerationTimer.Decrem(gametime);
@@ -214,6 +233,14 @@ namespace Aviias
                 _health++;
             }
 
+        }
+
+        public void Flight(Player player)
+        {
+            float alpha = (float)Math.Atan2((player.Y - posY), (player.X - posX));
+            Vector2 direction = AngleToVector(alpha);
+            Vector2 move = new Vector2(direction.X * _speed * (-1), /*direction.Y * _speed*/0);
+            _pos = new Vector2(posX + move.X, posY /*+ move.Y*/);
         }
 
         public void MoveOnPlayer(Player player)
@@ -238,21 +265,51 @@ namespace Aviias
                 {
                     if (monsterTimer.IsDown() && player.IsStopDamage == false)
                     {
-                        player.GetDamage(Damage);
-                        monsterTimer.ReInit();
+                        if (Energy < (Energy * (0.75)))
+                        {
+                            player.GetDamage(Damage);
+                            monsterTimer.ReInit();
+                            Energy = Energy - 0.8f;
+                        }
+                        else
+                        {
+                            player.GetDamage(Damage + (Damage/2));
+                            monsterTimer.ReInit();
+                            Energy = Energy - 15f;
+                        }
+                        
                     }
                 }
             }
         }
 
         
+        
         internal void Update(Player player, GameTime gametime)
         {
             UpdatePhysics(Game1.map, this);
-            MoveOnPlayer(player);
-            Fight(player, gametime);
+            if (_health >= 50 && Energy > 0f)
+            {
+                MoveOnPlayer(player);
+                Energy = Energy - 0.2f;
+            }
+            else
+            {
+                if(Energy > 0)
+                {
+                    Flight(player);
+                    Energy = Energy - 0.2f;
+                }               
+            }
+
+            if (Energy > 0)
+            {
+                Fight(player, gametime);
+            }
+                
             ReactToLight();
-            ActualizeHealthRegeneration(gametime);                           
+            ActualizeHealthRegeneration(gametime);
+            ActualizeEnergieRegeneration(gametime);                       
         }
 
         Vector2 AngleToVector(float angle)
