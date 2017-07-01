@@ -15,15 +15,15 @@ namespace Aviias
         Button _new;
         Button _load;
         Button _back;
-        Timer ButtonNew = new Timer(1.5f);
+        internal Timer ButtonNew = new Timer(1.5f);
         Timer ButtonLoad = new Timer(1.5f);
-        bool IsTrue;
+        bool IsTrue = false;
 
         public MenuPlay()
         {
             _new = new Button(new Vector2(305, 655), 600, 100);
             _load = new Button(new Vector2(1044, 655), 600, 100);
-            _back = new Button(new Vector2(21, -1),100, 50);
+            _back = new Button(new Vector2(21, -1), 100, 50);
         }
 
         internal void Update(GameTime gameTime, ContentManager Content)
@@ -31,7 +31,7 @@ namespace Aviias
             MouseState mouseState = Mouse.GetState();
             ButtonNew.Decrem(gameTime);
             ButtonLoad.Decrem(gameTime);
-            if (Menu.Swap == true && _new.IsPressed(mouseState) && mouseState.Position.X >= _new._position.X && mouseState.Position.Y >= _new._position.Y && mouseState.Position.X <= _new._position.X + _new._width && mouseState.Position.Y <= _new._position.Y + _new._height && ButtonNew.IsDown())
+            if (_new.IsPressed(mouseState) && mouseState.Position.X >= _new._position.X && mouseState.Position.Y >= _new._position.Y && mouseState.Position.X <= _new._position.X + _new._width && mouseState.Position.Y <= _new._position.Y + _new._height && ButtonNew.IsDown())
             {
                 _new._texture = ".\\Menu\\Button\\nouvelle_rouge";
                 IsTrue = true;
@@ -41,23 +41,29 @@ namespace Aviias
             {
                 _new._texture = ".\\Menu\\Button\\nouvelle_gris";
                 IsTrue = false;
-
-                if (_load.IsPressed(mouseState) && mouseState.Position.X >= _load._position.X && mouseState.Position.Y >= _load._position.Y && mouseState.Position.X <= _load._position.X + _load._width && mouseState.Position.Y <= _load._position.Y + _load._height && ButtonLoad.IsDown())
-                {
-                    _load._texture = ".\\Menu\\Button\\reprendre_rouge";
-                    IsTrue = true;
-                    ButtonLoad.ReInit();
-                }
-                else
-                {
-                    _load._texture = ".\\Menu\\Button\\reprendre_gris";
-                    IsTrue = false;
-                }
             }
+
+            if (IsTrue) return;
+
+            if (Menu.Swap == true && _load.IsPressed(mouseState) && mouseState.Position.X >= _load._position.X && mouseState.Position.Y >= _load._position.Y && mouseState.Position.X <= _load._position.X + _load._width && mouseState.Position.Y <= _load._position.Y + _load._height && ButtonLoad.IsDown())
+            {
+                _load._texture = ".\\Menu\\Button\\reprendre_rouge";
+                IsTrue = true;
+                ButtonLoad.ReInit();
+            }
+            else
+            {
+                _load._texture = ".\\Menu\\Button\\reprendre_gris";
+                IsTrue = false;
+            }
+
+            if (IsTrue) return;
+            IsTrue = false;
             if (_back.IsPressed(mouseState) && mouseState.Position.X >= _back._position.X && mouseState.Position.Y >= _back._position.Y && mouseState.Position.X <= _back._position.X + _back._width && mouseState.Position.Y <= _back._position.Y + _back._height)
             {
                 _back._texture = ".\\Menu\\Button\\retour_rouge";
-                Menu.Swap = false;             
+                Menu.Swap = false;
+                IsTrue = false;
             }
             else
             {
@@ -67,10 +73,10 @@ namespace Aviias
 
         public bool IsTrueF
         {
-           get { return IsTrue; }
-           set { IsTrue = value; }
+            get { return IsTrue; }
+            set { IsTrue = value; }
         }
-       
+
         internal void Draw(SpriteBatch spriteBatch, ContentManager content)
         {
             spriteBatch.Draw(content.Load<Texture2D>(".\\Menu\\Background\\menu_partie"), new Vector2(0, 0), null, Color.White, 0f, Vector2.Zero, 1f,

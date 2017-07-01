@@ -32,6 +32,7 @@ namespace Aviias
             {
                 _jouer._texture = ".\\Menu\\Button\\jouer_rouge";
                 Swap = true;
+                _menuPlay.ButtonNew.ReInit();
             }
             else
             {
@@ -59,7 +60,6 @@ namespace Aviias
         {
             return _menuPlay.IsTrueF;
         }
-
 
         internal void Draw(SpriteBatch spriteBatch, ContentManager content)
         {
