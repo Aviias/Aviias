@@ -49,6 +49,7 @@
     <Compile Include="IA\Gloutogobe.cs" />
     <Compile Include="IA\Soul.cs" />
     <Compile Include="IA\Physics.cs" />
+    <Compile Include="IA\Spawn.cs" />
     <Compile Include="Map\Bloc.cs" />
     <Compile Include="GUI\Chest.cs" />
     <Compile Include="GUI\Craft.cs" />

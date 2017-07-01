@@ -13,8 +13,8 @@ namespace Aviias
     [Serializable]
     public class Map
     {
-        public readonly int _worldWidth;
-        public readonly int _worldHeight;
+        public  readonly int _worldWidth;
+        public  readonly int _worldHeight;
         public Bloc[,] _blocs;
         const int _scale = 16;
         Random random = new Random();

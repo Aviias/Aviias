@@ -129,6 +129,15 @@ namespace Aviias
 
         public Vector2 Position { get { return Position; } set { Position = value; } }
 
+        public void ReinitCell(int i)
+        {
+            _cellArray[i] = new _cell();
+            _cellArray[i]._name = "";
+            _cellArray[i]._quantity = 0;
+            _cellArray[i].IsFull = false;
+            _cellArray[i]._ressource = new Ressource("air");
+        }
+
         public void AddInventory(int quantity, string name)
         {
             //foreach ( entry in _cellArray)
@@ -175,8 +184,47 @@ namespace Aviias
 
             return null;
         }
-       
 
+        public bool PutableBloc(List<string> list, string name)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i] == name)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        /*
+        public void TriInventory(List<string> CraftNotPutable)
+        {
+            for (int i = 0; i < _cellArray.Length; i++)
+            {
+                if(i < 10 && !PutableBloc(CraftNotPutable, _cellArray[i]._name))
+                {
+                    if(FirstEmptyCell() != -1)
+                    {
+                        _cellArray[FirstEmptyCell()] = _cellArray[i];
+                        ReinitCell(i);
+                    }
+                } 
+            }
+        }
+
+        public int FirstEmptyCell()
+        {
+            for (int i = 0; i < _cellArray.Length; i++)
+            {
+                if(_cellArray[i]._name == "")
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        */
         public void DecreaseInventory(int quantity, string name)
         {
             for (int i = 0; i < _cellArray.Length; i++)

@@ -51,7 +51,6 @@ namespace Aviias
         MouseState mouseState = Mouse.GetState();
         [field: NonSerialized]
         MouseState currentMouseState = Mouse.GetState();
-        int previousMouseState;
         public bool isInAir;
         public float _yVelocity;
         public double _gravity;
@@ -79,6 +78,7 @@ namespace Aviias
         Timer scrollToolBarTimer = new Timer(1.1f);
         Timer stopDamageTimer = new Timer(12f);
         Timer stopDamageCDTimer = new Timer(5f);
+        Timer TriTimer = new Timer(1.1f);
 
         List<string> CraftNotPutable = new List<string>();
         
@@ -152,11 +152,11 @@ namespace Aviias
             _activeQuest = new List<Quest>(8);
             _inv = new Inventory(this);
             save = new Save(map, this, Game1._npc);
-            previousMouseState = currentMouseState.ScrollWheelValue;
             x = position.X;
             y = position.Y;
             _texture = texture.Name;
             _stopDamage = false;
+
             CraftNotPutable.Add("stick");
             CraftNotPutable.Add("wood_shovel");
             CraftNotPutable.Add("heal_potion");
@@ -221,14 +221,13 @@ namespace Aviias
             Bloc bloc1;
             if (bloc != null)
             {
-                //log.WriteLine("---- > breakBloc i=" + i + " j=" + j);
+                
                 if (bloc.IsBreakable)
                 {
                     bloc1 = new Bloc(blocs[i,j].GetPosBlock ,scale, "air", content);
                     _inv.AddInventory(1, blocs[i, j].Type);
                     blocs[i, j] = bloc1;
-                    
-                    //log.WriteLine("---- > breakBloc block.X = " + blocs[i, j].GetPosBlock.X + " block.Y = " + blocs[i, j].GetPosBlock.Y);
+                                       
                 }
             }
             _map.ActualizeShadow((int)Position.X, (int)Position.Y);
@@ -322,7 +321,9 @@ namespace Aviias
             scrollToolBarTimer.Decrem(gameTime);
             stopDamageCDTimer.Decrem(gameTime);
             stopDamageTimer.Decrem(gameTime);
+            TriTimer.Decrem(gameTime);
             bool tmp = false;
+
             foreach (Soul soul in _souls)
             {
                 soul.Update(gameTime);
@@ -495,7 +496,6 @@ namespace Aviias
                 scrollToolBarTimer.ReInit();
             }
 
-            previousMouseState = currentMouseState.ScrollWheelValue;
 
             if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Right) == System.Windows.Forms.MouseButtons.Right && setBlocTimer.IsDown())
             {
@@ -511,7 +511,13 @@ namespace Aviias
                     setBlocTimer.ReInit();
                 }
             }
-
+            /*
+            if(IsInventoryOpen && currentKeyboardState.IsKeyDown(Keys.T) && TriTimer.IsDown())
+            {
+                _inv.TriInventory(CraftNotPutable);
+                TriTimer.ReInit();
+            }
+            */
                 if (currentKeyboardState.IsKeyDown(Keys.P))
             {
                 if (player._displayPos) player._displayPos = false;

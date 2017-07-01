@@ -108,7 +108,7 @@ namespace Aviias.IA
             return new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
         }
 
-        public void Update(List<Monster> monsters, Player player, ContentManager content, GameTime gametime)
+        public void Update(List<Monster> monsters, Player player, ContentManager content, GameTime gametime, Map map)
         {
             if(_stepEvolve <= 3 && ClosestPlayer(player) == false)
             {
@@ -122,7 +122,7 @@ namespace Aviias.IA
             else
             {
                 //UpdatePhysics(Game1.map, this);
-                MoveOnPlayer(player);
+                MoveOnPlayer(player, map, gametime);
                 Fight(player, gametime);
             }
         }

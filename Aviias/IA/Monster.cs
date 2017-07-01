@@ -37,9 +37,13 @@ namespace Aviias
         Timer _energyRegenTimer = new Timer(2f);
         float _energy;
         Random rnd = new Random();
+        bool _collisions;
+        float _yVelocity;
+        Timer EngeryDamageTimer = new Timer(1f);
+        Timer JumpTimer = new Timer(1f);
 
         public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy)
-            : base(false,4,-12)
+            : base(false,4,-5)
         {
             _id = rnd.Next(0, int.MaxValue);
             _health = health;
@@ -235,19 +239,38 @@ namespace Aviias
 
         }
 
-        public void Flight(Player player)
+        public void Flight(Player player, Map map, GameTime gametime)
         {
+            JumpTimer.Decrem(gametime);
+            Vector2 move;
             float alpha = (float)Math.Atan2((player.Y - posY), (player.X - posX));
             Vector2 direction = AngleToVector(alpha);
-            Vector2 move = new Vector2(direction.X * _speed * (-1), /*direction.Y * _speed*/0);
+            if (GetCollisionSide(GetBlocsAround(map)).Contains(3) && JumpTimer.IsDown() && (GetCollisionSide(GetBlocsAround(map)).Contains(2) || GetCollisionSide(GetBlocsAround(map)).Contains(1)))
+            {
+                Jump(map, this);
+                JumpTimer.ReInit();
+            }
+
+            move = new Vector2(direction.X * _speed * (-1), /*direction.Y * _speed*/0);
+            
+            
             _pos = new Vector2(posX + move.X, posY /*+ move.Y*/);
         }
 
-        public void MoveOnPlayer(Player player)
+        public void MoveOnPlayer(Player player, Map map, GameTime gametime)
         {
+            JumpTimer.Decrem(gametime);
+            Vector2 move;
             float alpha = (float)Math.Atan2((player.Y - posY), (player.X - posX));
             Vector2 direction = AngleToVector(alpha);
-            Vector2 move = new Vector2(direction.X * _speed, /*direction.Y * _speed*/0);
+            if (GetCollisionSide(GetBlocsAround(map)).Contains(3) && JumpTimer.IsDown() && (GetCollisionSide(GetBlocsAround(map)).Contains(2) || GetCollisionSide(GetBlocsAround(map)).Contains(1)))
+            {
+                Jump(map,this);
+                JumpTimer.ReInit();
+            }
+            move = new Vector2(direction.X * _speed, /*direction.Y * _speed*/0);
+            
+            
             _pos = new Vector2(posX + move.X, posY /*+ move.Y*/);
         }
 
@@ -283,28 +306,93 @@ namespace Aviias
             }
         }
 
-        
-        
-        internal void Update(Player player, GameTime gametime)
+        public List<int> GetCollisionSide(List<Bloc> _blocs)
         {
-            UpdatePhysics(Game1.map, this);
-            if (_health >= 50 && Energy > 0f)
+            List<int> result = new List<int>(16);
+            Rectangle monsterRect;
+            Rectangle monsterRect2;
+            monsterRect = new Rectangle((int)MonsterPosition.X, (int)MonsterPosition.Y, Texture.Width, Texture.Height);
+            monsterRect2 = new Rectangle((int)MonsterPosition.X, (int)MonsterPosition.Y + 1, Texture.Width, Texture.Height);
+
+            Rectangle rectTest = new Rectangle((int)MonsterPosition.X, (int)MonsterPosition.Y - 10, Texture.Width, Texture.Height);
+
+            for (int i = 0; i < _blocs.Count; i++)
             {
-                MoveOnPlayer(player);
+                if (_blocs[i] != null)
+                {
+                    Rectangle blocRect;
+                    blocRect = new Rectangle((int)_blocs[i].posX, (int)_blocs[i].posY, _blocs[i].Width, _blocs[i].Height);
+                    if (monsterRect.Intersects(blocRect))
+                    {
+                        if (monsterRect.Bottom > blocRect.Top && monsterRect.Bottom < blocRect.Bottom)
+                        {
+                            result.Add(3);
+                            if (!rectTest.Intersects(blocRect)) Y -= 1;
+                        }
+                        if (monsterRect.Top < blocRect.Bottom && monsterRect.Top > blocRect.Top) result.Add(4);
+                        if (rectTest.Left < blocRect.Right && rectTest.Left > blocRect.Left) result.Add(2);
+                        if (rectTest.Right > blocRect.Left && rectTest.Right < blocRect.Right) result.Add(1);
+                        _collisions = true;
+                    }
+                    if (monsterRect2.Intersects(blocRect))
+                    {
+                        if (monsterRect2.Bottom > blocRect.Top && monsterRect2.Bottom < blocRect.Bottom)
+                        {
+                            _yVelocity = 0;
+                            result.Add(3);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+
+
+        internal List<Bloc> GetBlocsAround(Map map)
+        {
+            int nbBlocs = 0;
+
+            List<Bloc> _blocs = new List<Bloc>(16);
+
+            for (int a = (int)(MonsterPosition.Y / 16); a < (MonsterPosition.Y / 16) + 8; a++)
+            {
+                for (int b = (int)(MonsterPosition.X / 16); b < (MonsterPosition.X) / 16 + 8; b++)
+                {
+                    if (a >= 0 && b >= 0 && a < map._worldHeight && b < map._worldWidth && map._blocs[b, a] != null && map._blocs[b, a].Type != "air" && map._blocs[b, a].Type != "ladder")
+                    {
+                        _blocs.Add(map._blocs[b, a]);
+                        nbBlocs++;
+                    }
+                }
+            }
+
+            return _blocs;
+        }
+
+        internal void Update(Player player, GameTime gametime, Map map)
+        {
+            EngeryDamageTimer.Decrem(gametime);
+            UpdatePhysics(Game1.map, this);
+
+            if (_health >= 50)
+            {
+                MoveOnPlayer(player, map, gametime);
                 Energy = Energy - 0.2f;
             }
             else
             {
-                if(Energy > 0)
-                {
-                    Flight(player);
-                    Energy = Energy - 0.2f;
-                }               
+              Flight(player, map, gametime);
+              Energy = Energy - 0.2f;
+                               
             }
 
-            if (Energy > 0)
+            Fight(player, gametime);
+
+            if (Energy < 0f && EngeryDamageTimer.IsDown())
             {
-                Fight(player, gametime);
+                this.GetDamage(1);
+                EngeryDamageTimer.ReInit();
             }
                 
             ReactToLight();
