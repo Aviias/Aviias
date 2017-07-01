@@ -27,9 +27,11 @@ namespace Aviias
         public static Map map;
         Random random = new Random();
         BoxingViewportAdapter _viewportAdapter;
+        BoxingViewportAdapter _viewportInterface;
         const int WindowWidth = 1920;
         const int WindowHeight = 1080;
         Camera2D _camera;
+        Camera2D _interface;
         public List<NPC> _npc;
         SpriteFont font;
         List<Monster> monsters = new List<Monster>();
@@ -116,6 +118,11 @@ namespace Aviias
 
             _viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, WindowWidth, WindowHeight);
             _camera = new Camera2D(_viewportAdapter);
+            _interface = new Camera2D(_viewportAdapter);
+
+
+
+
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("font");
@@ -207,6 +214,10 @@ namespace Aviias
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            var viewMatrix = _camera.GetViewMatrix();
+            var projectionMatrix = Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.Viewport.Width,
+                GraphicsDevice.Viewport.Height, 0, 0f, -1f);
+
             if (_menu.Jouer() == false)
             {
                 spriteBatch.Begin();
@@ -215,7 +226,7 @@ namespace Aviias
             }
             else
             {
-                GraphicsDevice.Clear(Color.CornflowerBlue);
+                GraphicsDevice.Clear(Color.Red);
 
                 spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
 
@@ -224,27 +235,25 @@ namespace Aviias
                 {
                     monsters[i].Draw(spriteBatch);
                 }
-                if (player.IsDie == false)
-                {
-                    player.Draw(spriteBatch, Content);
-                }
-
                 //   foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
                 foreach (NPC npc in _npc)
                 {
                     npc.Draw(spriteBatch);
                     npc.Update();
                 }
-                if (player.IsDie == false)
-                {
-                    player.Draw(spriteBatch, Content);
-                }
-                else
+                if(player.IsDie)
                 {
                     _camera.LookAt(new Vector2(player.Position.X, player.Position.Y));
                     spriteBatch.Draw(_gameover, new Rectangle((int)player.Position.X - 962, (int)player.Position.Y - 544, WindowWidth, WindowHeight), Color.White);
                 }
 
+                spriteBatch.End();
+
+                spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
+                if (player.IsDie == false)
+                {
+                    player.Draw(spriteBatch, Content, _camera);
+                }
                 spriteBatch.End();
                 base.Draw(gameTime);
                 // TODO: Add your drawing code here

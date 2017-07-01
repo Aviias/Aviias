@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using MonoGame.Extended;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace Aviias
 {
@@ -47,7 +48,6 @@ namespace Aviias
         public bool flyMod;
         public bool IsInventoryOpen;
         Map _map;
-        
 
         Timer playerTimer = new Timer(1.2f);
         Timer invenTimer = new Timer(1.3f);
@@ -61,6 +61,7 @@ namespace Aviias
         float _playerMoveSpeed;
 
         internal Inventory _inv;
+        private SpriteBatch spriteBatch;
 
         public int Width
         {
@@ -121,6 +122,9 @@ namespace Aviias
             save = new Save(map, this);
             previousMouseState = currentMouseState.ScrollWheelValue;
             _inv.AddInventory(2, "oak_wood");
+            _inv.AddInventory(2, "dirt");
+            _inv.AddInventory(2, "bedrock");
+            _inv.AddInventory(2, "glass");
             /*
             _inv.AddInventory(4, "oak_plank");
             _inv.AddInventory(500, "dirt");
@@ -295,7 +299,6 @@ namespace Aviias
             {
                 for (int i = 0; i < _inv._craft._cellCraft.Length; i++)
                 {
-                    _inv.PostionCraft(i);
                     if (_inv._craft._cellCraft[i].IsCraftable == true)
                     {
                         _inv.AddInventory(_inv._craft._cellCraft[i]._quantity, _inv._craft._cellCraft[i]._name);
@@ -582,33 +585,32 @@ namespace Aviias
             return (Math.Floor((double)health / 10)*10).ToString();
         }
 
-        internal void Draw(SpriteBatch spriteBatch, ContentManager content)
+        internal void Draw(SpriteBatch spriteBatch, ContentManager content, Camera2D camera)
         {
             
             spriteBatch.Draw(PlayerTexture, Position, null, Color.White, 0f, Vector2.Zero, 1f,
                SpriteEffects.None, 0f);
-            spriteBatch.Draw(content.Load<Texture2D>(ImageHealth(_health)), new Vector2(Position.X - 950, Position.Y - 500), null, Color.White, 0f, Vector2.Zero, 1.1f,
+            spriteBatch.Draw(content.Load<Texture2D>(ImageHealth(_health)), new Vector2(camera.Position.X + 30, camera.Position.Y +50), null, Color.White, 0f, Vector2.Zero, 1.1f,
                SpriteEffects.None, 0f);
-            if (_displayPos) text.DisplayText((Position.X  + " - " + Position.Y), new Vector2(Position.X, Position.Y - 30), spriteBatch, Color.Red);
-            text.DisplayText(("" +_health + "/"  + "100"), new Vector2(Position.X - 785, Position.Y - 420), spriteBatch, Color.White);
+            text.DisplayText(("" +_health + "/"  + "100"), new Vector2(camera.Position.X + 200, camera.Position.Y + 130), spriteBatch, Color.White);
 
             if(IsInventoryOpen)
             {
-                _inv.Draw(spriteBatch, content);
+                _inv.Draw(spriteBatch, content, camera);
             }else
             {
-                spriteBatch.Draw(content.Load<Texture2D>("Barre d'inventaire"), new Vector2(Position.X - 400, Position.Y +474), null, Color.White, 0f, Vector2.Zero, 1f,
+                spriteBatch.Draw(content.Load<Texture2D>("Barre d'inventaire"), new Vector2(camera.Position.X + 575, camera.Position.Y +1012), null, Color.White, 0f, Vector2.Zero, 1f,
                     SpriteEffects.None, 0f);
                 for(int i=0; i<10; i++)
                 {
-                    if (_inv.PositionToolBar(i).IsFull == true)
+                    if (_inv.PositionToolBar(i, camera).IsFull == true)
                     {
-                        spriteBatch.Draw(content.Load<Texture2D>(_inv.PositionToolBar(i)._name), _inv.PositionToolBar(i).Position, null, Color.White, 0f, Vector2.Zero, 0.8f,
+                        spriteBatch.Draw(content.Load<Texture2D>(_inv.PositionToolBar(i, camera)._name), _inv.PositionToolBar(i,camera).Position, null, Color.White, 0f, Vector2.Zero, 0.8f,
                             SpriteEffects.None, 0f);
-                        text.DisplayText("" + _inv.PositionToolBar(i)._quantity, new Vector2(_inv.PositionToolBar(i).Position.X, _inv.PositionToolBar(i).Position.Y + 100), spriteBatch, Color.Black);
+                        text.DisplayText("" + _inv.PositionToolBar(i, camera)._quantity, new Vector2(_inv.PositionToolBar(i, camera).Position.X, _inv.PositionToolBar(i, camera).Position.Y + 100), spriteBatch, Color.Black);
                     }
                 }
-                spriteBatch.Draw(content.Load<Texture2D>("Roullette"), _inv.PositionCellToolBar(), null, Color.White, 0f, Vector2.Zero, 1f,
+                spriteBatch.Draw(content.Load<Texture2D>("Roullette"), _inv.PositionCellToolBar(camera), null, Color.White, 0f, Vector2.Zero, 1f,
                     SpriteEffects.None, 0f);
 
             }

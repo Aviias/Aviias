@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using System.Collections.Generic;
 
 namespace Aviias
@@ -25,18 +26,16 @@ namespace Aviias
                 _cellArray[i] = new _cell();
                 _cellArray[i]._name = "";
                 _cellArray[i]._ressource = new Ressource("air");
-
-                UpdatePosition(i);
             }
         }
 
-        public void UpdatePosition(int i)
+        public void UpdatePosition(int i, Camera2D camera)
         {
             int _difX = 77;
             float _difY = 82;
             if (i == 0)
             {
-                _cellArray[i].Position = new Vector2(_player.Position.X - 325, _player.Position.Y + 49);
+                _cellArray[i].Position = new Vector2(camera.Position.X + 650, camera.Position.Y + 590);
             }
             else
             {
@@ -59,12 +58,12 @@ namespace Aviias
             }
         }
 
-        public _cell PositionToolBar(int i)
+        public _cell PositionToolBar(int i, Camera2D camera)
         {
             int _difX = 77;
             if (i == 0)
             {
-                _cellArray[i].Position = new Vector2(_player.Position.X - 390, _player.Position.Y + 484);
+                _cellArray[i].Position = new Vector2(camera.Position.X + 584, camera.Position.Y + 1022);
                 return _cellArray[i];
             }
             else if (i > 0 && i < 10)
@@ -84,16 +83,16 @@ namespace Aviias
             return _cellArray[i].IsFull;
         }
 
-        public Vector2 PositionCellToolBar()
+        public Vector2 PositionCellToolBar(Camera2D camera)
         {
             float DifX = 100;
             if (_actualCell == 0)
             {
-                return new Vector2(_player.Position.X - 400, _player.Position.Y + 474);
+                return new Vector2(camera.Position.X + 575, camera.Position.Y + 1012);
             }
             else
             {
-                return new Vector2(_player.Position.X - DifX * _actualCell, _player.Position.Y + 474);
+                return new Vector2(camera.Position.X + DifX * _actualCell, camera.Position.Y + 474);
             }
         }
 
@@ -212,28 +211,28 @@ namespace Aviias
             }
         }
 
-        public void PostionCraft(int i)
+        public void PostionCraft(int i, Camera2D camera)
         {
-            if (i == 0 && _craft._cellCraft[i].IsCraftable == true)
+            if (i == 0)
             {
-                _craft._cellCraft[i]._position = new Vector2(_cellArray[i].Position.X + 900, _cellArray[i].Position.X - 250);
+                _craft._cellCraft[i]._position = new Vector2(_cellArray[0].Position.X + 825, _cellArray[0].Position.Y -450);
             }
-            else if (_craft._cellCraft[i].IsCraftable == true)
-            {
-                _craft._cellCraft[i]._position = new Vector2(_craft._cellCraft[i - 1]._position.X + 500, _craft._cellCraft[i - 1]._position.Y - 250);
-            }
+            //else if (_craft._cellCraft[i].IsCraftable == true)
+            //{
+            //    _craft._cellCraft[i]._position = new Vector2(_craft._cellCraft[i - 1]._position.X + 500, _craft._cellCraft[i - 1]._position.Y - 250);
+            //}
         }
 
-        internal void Draw(SpriteBatch spriteBatch, ContentManager content)
+        internal void Draw(SpriteBatch spriteBatch, ContentManager content, Camera2D camera)
         {
             text = new Text(content);
-            spriteBatch.Draw(content.Load<Texture2D>("Inventaire"), new Vector2(_player.Position.X - 400, _player.Position.Y - 400), null, Color.White, 0f, Vector2.Zero, 1f,
+            spriteBatch.Draw(content.Load<Texture2D>("Inventaire"), new Vector2(camera.Position.X + 576, camera.Position.Y + 140), null, Color.White, 0f, Vector2.Zero, 1f,
                 SpriteEffects.None, 0f);
-            spriteBatch.Draw(content.Load<Texture2D>("babyplayer"), new Vector2(_player.Position.X - 10, _player.Position.Y - 350), null, Color.White, 0f, Vector2.Zero, 3.4f,
+            spriteBatch.Draw(content.Load<Texture2D>("babyplayer"), new Vector2(camera.Position.X + 965, camera.Position.Y + 190), null, Color.White, 0f, Vector2.Zero, 3.4f,
                 SpriteEffects.None, 0f);
             for (int i=0; i<40; i++)
             {
-                UpdatePosition(i);
+                UpdatePosition(i, camera);
                 if (_cellArray[i]._name != "" && IsFull(i))
                 {
                     spriteBatch.Draw(content.Load<Texture2D>(_cellArray[i]._name), _cellArray[i].Position, null, Color.White, 0f, Vector2.Zero, 0.8f,
@@ -244,12 +243,12 @@ namespace Aviias
             _craft.IsCraftable(_cellArray);
             for (int i = 0; i < _craft._cellCraft.Length; i++)
             {
-                PostionCraft(i);
+                PostionCraft(i, camera);
                 if (_craft._cellCraft[i].IsCraftable == true)
                 {
                         spriteBatch.Draw(content.Load<Texture2D>("craft"), _craft._cellCraft[i]._position, null, Color.White, 0f, Vector2.Zero, 1.1f,
                             SpriteEffects.None, 0f);
-                        spriteBatch.Draw(content.Load<Texture2D>(_craft._cellCraft[i]._name), _craft._cellCraft[i]._position, null, Color.White, 0f, Vector2.Zero, 0.8f,
+                        spriteBatch.Draw(content.Load<Texture2D>(_craft._cellCraft[i]._name), new Vector2(_craft._cellCraft[i]._position.X + 12, _craft._cellCraft[i]._position.Y +12), null, Color.White, 0f, Vector2.Zero, 0.8f,
                             SpriteEffects.None, 0f);
                 }
             }
