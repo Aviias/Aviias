@@ -269,8 +269,8 @@ namespace Aviias
                 JumpTimer.ReInit();
             }
             move = new Vector2(direction.X * _speed, /*direction.Y * _speed*/0);
-            
-            
+
+            _pos = new Vector2(posX + move.X, posY /*+ move.Y*/);
         }
 
         public void Fight(Player player, GameTime gametime)
