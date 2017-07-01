@@ -651,11 +651,7 @@
 /processorParam:TextureFormat=Color
 /build:Roullette.png
 
-<<<<<<< HEAD
-#begin Menu/Button/quitter_gris.png
-=======
 #begin torche.png
->>>>>>> origin/f_NpcGravity
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -665,15 +661,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-<<<<<<< HEAD
-/build:Menu/Button/quitter_gris.png
-
-#begin Menu/Button/quitter_rouge.png
-=======
 /build:torche.png
 
 #begin droite.png
->>>>>>> origin/f_NpcGravity
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -683,15 +673,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-<<<<<<< HEAD
-/build:Menu/Button/quitter_rouge.png
-
-#begin Menu/Background/menu_partie.png
-=======
 /build:droite.png
 
 #begin face.png
->>>>>>> origin/f_NpcGravity
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -701,15 +685,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-<<<<<<< HEAD
-/build:Menu/Background/menu_partie.png
-
-#begin Menu/Button/nouvelle_gris.png
-=======
 /build:face.png
 
 #begin gauche.png
->>>>>>> origin/f_NpcGravity
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -719,15 +697,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-<<<<<<< HEAD
-/build:Menu/Button/nouvelle_gris.png
-
-#begin Menu/Button/nouvelle_rouge.png
-=======
 /build:gauche.png
 
 #begin Blopmulti.png
->>>>>>> origin/f_NpcGravity
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -737,15 +709,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-<<<<<<< HEAD
-/build:Menu/Button/nouvelle_rouge.png
-
-#begin Menu/Button/reprendre_gris.png
-=======
 /build:Blopmulti.png
 
 #begin Blopred.png
->>>>>>> origin/f_NpcGravity
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -755,15 +721,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-<<<<<<< HEAD
-/build:Menu/Button/reprendre_gris.png
-
-#begin Menu/Button/reprendre_rouge.png
-=======
 /build:Blopred.png
 
 #begin glouto.png
->>>>>>> origin/f_NpcGravity
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -773,15 +733,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-<<<<<<< HEAD
-/build:Menu/Button/reprendre_rouge.png
-
-#begin Menu/Button/retour_gris.png
-=======
 /build:glouto.png
 
 #begin soul.png
->>>>>>> origin/f_NpcGravity
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -791,15 +745,13 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-<<<<<<< HEAD
-/build:Menu/Button/retour_gris.png
-
-#begin Menu/Button/retour_rouge.png
-=======
 /build:soul.png
 
+<<<<<<< HEAD
 #begin diamond_ore.png
->>>>>>> origin/f_NpcGravity
+=======
+#begin background.jpg
+>>>>>>> origin/f_animation
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -810,8 +762,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 <<<<<<< HEAD
-/build:Menu/Button/retour_rouge.png
-=======
 /build:diamond_ore.png
 
 #begin gold_ore.png
@@ -825,5 +775,117 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:gold_ore.png
->>>>>>> origin/f_NpcGravity
+
+
+#begin Menu/Button/quitter_gris.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Menu/Button/quitter_gris.png
+
+#begin Menu/Button/quitter_rouge.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Menu/Button/quitter_rouge.png
+
+#begin Menu/Background/menu_partie.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Menu/Background/menu_partie.png
+
+#begin Menu/Button/nouvelle_gris.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Menu/Button/nouvelle_gris.png
+
+#begin Menu/Button/nouvelle_rouge.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Menu/Button/nouvelle_rouge.png
+
+#begin Menu/Button/reprendre_gris.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Menu/Button/reprendre_gris.png
+
+#begin Menu/Button/reprendre_rouge.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Menu/Button/reprendre_rouge.png
+
+#begin Menu/Button/retour_gris.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Menu/Button/retour_gris.png
+
+#begin Menu/Button/retour_rouge.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Menu/Button/retour_rouge.png
+
+=======
+/build:background.jpg
+>>>>>>> origin/f_animation
 

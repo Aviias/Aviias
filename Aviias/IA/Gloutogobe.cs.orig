@@ -121,8 +121,13 @@ namespace Aviias.IA
             }
             else
             {
+<<<<<<< HEAD
+                UpdatePhysics(Game1.map, Texture);
+                MoveOnPlayer(player);
+=======
                 //UpdatePhysics(Game1.map, this);
                 MoveOnPlayer(player, map, gametime);
+>>>>>>> origin/f_animation
                 Fight(player, gametime);
             }
         }

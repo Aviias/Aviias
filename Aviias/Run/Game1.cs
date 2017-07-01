@@ -46,7 +46,7 @@ namespace Aviias
         Texture2D _gameover;
         Timer _nightDay = new Timer(150f);
         //Ressource _testRessource = new Ressource();
-
+        Spawn spawnMonster;
 
         public Game1()
         {
@@ -74,26 +74,12 @@ namespace Aviias
             map = new Map(200, 200);
             _menu = new Menu();
             _menu.Initialize();
-
-            int monsterneed = 2 - monsters.Count;
-            if (monsterneed != 0)
-            {
-                for (int i = 0; i < monsterneed; i++)
-                {
-
-                    int posX = rnd.Next(0, map.WorldWidth * 10);
-                    int posY = rnd.Next(0, map.WorldHeight * 10);
-                    monsterPosition = new Vector2(posX, posY);
-                    wolf = new Wolf(Content, Content.Load<Texture2D>("loup"), monsterPosition);
-                    //monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
-                    monsters.Add(wolf);
-                }
-            }
-            int posgloutX = rnd.Next(0, map.WorldWidth * 10);
-            int posgloutY = rnd.Next(0, map.WorldHeight * 10);
-            Vector2 gloutoPos = new Vector2(posgloutX, posgloutY);
+           
+            /*
+            Vector2 gloutoPos = spawnMonster.SpawnOnSurface(map);
 
             glouto = new Gloutogobe(Content, Content.Load<Texture2D>("Blopred"), gloutoPos);
+            */
             Vector2 playerPosition = new Vector2(1500, 345 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
             player.Initialize(Content.Load<Texture2D>("face"), playerPosition, Content, map);
             map.GenerateMap(Content);
@@ -104,6 +90,20 @@ namespace Aviias
             _npc = new List<NPC>(8);
             _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(500, 250), 5));
             _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(1400, 300), 3));
+
+            spawnMonster = new Spawn(map);
+            int monsterneed = 1 - monsters.Count;
+            if (monsterneed != 0)
+            {
+                for (int i = 0; i < monsterneed; i++)
+                {
+                    monsterPosition = spawnMonster.SpawnOnSurface(map);
+
+                    wolf = new Wolf(Content, Content.Load<Texture2D>("loup"), monsterPosition);
+                    //monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
+                    monsters.Add(wolf);
+                }
+            }
 
             base.Initialize();
 
@@ -131,6 +131,8 @@ namespace Aviias
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+           
+
             font = Content.Load<SpriteFont>("font");
             player.LoadContent(Content);
             _gameover = Content.Load<Texture2D>("gameover3");
@@ -181,14 +183,14 @@ namespace Aviias
                     {
                         if (monsters[i] != null && monsters[i].IsDie == false)
                         {
-                          monsters[i].Update(player, gameTime);
+                          monsters[i].Update(player, gameTime, map);
                         }
 
                         list = player.GetCollisionSide(player.GetBlocsAround(map));
 
                         Camera.Move(new Vector2(-player.PlayerMoveSpeed, 0));
                     }
-                    glouto.Update(monsters, player, Content, gameTime);
+                    //glouto.Update(monsters, player, Content, gameTime, map);
 
                     player.Update(player, Camera, _npc, gameTime, Content, log, map, monsters);
                     player.UpdatePlayerCollision(gameTime, player, monsters);
@@ -207,9 +209,8 @@ namespace Aviias
                     if (spawnTimer.IsDown())
 
                     {
-                        int posX = rnd.Next(0, map.WorldWidth * 10);
-                        int posY = rnd.Next(0, map.WorldHeight * 10);
-                        Vector2 monsterPosition = new Vector2(posX, posY);
+                       
+                        Vector2 monsterPosition = spawnMonster.SpawnOnSurface(map);
                         //drake = new Drake(Content, Content.Load<Texture2D>("drake"), monsterPosition);
                         
                          monsters.Add(monster);
@@ -244,14 +245,13 @@ namespace Aviias
                 GraphicsDevice.Clear(Color.Red);
 
                 spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
-
                 map.Draw(spriteBatch, (int)player.Position.X, (int)player.Position.Y);
                 for (int i = 0; i < monsters.Count; i++)
                 {
                     if (monsters[i] != null) monsters[i].Draw(spriteBatch);
                 }
 
-                glouto.Draw(spriteBatch);
+                //glouto.Draw(spriteBatch);
              //   foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
                 foreach (NPC npc in _npc)
                 {

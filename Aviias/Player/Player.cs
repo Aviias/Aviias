@@ -52,7 +52,6 @@ namespace Aviias
         MouseState mouseState = Mouse.GetState();
         [field: NonSerialized]
         MouseState currentMouseState = Mouse.GetState();
-        int previousMouseState;
         public bool isInAir;
         public float _yVelocity;
         public double _gravity;
@@ -73,7 +72,9 @@ namespace Aviias
         Timer scrollToolBarTimer = new Timer(1.1f);
         Timer stopDamageTimer = new Timer(12f);
         Timer stopDamageCDTimer = new Timer(5f);
+        Timer TriTimer = new Timer(1.1f);
 
+        List<string> CraftNotPutable = new List<string>();
         //   MonoGame.Extended.Camera2D Camera;
         float _playerMoveSpeed;
         internal Inventory _inv;
@@ -143,11 +144,14 @@ namespace Aviias
             _activeQuest = new List<Quest>(8);
             _inv = new Inventory(this);
             save = new Save(map, this, Game1._npc);
-            previousMouseState = currentMouseState.ScrollWheelValue;
             x = position.X;
             y = position.Y;
             _texture = texture.Name;
             _stopDamage = false;
+
+            CraftNotPutable.Add("stick");
+            CraftNotPutable.Add("wood_shovel");
+            CraftNotPutable.Add("heal_potion");
             _inv.AddInventory(2, "oak_wood");
             _inv.AddInventory(2, "dirt");
             _inv.AddInventory(2, "bedrock");
@@ -212,14 +216,13 @@ namespace Aviias
             Bloc bloc1;
             if (bloc != null)
             {
-                //log.WriteLine("---- > breakBloc i=" + i + " j=" + j);
+                
                 if (bloc.IsBreakable)
                 {
                     bloc1 = new Bloc(blocs[i,j].GetPosBlock ,scale, "air", content);
                     _inv.AddInventory(1, blocs[i, j].Type);
                     blocs[i, j] = bloc1;
-                    
-                    //log.WriteLine("---- > breakBloc block.X = " + blocs[i, j].GetPosBlock.X + " block.Y = " + blocs[i, j].GetPosBlock.Y);
+                                       
                 }
             }
             _map.ActualizeShadow((int)Position.X, (int)Position.Y);
@@ -288,6 +291,19 @@ namespace Aviias
             return true;
         }
 
+        public bool PutableBloc(List<string> list, string name)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if(list[i] == name)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         internal void Update(Player player, Camera2D Camera, List<NPC> _npc, GameTime gameTime, ContentManager Content, StreamWriter log, Map map, List<Monster> monsters)
         {
             currentKeyboardState = Keyboard.GetState();
@@ -300,7 +316,9 @@ namespace Aviias
             scrollToolBarTimer.Decrem(gameTime);
             stopDamageCDTimer.Decrem(gameTime);
             stopDamageTimer.Decrem(gameTime);
+            TriTimer.Decrem(gameTime);
             bool tmp = false;
+
             foreach (Soul soul in _souls)
             {
                 soul.Update(gameTime);
@@ -422,18 +440,57 @@ namespace Aviias
               
             }
 
-            if (currentMouseState.ScrollWheelValue > previousMouseState && scrollToolBarTimer.IsDown())
+            if (currentKeyboardState.IsKeyDown(Keys.NumPad1) && scrollToolBarTimer.IsDown())
             {
-                _inv.MoveLeftActualCell();
+                _inv.ActualCell = 0;
                 scrollToolBarTimer.ReInit();
                 
-            } else if (currentMouseState.ScrollWheelValue < previousMouseState && scrollToolBarTimer.IsDown())
+            } else if (currentKeyboardState.IsKeyDown(Keys.NumPad2) && scrollToolBarTimer.IsDown())
             {
-                _inv.MoveRightActualCell();
+                _inv.ActualCell = 1;
+                scrollToolBarTimer.ReInit();
+            }
+            else if (currentKeyboardState.IsKeyDown(Keys.NumPad3) && scrollToolBarTimer.IsDown())
+            {
+                _inv.ActualCell = 2;
+                scrollToolBarTimer.ReInit();
+            }
+            else if (currentKeyboardState.IsKeyDown(Keys.NumPad4) && scrollToolBarTimer.IsDown())
+            {
+                _inv.ActualCell = 3;
+                scrollToolBarTimer.ReInit();
+            }
+            else if (currentKeyboardState.IsKeyDown(Keys.NumPad5) && scrollToolBarTimer.IsDown())
+            {
+                _inv.ActualCell = 4;
+                scrollToolBarTimer.ReInit();
+            }
+            else if (currentKeyboardState.IsKeyDown(Keys.NumPad6) && scrollToolBarTimer.IsDown())
+            {
+                _inv.ActualCell = 5;
+                scrollToolBarTimer.ReInit();
+            }
+            else if (currentKeyboardState.IsKeyDown(Keys.NumPad7) && scrollToolBarTimer.IsDown())
+            {
+                _inv.ActualCell = 6;
+                scrollToolBarTimer.ReInit();
+            }
+            else if (currentKeyboardState.IsKeyDown(Keys.NumPad8) && scrollToolBarTimer.IsDown())
+            {
+                _inv.ActualCell = 7;
+                scrollToolBarTimer.ReInit();
+            }
+            else if (currentKeyboardState.IsKeyDown(Keys.NumPad9) && scrollToolBarTimer.IsDown())
+            {
+                _inv.ActualCell = 8;
+                scrollToolBarTimer.ReInit();
+            }
+            else if (currentKeyboardState.IsKeyDown(Keys.NumPad0) && scrollToolBarTimer.IsDown())
+            {
+                _inv.ActualCell = 9;
                 scrollToolBarTimer.ReInit();
             }
 
-            previousMouseState = currentMouseState.ScrollWheelValue;
 
             if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Right) == System.Windows.Forms.MouseButtons.Right && setBlocTimer.IsDown())
             {
@@ -442,14 +499,20 @@ namespace Aviias
                 position = Camera.ScreenToWorld(position);
                 int cell = _inv.ActualCell;
                 string name = _inv.GetNameBloc(cell);
-
-                if (_inv.IsOnInventory(name) && _inv._craft._cellCraft[cell+1]._isSetable)
+                // Type is true when it is a craft
+                if (_inv.IsOnInventory(name) && PutableBloc(CraftNotPutable, name))
                 {
                     map.SetBloc(position, Content, player, name, map);
                     setBlocTimer.ReInit();
                 }
             }
-
+            /*
+            if(IsInventoryOpen && currentKeyboardState.IsKeyDown(Keys.T) && TriTimer.IsDown())
+            {
+                _inv.TriInventory(CraftNotPutable);
+                TriTimer.ReInit();
+            }
+            */
                 if (currentKeyboardState.IsKeyDown(Keys.P))
             {
                 if (player._displayPos) player._displayPos = false;

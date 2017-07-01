@@ -61,6 +61,7 @@ namespace Aviias
         }
 
         public _cell PositionToolBar(int i, Camera2D camera)
+
         {
             int _difX = 77;
             if (i == 0)
@@ -87,7 +88,7 @@ namespace Aviias
 
         public Vector2 PositionCellToolBar(Camera2D camera)
         {
-            float DifX = 100;
+            float DifX = 77;
             if (_actualCell == 0)
             {
                 return new Vector2(camera.Position.X + 575, camera.Position.Y + 1012);
@@ -105,36 +106,13 @@ namespace Aviias
 
         public int ActualCell
         {
-            get { return _actualCell; }            
+            get { return _actualCell; } 
+            set { _actualCell = value; }           
         }
 
         public string GetNameBloc(int x)
         {
             return _cellArray[x]._name;
-        }
-
-        public void MoveLeftActualCell()
-        {
-            if(_actualCell < 9)
-            {
-                _actualCell += 1;
-            }
-            else
-            {
-                _actualCell = 0;
-            }
-        }
-
-        public void MoveRightActualCell()
-        {
-            if (_actualCell > 0)
-            {
-                _actualCell -= 1;
-            }
-            else
-            {
-                _actualCell = 9;
-            }
         }
 
         [Serializable]
@@ -149,6 +127,15 @@ namespace Aviias
         }
 
         public Vector2 Position { get { return Position; } set { Position = value; } }
+
+        public void ReinitCell(int i)
+        {
+            _cellArray[i] = new _cell();
+            _cellArray[i]._name = "";
+            _cellArray[i]._quantity = 0;
+            _cellArray[i].IsFull = false;
+            _cellArray[i]._ressource = new Ressource("air");
+        }
 
         public void AddInventory(int quantity, string name)
         {
@@ -208,8 +195,47 @@ namespace Aviias
 
             return null;
         }
-       
 
+        public bool PutableBloc(List<string> list, string name)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i] == name)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        /*
+        public void TriInventory(List<string> CraftNotPutable)
+        {
+            for (int i = 0; i < _cellArray.Length; i++)
+            {
+                if(i < 10 && !PutableBloc(CraftNotPutable, _cellArray[i]._name))
+                {
+                    if(FirstEmptyCell() != -1)
+                    {
+                        _cellArray[FirstEmptyCell()] = _cellArray[i];
+                        ReinitCell(i);
+                    }
+                } 
+            }
+        }
+
+        public int FirstEmptyCell()
+        {
+            for (int i = 0; i < _cellArray.Length; i++)
+            {
+                if(_cellArray[i]._name == "")
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        */
         public void DecreaseInventory(int quantity, string name)
         {
             for (int i = 0; i < _cellArray.Length; i++)
