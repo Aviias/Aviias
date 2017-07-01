@@ -16,19 +16,19 @@ namespace Aviias
         Button _quitter;
         MenuPlay _menuPlay;
         public bool _close { get; set; }
-        bool Swap;
+        public static bool Swap;
 
         public void Initialize()
         {
             _menuPlay = new MenuPlay();
-            _jouer = new Button(new Vector2(305, 655),600,100);
-            _quitter = new Button(new Vector2(684 , 800), 600, 100);
+            _jouer = new Button(new Vector2(305, 655), 600, 100);
+            _quitter = new Button(new Vector2(684, 800), 600, 100);
         }
 
         internal void Update(GameTime gameTime, ContentManager Content)
         {
             MouseState mouseState = Mouse.GetState();
-            if (_jouer.IsPressed(mouseState) && mouseState.Position.X >= _jouer._position.X && mouseState.Position.Y >= _jouer._position.Y && mouseState.Position.X <= _jouer._position.X + _jouer._width && mouseState.Position.Y <= _jouer._position.Y + _jouer._height)
+            if (Swap == false && _jouer.IsPressed(mouseState) && mouseState.Position.X >= _jouer._position.X && mouseState.Position.Y >= _jouer._position.Y && mouseState.Position.X <= _jouer._position.X + _jouer._width && mouseState.Position.Y <= _jouer._position.Y + _jouer._height)
             {
                 _jouer._texture = ".\\Menu\\Button\\jouer_rouge";
                 Swap = true;
@@ -37,7 +37,7 @@ namespace Aviias
             {
                 _jouer._texture = ".\\Menu\\Button\\jouer_gris";
             }
-            if(Swap == true)
+            if (Swap == true)
             {
                 _menuPlay.Update(gameTime, Content);
             }
@@ -60,12 +60,14 @@ namespace Aviias
             return _menuPlay.IsTrueF;
         }
 
+
         internal void Draw(SpriteBatch spriteBatch, ContentManager content)
         {
-            if(Swap == true)
+            if (Swap == true)
             {
                 _menuPlay.Draw(spriteBatch, content);
-            }else
+            }
+            else
             {
                 spriteBatch.Draw(content.Load<Texture2D>(".\\Menu\\Background\\menuv2"), new Vector2(0, 0), null, Color.White, 0f, Vector2.Zero, 1f,
                     SpriteEffects.None, 0f);

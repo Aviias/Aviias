@@ -47,6 +47,7 @@ namespace Aviias
         public bool flyMod;
         public bool IsInventoryOpen;
         Map _map;
+        
 
         Timer playerTimer = new Timer(1.2f);
         Timer invenTimer = new Timer(1.3f);
@@ -119,8 +120,8 @@ namespace Aviias
             _inv = new Inventory(this);
             save = new Save(map, this);
             previousMouseState = currentMouseState.ScrollWheelValue;
-            /*
             _inv.AddInventory(2, "oak_wood");
+            /*
             _inv.AddInventory(4, "oak_plank");
             _inv.AddInventory(500, "dirt");
             _inv.AddInventory(70, "stone");
@@ -294,6 +295,7 @@ namespace Aviias
             {
                 for (int i = 0; i < _inv._craft._cellCraft.Length; i++)
                 {
+                    _inv.PostionCraft(i);
                     if (_inv._craft._cellCraft[i].IsCraftable == true)
                     {
                         _inv.AddInventory(_inv._craft._cellCraft[i]._quantity, _inv._craft._cellCraft[i]._name);

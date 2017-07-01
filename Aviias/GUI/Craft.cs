@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 namespace Aviias
 {
@@ -26,6 +27,7 @@ namespace Aviias
             public string _name { get; set; }
             public bool IsCraftable { get; set; }
             public int _quantity { get; set; }
+            public Vector2 _position { get; set; }
             public Dictionary<int, Ressource> _ressource { get; set; }
         }
 

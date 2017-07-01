@@ -49,6 +49,7 @@
     <Compile Include="GUI\Chest.cs" />
     <Compile Include="GUI\Craft.cs" />
     <Compile Include="GUI\Menu\MenuPlay.cs" />
+    <Compile Include="NewScreen.cs" />
     <Compile Include="Run\Game1.cs" />
     <Compile Include="GUI\Inventory.cs" />
     <Compile Include="Map\Map.cs" />
