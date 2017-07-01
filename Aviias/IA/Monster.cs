@@ -43,7 +43,7 @@ namespace Aviias
         Timer JumpTimer = new Timer(1f);
 
         public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy)
-            : base(false,4,-5)
+            : base(false,4,-5, pos)
         {
             _id = rnd.Next(0, int.MaxValue);
             _health = health;
@@ -247,7 +247,7 @@ namespace Aviias
             Vector2 direction = AngleToVector(alpha);
             if (GetCollisionSide(GetBlocsAround(map)).Contains(3) && JumpTimer.IsDown() && (GetCollisionSide(GetBlocsAround(map)).Contains(2) || GetCollisionSide(GetBlocsAround(map)).Contains(1)))
             {
-                Jump(map, this);
+                Jump(map, this.Texture);
                 JumpTimer.ReInit();
             }
 
@@ -265,7 +265,7 @@ namespace Aviias
             Vector2 direction = AngleToVector(alpha);
             if (GetCollisionSide(GetBlocsAround(map)).Contains(3) && JumpTimer.IsDown() && (GetCollisionSide(GetBlocsAround(map)).Contains(2) || GetCollisionSide(GetBlocsAround(map)).Contains(1)))
             {
-                Jump(map,this);
+                Jump(map,this.Texture);
                 JumpTimer.ReInit();
             }
             move = new Vector2(direction.X * _speed, /*direction.Y * _speed*/0);
@@ -392,6 +392,8 @@ namespace Aviias
                 this.GetDamage(1);
                 EngeryDamageTimer.ReInit();
             }
+
+            UpdatePhysics(map, Texture);
                 
             ReactToLight();
             ActualizeHealthRegeneration(gametime);
