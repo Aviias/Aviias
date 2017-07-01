@@ -29,6 +29,7 @@ namespace Aviias
         bool _isMoving;
         Timer _moving;
         int _direction;
+        Timer _movingCooldown;
         
 
         public NPC(ContentManager content, string texture, SpriteBatch spriteBatch, Vector2 position, int nbQuest)
@@ -48,6 +49,7 @@ namespace Aviias
             _direction = 0;
             _isQuestActive = false;
             _isTalking = false;
+            _movingCooldown = new Timer(0f);
         }
 
         public void Interact(Player player)
@@ -152,24 +154,25 @@ namespace Aviias
         {
             if (_isMoving && !_moving.IsDown())
             {
-                if (_direction == 0) _pos.X += 10;
-                else _pos.X -= 10;
+                if (_direction == 0) _pos.X += 1;
+                else _pos.X -= 1;
                 _moving.Decrem(gametime);
+                if (_moving.IsDown())
+                {
+                    _isMoving = false;
+                    _movingCooldown = new Timer(10);
+                }
             }
 
-            if (!_isMoving)
+            _movingCooldown.Decrem(gametime);
+
+            if (!_isMoving && _movingCooldown.IsDown())
             {
                 int rand = Game1.random.Next(1, 100);
-                if (rand <= 20)
+                if (rand <= 10)
                 {
-                    _moving = new Timer(Game1.random.Next(2, 6));
-                    _direction = Game1.random.Next(0, 1);
-                    _isMoving = true;
-                }
-                else if (rand >= 80)
-                {
-                    _moving = new Timer(Game1.random.Next(2, 6));
-                    _direction = Game1.random.Next(0, 1);
+                    _moving = new Timer(Game1.random.Next(2, 4));
+                    _direction = Game1.random.Next(0, 2);
                     _isMoving = true;
                 }
             }

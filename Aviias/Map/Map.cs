@@ -21,6 +21,8 @@ namespace Aviias
         int columnHeight;
         const int _ironRate = 1;
         const int _coalRate = 1;
+        const int _goldRate = 1;
+        const int _diamondRate = 1;
         int _oreRandom = 0;
         bool _oreGeneration;
         int _treeRate = 1;
@@ -121,13 +123,33 @@ namespace Aviias
                                         _oreGeneration = true;
                                     }
                                 }
-                                if (_worldHeight - j < 150)
+                                if (_worldHeight - j < 150 && !_oreGeneration)
                                 {
                                     _oreRandom = NextInt(1, 300);
                                     if (_blocs[i, j - 1] != null || _blocs[i - 1, j] != null && (_blocs[i, j - 1].Type == "coal_ore" || _blocs[i - 1, j].Type == "coal_ore")) _oreRandom /= 20;
                                     if (_oreRandom <= _coalRate)
                                     {
                                         id = "coal_ore";
+                                        _oreGeneration = true;
+                                    }
+                                }
+                                if (_worldHeight - j < 80 && !_oreGeneration)
+                                {
+                                    _oreRandom = NextInt(1, 300);
+                                    if (_blocs[i, j - 1] != null || _blocs[i - 1, j] != null && (_blocs[i, j - 1].Type == "gold_ore" || _blocs[i - 1, j].Type == "gold_ore")) _oreRandom /= 20;
+                                    if (_oreRandom <= _goldRate)
+                                    {
+                                        id = "gold_ore";
+                                        _oreGeneration = true;
+                                    }
+                                }
+                                if (_worldHeight - j < 30 && !_oreGeneration)
+                                {
+                                    _oreRandom = NextInt(1, 300);
+                                    if (_blocs[i, j - 1] != null || _blocs[i - 1, j] != null && (_blocs[i, j - 1].Type == "diamond_ore" || _blocs[i - 1, j].Type == "diamond_ore")) _oreRandom /= 20;
+                                    if (_oreRandom <= _diamondRate)
+                                    {
+                                        id = "diamond_ore";
                                         _oreGeneration = true;
                                     }
                                 }

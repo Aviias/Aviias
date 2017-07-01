@@ -123,7 +123,8 @@ namespace Aviias.IA
                         if (playerRect.Bottom > blocRect.Top && playerRect.Bottom < blocRect.Bottom)
                         {
                             result.Add(3);
-                            if (!rectTest.Intersects(blocRect)) _pos.Y -= 1;
+                            _yVelocity = 0;
+                       //     if (!rectTest.Intersects(blocRect)) _pos.Y -= 1;
                         }
                         if (playerRect.Top < blocRect.Bottom && playerRect.Top > blocRect.Top) result.Add(4);
                         //  if (playerRect.Left < blocRect.Right && playerRect.Left > blocRect.Left) result.Add(2);
