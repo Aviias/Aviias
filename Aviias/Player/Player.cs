@@ -27,7 +27,7 @@ namespace Aviias
         public bool _displayPos;
         string _str;
        // [field: NonSerialized]
-        public List<Quest> _activeQuest;
+        internal List<Quest> _activeQuest;
         int _resistance;
         int _damage;
         bool _isDie;
@@ -63,26 +63,16 @@ namespace Aviias
         Animation PMoveLeft;
         Animation PMoveRight;
         Animation CurrentAnim;
-      //  [field: NonSerialized]
         Timer playerTimer = new Timer(1.2f);
-      //  [field: NonSerialized]
         Timer invenTimer = new Timer(1.3f);
-       // [field: NonSerialized]
         Timer craftTimer = new Timer(1.5f);
-       // [field: NonSerialized]
         Timer blocBreakTimer = new Timer(1.5f);
-        //[field: NonSerialized]
         Timer blockDurationTimer = new Timer(1.5f);
-        //[field: NonSerialized]
         Timer setBlocTimer = new Timer(1.2f);
-        //[field: NonSerialized]
         Timer scrollToolBarTimer = new Timer(1.1f);
         Timer stopDamageTimer = new Timer(12f);
         Timer stopDamageCDTimer = new Timer(5f);
 
-
-
-        internal Dictionary<Ressource, int> _inventory;
         //   MonoGame.Extended.Camera2D Camera;
         float _playerMoveSpeed;
         internal Inventory _inv;
@@ -176,12 +166,12 @@ namespace Aviias
             get { return Position; }
         }
 
-        public void AddQuest(Quest quest)
+        internal void AddQuest(Quest quest)
         {
             _activeQuest.Add(quest);
         }
 
-        public void RemoveQuest(Quest quest)
+        internal void RemoveQuest(Quest quest)
         {
             _activeQuest.Remove(quest);
         }
@@ -547,30 +537,33 @@ namespace Aviias
 
             for (int i = 0; i < monsters.Count; i++)
             {
-                monsterRect = new Rectangle((int)monsters[i].posX, (int)monsters[i].posY, monsters[i].Width, monsters[i].Height);
-                if (playerRect.Intersects(monsterRect))
+                if (monsters[i] != null)
                 {
-                    // Collision between player and monster
-                    if (Math.Abs(playerRect.Center.X - monsterRect.Center.X) > Math.Abs(playerRect.Center.Y - monsterRect.Center.Y))
+                    monsterRect = new Rectangle((int)monsters[i].posX, (int)monsters[i].posY, monsters[i].Width, monsters[i].Height);
+                    if (playerRect.Intersects(monsterRect))
                     {
-                        if (playerRect.Center.X < monsterRect.Center.X)
+                        // Collision between player and monster
+                        if (Math.Abs(playerRect.Center.X - monsterRect.Center.X) > Math.Abs(playerRect.Center.Y - monsterRect.Center.Y))
                         {
-                            monsters[i].posX = playerRect.Right - monsters[i].moveSpeed;
+                            if (playerRect.Center.X < monsterRect.Center.X)
+                            {
+                                monsters[i].posX = playerRect.Right - monsters[i].moveSpeed;
+                            }
+                            if (playerRect.Center.X > monsterRect.Center.X)
+                            {
+                                monsters[i].posX = playerRect.Left - monsters[i].Width - monsters[i].moveSpeed;
+                            }
                         }
-                        if (playerRect.Center.X > monsterRect.Center.X)
+                        else
                         {
-                            monsters[i].posX = playerRect.Left - monsters[i].Width - monsters[i].moveSpeed;
-                        }
-                    }
-                    else
-                    {
-                        if (playerRect.Center.Y < monsterRect.Center.Y)
-                        {
-                            monsters[i].posY = playerRect.Bottom - monsters[i].moveSpeed;
-                        }
-                        if (playerRect.Center.Y > monsterRect.Center.Y)
-                        {
-                            monsters[i].posY = playerRect.Top - monsters[i].Height - monsters[i].moveSpeed;
+                            if (playerRect.Center.Y < monsterRect.Center.Y)
+                            {
+                                monsters[i].posY = playerRect.Bottom - monsters[i].moveSpeed;
+                            }
+                            if (playerRect.Center.Y > monsterRect.Center.Y)
+                            {
+                                monsters[i].posY = playerRect.Top - monsters[i].Height - monsters[i].moveSpeed;
+                            }
                         }
                     }
                 }
@@ -725,7 +718,5 @@ namespace Aviias
             Position = new Vector2(x, y);
             PlayerTexture = content.Load<Texture2D>(_texture);
         }
-
-        public Dictionary<Ressource, int> Inventory => _inventory;
     }
 }

@@ -17,7 +17,6 @@ namespace Aviias
         public readonly int _worldHeight;
         public Bloc[,] _blocs;
         const int _scale = 16;
-        Random random = new Random();
         int prob;
         int columnHeight;
         const int _ironRate = 1;
@@ -337,7 +336,7 @@ namespace Aviias
 
         int NextInt(int min, int max)
         {
-            return random.Next(min, max);
+            return Game1.random.Next(min, max);
         }
 
         public void ActualizeShadow(int x, int y)

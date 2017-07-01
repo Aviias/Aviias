@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Aviias
 {
     [Serializable]
-    public class Quest
+    class Quest
     {
         Dictionary <string, int> _reward;
         int _type;
@@ -17,8 +17,6 @@ namespace Aviias
         string _spitch;
         int _id;
         internal Dictionary<string, int> _goal;
-        [field: NonSerialized]
-        Random rand = new Random();
 
         public Quest(int type, int idStartNpc, int idEndNpc, NPC startNPC)
         {
@@ -28,7 +26,8 @@ namespace Aviias
             _idEndNpc = idEndNpc;
             _goal = new Dictionary<string, int>(4);
             _reward = new Dictionary<string, int>(2);
-             _goal.Add("dirt", 8);
+             _goal.Add("stone", 8);
+            _goal.Add("wood_shovel", 1);
             _startNpc = startNPC;
             CreateSpitch();
             CreateReward();
@@ -38,27 +37,25 @@ namespace Aviias
         {
             if (_type == 0)
             {
-                foreach (KeyValuePair<Ressource, int> entry in player.Inventory)
+                foreach (KeyValuePair<string, int> goal in _goal)
                 {
-                    if (_goal.ContainsKey(entry.Key.Name) && entry.Value > _goal["dirt"]) return true;
+                    if (player._inv.Quantity(goal.Key) > goal.Value) return false;
                 }
-                return false;
+                return true;
             }
-          /*  else
+            else
             {
                 if (_idEndNpc == npcId)
                 {
                     return true;
                 }
-            }*/
+            }
             return false;
         }
 
         void CreateReward()
         {
-            _reward.Add("dirt", rand.Next(0, 30));
-            _reward.Add("stone", rand.Next(0, 20));
-            _reward.Add("heal_potion", 1);
+            _reward.Add("heal_potion", Game1.random.Next(1, 3));
         }
 
         void CreateSpitch()
@@ -68,16 +65,16 @@ namespace Aviias
                 string goal = "Salut toi ! ";
                 goal += "Ramene moi ces ressources ";
                 goal += "et ne demande pas pourquoi.\n";
-                foreach (KeyValuePair<string, int> entry in _goal)
+                /*foreach (KeyValuePair<string, int> entry in _goal)
                 {
                     goal += entry.Key + " x " + entry.Value + "\n";
-                }
+                }*/
                 _spitch = goal;
             }
             else
             {
                 string goal = "Salut toi !\n";
-                goal += "Peux-tu aller voir d ";
+                goal += "Peux-tu aller voir " + _idEndNpc;
                 goal += "pour moi ?\n";
                 _spitch = goal;
             }

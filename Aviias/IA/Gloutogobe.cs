@@ -81,7 +81,7 @@ namespace Aviias.IA
 
             while (i < monsters.Count)
             {
-                if(Vector2.Distance(pos, monsters[i].MonsterPosition) <= Vector2.Distance(pos, closest.MonsterPosition))
+                if(monsters[i] != null && Vector2.Distance(pos, monsters[i].MonsterPosition) <= Vector2.Distance(pos, closest.MonsterPosition))
                 {
                     closest = monsters[i];
                     clos = i;
@@ -121,7 +121,7 @@ namespace Aviias.IA
             }
             else
             {
-                UpdatePhysics(Game1.map, this);
+                UpdatePhysics(Game1.map, Texture);
                 MoveOnPlayer(player);
                 Fight(player, gametime);
             }

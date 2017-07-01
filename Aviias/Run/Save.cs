@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Aviias
 {
     [Serializable]
-    public class Save
+    class Save
     {
         Map _map;
         Player _player;

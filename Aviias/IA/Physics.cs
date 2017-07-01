@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace Aviias.IA
 {
     class Physics 
     {
+        public Vector2 _pos;
         int _yVelocity;
         bool _collisions;
         int _nbBlocs;
@@ -16,20 +18,21 @@ namespace Aviias.IA
         bool flyMod;
         public int _gravity;
 
-        public Physics(bool fly, int gravity, int jumpHeight)
+        public Physics(bool fly, int gravity, int jumpHeight, Vector2 position)
         {
             flyMod = fly;
             _gravity = gravity;
             _jumpHeight = jumpHeight;
+            _pos = position;
         }
 
-        internal void UpdatePhysics(Map map, Monster monster)
+        internal void UpdatePhysics(Map map, Texture2D texture)
         {
             if (!flyMod)
             {
-                if (IsInAir(map, monster))
+                if (IsInAir(map, texture))
                 {
-                    monster.Y += _yVelocity;
+                    _pos.Y += _yVelocity;
                     if (_yVelocity < 60) _yVelocity += _gravity;
                 }
                 else
@@ -40,15 +43,15 @@ namespace Aviias.IA
             }
         }
 
-        public List<Bloc> GetBlocsAround(Map map, Monster monster)
+        public List<Bloc> GetBlocsAround(Map map)
         {
             _nbBlocs = 0;
 
             List<Bloc> _blocs = new List<Bloc>(16);
 
-            for (int a = (int)(monster.MonsterPosition.Y / 16); a < (monster.MonsterPosition.Y / 16) + 8; a++)
+            for (int a = (int)(_pos.Y / 16); a < (_pos.Y / 16) + 8; a++)
             {
-                for (int b = (int)(monster.MonsterPosition.X / 16); b < (monster.MonsterPosition.X) / 16 + 8; b++)
+                for (int b = (int)(_pos.X / 16); b < (_pos.X) / 16 + 8; b++)
                 {
                     if (a >= 0 && b >= 0 && a < map._worldHeight && b < map._worldWidth && map._blocs[b, a] != null && map._blocs[b, a].Type != "air" && map._blocs[b, a].Type != "ladder")
                     {
@@ -61,31 +64,31 @@ namespace Aviias.IA
             return _blocs;
         }
 
-        public bool IsInAir(Map map, Monster monster)
+        public bool IsInAir(Map map, Texture2D texture)
         {
             List<int> list = new List<int>(16);
-            list = GetCollisionSide(GetBlocsAround(map, monster), monster);
+            list = GetCollisionSide(GetBlocsAround(map), texture);
             if (list.Contains(3)) return false;
             return true;
         }
 
-        internal void Jump(Map map, Monster monster)
+        internal void Jump(Map map, Texture2D texture)
         {
-            if (!IsInAir(map, monster))
+            if (!IsInAir(map, texture))
             {
                 _yVelocity = _jumpHeight;
-                monster.Y -= 10;
+                _pos.Y -= 10;
             }
         }
 
-        public void UpdateCollision(Map map, Monster monster)
+        public void UpdateCollision(Map map, Texture2D texture)
         {
             _nbBlocs = 0;
 
             List<Bloc> _blocs = new List<Bloc>(16);
-            for (int a = (int)(monster.MonsterPosition.Y / 16); a < (monster.MonsterPosition.Y / 16) + 8; a++)
+            for (int a = (int)(_pos.Y / 16); a < (_pos.Y / 16) + 8; a++)
             {
-                for (int b = (int)(monster.MonsterPosition.X / 16); b < (monster.MonsterPosition.X) / 16 + 8; b++)
+                for (int b = (int)(_pos.X / 16); b < (_pos.X) / 16 + 8; b++)
                 {
                     if (a >= 0 && b >= 0 && a < map._worldHeight && b < map._worldWidth && map._blocs[b, a] != null && map._blocs[b, a].Type != "air")
                     {
@@ -96,18 +99,18 @@ namespace Aviias.IA
             }
 
             List<int> list = new List<int>(16);
-            list = GetCollisionSide(_blocs, monster);
+            list = GetCollisionSide(_blocs, texture);
         }
 
-        public List<int> GetCollisionSide(List<Bloc> _blocs, Monster monster)
+        public List<int> GetCollisionSide(List<Bloc> _blocs, Texture2D texture)
         {
             List<int> result = new List<int>(16);
             Rectangle playerRect;
             Rectangle playerRect2;
-            playerRect = new Rectangle((int)monster.MonsterPosition.X, (int)monster.MonsterPosition.Y, monster.Texture.Width, monster.Texture.Height);
-            playerRect2 = new Rectangle((int)monster.MonsterPosition.X, (int)monster.MonsterPosition.Y + 1, monster.Texture.Width, monster.Texture.Height);
+            playerRect = new Rectangle((int)_pos.X, (int)_pos.Y, texture.Width, texture.Height);
+            playerRect2 = new Rectangle((int)_pos.X, (int)_pos.Y + 1, texture.Width, texture.Height);
 
-            Rectangle rectTest = new Rectangle((int)monster.MonsterPosition.X, (int)monster.MonsterPosition.Y - 10, monster.Texture.Width, monster.Texture.Height);
+            Rectangle rectTest = new Rectangle((int)_pos.X, (int)_pos.Y - 10, texture.Width, texture.Height);
 
             for (int i = 0; i < _blocs.Count; i++)
             {
@@ -120,7 +123,7 @@ namespace Aviias.IA
                         if (playerRect.Bottom > blocRect.Top && playerRect.Bottom < blocRect.Bottom)
                         {
                             result.Add(3);
-                            if (!rectTest.Intersects(blocRect)) monster.Y -= 1;
+                            if (!rectTest.Intersects(blocRect)) _pos.Y -= 1;
                         }
                         if (playerRect.Top < blocRect.Bottom && playerRect.Top > blocRect.Top) result.Add(4);
                         //  if (playerRect.Left < blocRect.Right && playerRect.Left > blocRect.Left) result.Add(2);
@@ -131,9 +134,10 @@ namespace Aviias.IA
                     }
                     if (playerRect2.Intersects(blocRect))
                     {
-                        if (playerRect2.Bottom > blocRect.Top && playerRect2.Bottom < blocRect.Bottom)
+                        if (playerRect2.Bottom - 1 > blocRect.Top && playerRect2.Bottom < blocRect.Bottom)
                         {
                             _yVelocity = 0;
+                            _pos.Y -= 1;
                             result.Add(3);
                         }
                     }

@@ -27,12 +27,12 @@ namespace Aviias
         KeyboardState previousKeyboardState;
         // Texture2D texture;
         public static Map map;
-        Random random = new Random();
+        public static Random random = new Random();
         BoxingViewportAdapter _viewportAdapter;
         const int WindowWidth = 1920;
         const int WindowHeight = 1080;
         Camera2D _camera;
-        public static List<NPC> _npc;
+        internal static List<NPC> _npc;
         SpriteFont font;
         List<Monster> monsters = new List<Monster>();
         StreamWriter log; // Debug file
@@ -170,7 +170,7 @@ namespace Aviias
 
                     for (int i = 0; i < monsters.Count; i++)
                     {
-                        if (monsters[i].IsDie == false && monsters[i] != null)
+                        if (monsters[i] != null && monsters[i].IsDie == false)
                         {
                           monsters[i].Update(player, gameTime);
                         }
@@ -183,6 +183,7 @@ namespace Aviias
 
                     player.Update(player, Camera, _npc, gameTime, Content, log, map, monsters);
                     player.UpdatePlayerCollision(gameTime, player, monsters);
+                    foreach (NPC npc in _npc) npc.Update(gameTime, spriteBatch);
                     base.Update(gameTime);
 
                     spawnTimer.Decrem(gameTime);
@@ -202,8 +203,8 @@ namespace Aviias
                         Vector2 monsterPosition = new Vector2(posX, posY);
                         //drake = new Drake(Content, Content.Load<Texture2D>("drake"), monsterPosition);
                         
-                        // monsters.Add(monster);
-                        //monsters.Add(drake);
+                         monsters.Add(monster);
+                         monsters.Add(drake);
                         
                         spawnTimer.ReInit();
                     }
@@ -234,7 +235,7 @@ namespace Aviias
                 map.Draw(spriteBatch, (int)player.Position.X, (int)player.Position.Y);
                 for (int i = 0; i < monsters.Count; i++)
                 {
-                    monsters[i].Draw(spriteBatch);
+                    if (monsters[i] != null) monsters[i].Draw(spriteBatch);
                 }
 
                 glouto.Draw(spriteBatch);
@@ -243,11 +244,10 @@ namespace Aviias
                     player.Draw(spriteBatch, Content);
                 }
 
-                //   foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
+             //   foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
                 foreach (NPC npc in _npc)
                 {
                     npc.Draw(spriteBatch);
-                    npc.Update();
                 }
                 if (player.IsDie == false)
                 {

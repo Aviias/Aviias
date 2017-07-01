@@ -184,6 +184,18 @@ namespace Aviias
             return false;         
         }
 
+        public int Quantity(string name)
+        {
+            for (int i = 0; i < _cellArray.Length; i++)
+            {
+                if (_cellArray[i]._name == name && IsFull(i))
+                {
+                    return _cellArray[i]._quantity;
+                }
+            }
+            return -1;
+        }
+
         public string GetName(Vector2 pos)
         {
             for (int i = 0; i < _cellArray.Length; i++)

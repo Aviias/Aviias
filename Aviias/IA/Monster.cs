@@ -18,8 +18,8 @@ namespace Aviias
         int _id;
         int _health;
         float _speed;
-        [field: NonSerialized]
-        Vector2 _pos;
+   /*     [field: NonSerialized]
+        Vector2 _pos;*/
         bool _isDie;
         double _regenerationRate;
         int _damageDealing;
@@ -37,7 +37,7 @@ namespace Aviias
         Random rnd = new Random();
 
         public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos)
-            : base(false,4,-12)
+            : base(false,4,-12, pos)
         {
             _id = rnd.Next(0, int.MaxValue);
             _health = health;
@@ -47,7 +47,7 @@ namespace Aviias
             _damageDealing = damageDealing;
             _resistance = resistance;
             text = new Aviias.Text(content);
-            _pos = pos;
+         //   _pos = pos;
             _texture = texture;
             _baseDamageDealing = damageDealing;
             _baseHealth = health;
@@ -221,7 +221,12 @@ namespace Aviias
             float alpha = (float)Math.Atan2((player.Y - posY), (player.X - posX));
             Vector2 direction = AngleToVector(alpha);
             Vector2 move = new Vector2(direction.X * _speed, /*direction.Y * _speed*/0);
-            _pos = new Vector2(posX + move.X, posY /*+ move.Y*/);
+            //  if (move.X )
+            if (GetCollisionSide(GetBlocsAround(Game1.map), _texture).Contains(1))
+            {
+
+            }
+            else _pos = new Vector2(posX + move.X, posY /*+ move.Y*/);
         }
 
         public void Fight(Player player, GameTime gametime)
@@ -248,7 +253,7 @@ namespace Aviias
         
         internal void Update(Player player, GameTime gametime)
         {
-            UpdatePhysics(Game1.map, this);
+            UpdatePhysics(Game1.map, _texture);
             MoveOnPlayer(player);
             Fight(player, gametime);
             ReactToLight();

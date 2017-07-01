@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Aviias.IA;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -10,39 +11,43 @@ using System.Threading.Tasks;
 namespace Aviias
 {
     [Serializable]
-    public class NPC
+    class NPC : Physics
     {
         [field: NonSerialized]
         Texture2D _texture;
         [field: NonSerialized]
-        Vector2 _position;
         public bool _isQuestActive;
         public int _nbQuest;
         Text _text;
         Quest _questActive;
-        [field: NonSerialized]
-        SpriteBatch _spriteBatch;
         public bool _isTalking;
         static int _id;
         int trueid = 0;
-        Random rand = new Random();
         string _textureName;
         float x;
         float y;
+        bool _isMoving;
+        Timer _moving;
+        int _direction;
         
 
         public NPC(ContentManager content, string texture, SpriteBatch spriteBatch, Vector2 position, int nbQuest)
+            :base(false, 4, -10, position)
         {
             _texture = content.Load<Texture2D>(texture);
-            _position = position;
+            _pos = position;
             _text = new Text(content);
-            _spriteBatch = spriteBatch;
             _nbQuest = nbQuest;
             _id++;
             trueid = _id;
             x = position.X;
             y = position.Y;
             _textureName = texture;
+            _isMoving = false;
+            _moving = new Timer(0f);
+            _direction = 0;
+            _isQuestActive = false;
+            _isTalking = false;
         }
 
         public void Interact(Player player)
@@ -76,13 +81,23 @@ namespace Aviias
             {
                 if (_questActive.CheckGoal(player, _id)) EndQuest(player);
             }
-            else if (_isTalking == false) GiveQuest(player);
-         //   _isTalking = true;
+            else if (_isTalking == false)
+            {
+                GiveQuest(player);
+                _isTalking = true;
+            }
         }
 
-        public void Update()
+        public void Update(GameTime gametime, SpriteBatch spriteBatch)
         {
-            if (_isTalking) Talk(_questActive, _spriteBatch);
+
+            UpdatePhysics(Game1.map, _texture);
+            RandomMove(gametime);
+        }
+
+        public void GraphicUpdate(SpriteBatch spriteBatch)
+        {
+            if (_isTalking) Talk(_questActive, spriteBatch);
         }
 
         public void GiveQuest(Player player)
@@ -92,7 +107,7 @@ namespace Aviias
             if (!_isQuestActive && _nbQuest > 0)
             {
                 int idEnd = trueid == 1 ? 2 : 1;
-                _questActive = new Quest(1, _id, idEnd, this);
+                _questActive = new Quest(Game1.random.Next(0, 1), _id, idEnd, this);
                 player.AddQuest(_questActive);
                 //   Talk(_questActive, _spriteBatch);
                 _isQuestActive = true;
@@ -104,8 +119,9 @@ namespace Aviias
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _position, null, Color.White, 0f, Vector2.Zero, 1f,
+            spriteBatch.Draw(_texture, _pos, null, Color.White, 0f, Vector2.Zero, 1f,
                SpriteEffects.None, 0f);
+            GraphicUpdate(spriteBatch);
         }
 
         public void EndQuest(Player player)
@@ -123,17 +139,43 @@ namespace Aviias
 
         public void Talk(Quest quest, SpriteBatch spriteBatch)
         {
-            _text.DisplayText(quest.Spitch, new Vector2(_position.X, _position.Y - 50), spriteBatch, Color.Black);
+            _text.DisplayText(quest.Spitch, new Vector2(_pos.X, _pos.Y - 50), spriteBatch, Color.Black);
         }
 
         public void Reload(ContentManager content)
         {
-            _position = new Vector2(x, y);
+            _pos = new Vector2(x, y);
             _texture = content.Load<Texture2D>(_textureName);
         }
 
-        public Vector2 Position => _position;
+        public void RandomMove(GameTime gametime)
+        {
+            if (_isMoving && !_moving.IsDown())
+            {
+                if (_direction == 0) _pos.X += 10;
+                else _pos.X -= 10;
+                _moving.Decrem(gametime);
+            }
 
+            if (!_isMoving)
+            {
+                int rand = Game1.random.Next(1, 100);
+                if (rand <= 20)
+                {
+                    _moving = new Timer(Game1.random.Next(2, 6));
+                    _direction = Game1.random.Next(0, 1);
+                    _isMoving = true;
+                }
+                else if (rand >= 80)
+                {
+                    _moving = new Timer(Game1.random.Next(2, 6));
+                    _direction = Game1.random.Next(0, 1);
+                    _isMoving = true;
+                }
+            }
+        }
+
+        public Vector2 Position => _pos;
         public int Id => trueid;
     }
 }
