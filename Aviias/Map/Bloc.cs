@@ -25,6 +25,7 @@ namespace Aviias
         public float moveSpeed = 0.1f;
         int _luminosity;
         public bool _isInContactWithTheSky;
+        bool _isSetable;
 
         public Bloc(Vector2 position, float scale, string type, ContentManager content)
         {
@@ -38,11 +39,13 @@ namespace Aviias
             if (type != "air")
             {
                 _isBreakable = true;
+                _isSetable = true;
                 _isAir = false;
             }
             else
             {
                 _isBreakable = false;
+                _isSetable = false;
                 _isAir = true;
             }
         }
@@ -58,7 +61,10 @@ namespace Aviias
             spriteBatch.Draw(_texture, _position, null, new Color(_luminosity, _luminosity, _luminosity, 255), 0f, Vector2.Zero, _scale / 64, SpriteEffects.None, 0f);
         }
     
-
+        public bool IsSetable
+        {
+            get { return _isSetable; }
+        }
         
 
         public void setBloc(Bloc bloc, Vector2 position, ContentManager content)

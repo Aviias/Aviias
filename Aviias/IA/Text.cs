@@ -9,15 +9,22 @@ using System.Threading.Tasks;
 
 namespace Aviias
 {
+    [Serializable]
     public class Text
     {
-        SpriteFont msg_font;
+        [field: NonSerialized]
+        SpriteFont _msgFont;
         string[] _msgTab;
 
         public Text(ContentManager Content)
         {
-            msg_font = Content.Load<SpriteFont>("msg_font");
+            _msgFont = Content.Load<SpriteFont>("msg_font");
             _msgTab = new string[10];
+        }
+
+        public void Reload(ContentManager content)
+        {
+            _msgFont = content.Load<SpriteFont>("msg_font");
         }
 
         public void DisplayText(string msg, Vector2 position, SpriteBatch spriteBatch, Color color)
@@ -36,7 +43,7 @@ namespace Aviias
                 for (int j = 0; j < i + 1; j++)
                 {
                     Vector2 _position = new Vector2(position.X, position.Y - 60 + j * 12);
-                    if (_msgTab[j] != null) spriteBatch.DrawString(msg_font, _msgTab[j], _position, color);
+                    if (_msgTab[j] != null) spriteBatch.DrawString(_msgFont, _msgTab[j], _position, color);
                 }
             }
         }

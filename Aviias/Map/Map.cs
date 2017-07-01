@@ -17,11 +17,12 @@ namespace Aviias
         public readonly int _worldHeight;
         public Bloc[,] _blocs;
         const int _scale = 16;
-        Random random = new Random();
         int prob;
         int columnHeight;
         const int _ironRate = 1;
         const int _coalRate = 1;
+        const int _goldRate = 1;
+        const int _diamondRate = 1;
         int _oreRandom = 0;
         bool _oreGeneration;
         int _treeRate = 1;
@@ -36,6 +37,7 @@ namespace Aviias
         bool _isMountain;
         int _mountainSize;
         int _mtest;
+        bool _isNight;
         public int skyLuminosity;
 
         public int WorldWidth
@@ -121,13 +123,33 @@ namespace Aviias
                                         _oreGeneration = true;
                                     }
                                 }
-                                if (_worldHeight - j < 150)
+                                if (_worldHeight - j < 150 && !_oreGeneration)
                                 {
                                     _oreRandom = NextInt(1, 300);
                                     if (_blocs[i, j - 1] != null || _blocs[i - 1, j] != null && (_blocs[i, j - 1].Type == "coal_ore" || _blocs[i - 1, j].Type == "coal_ore")) _oreRandom /= 20;
                                     if (_oreRandom <= _coalRate)
                                     {
                                         id = "coal_ore";
+                                        _oreGeneration = true;
+                                    }
+                                }
+                                if (_worldHeight - j < 80 && !_oreGeneration)
+                                {
+                                    _oreRandom = NextInt(1, 300);
+                                    if (_blocs[i, j - 1] != null || _blocs[i - 1, j] != null && (_blocs[i, j - 1].Type == "gold_ore" || _blocs[i - 1, j].Type == "gold_ore")) _oreRandom /= 20;
+                                    if (_oreRandom <= _goldRate)
+                                    {
+                                        id = "gold_ore";
+                                        _oreGeneration = true;
+                                    }
+                                }
+                                if (_worldHeight - j < 30 && !_oreGeneration)
+                                {
+                                    _oreRandom = NextInt(1, 300);
+                                    if (_blocs[i, j - 1] != null || _blocs[i - 1, j] != null && (_blocs[i, j - 1].Type == "diamond_ore" || _blocs[i - 1, j].Type == "diamond_ore")) _oreRandom /= 20;
+                                    if (_oreRandom <= _diamondRate)
+                                    {
+                                        id = "diamond_ore";
                                         _oreGeneration = true;
                                     }
                                 }
@@ -140,7 +162,7 @@ namespace Aviias
                     }
                     else id = "air";
                     _blocs[i, j] = new Bloc(new Vector2(i * (_scale), j * (_scale)), _scale, id, content);
-                    if (j == 0)
+                    if (j >= 0 && j <= 3)
                     {
                         _blocs[i, j]._isInContactWithTheSky = true;
                     }
@@ -158,13 +180,13 @@ namespace Aviias
                 }
 
                 // Structures generation
-                for (int k = 5; k < _worldWidth - 5; k++)
+                for (int l = 5; l < _worldWidth - 5; l++)
                 {
-                    for (int l = 5; l < _worldHeight - 5; l++)
+                    for (int k = 5; k < _worldHeight - 5; k++)
                     {
-                        if (k > 6 && l > 6 && _blocs[k - 3, l] != null && _blocs[k - 3, l].Type == "grass_side")
+                        if (k > 6 && l > 6 && l < 200 && _blocs[k - 3, l] != null && _blocs[k - 3, l].Type == "grass_side")
                         {
-                            int rand = random.Next(1, 8500);
+                            int rand = NextInt(1, 8500);
                             if (rand == 1)
                             {
                                 rand = NextInt(1, 3);
@@ -174,10 +196,12 @@ namespace Aviias
                                 }
                                 else _structureModel = structures.structures["mobTowerA"];
                                 AddHouse(k, l, _structureModel, content);
+                                k += _structureModel.Length * 2;
+                                l += _structureModel.Length * 2;
                             }
                         }
 
-                        if (k > 6 && l > 6 && _blocs[k - 3, l] != null && _blocs[k - 3, l].Type == "grass_side")
+                        if (k > 6 && l > 6 && l < 200 && _blocs[k - 3, l] != null && _blocs[k - 3, l].Type == "grass_side")
                         {
                             _treeGeneration = NextInt(1, 2300);
                             if (_treeGeneration <= _treeRate)
@@ -186,13 +210,15 @@ namespace Aviias
                                 if (_treeGeneration == 1) _structureModel = structures.structures["treeA"];
                                 else _structureModel = structures.structures["treeB"];
                                 AddTree(k, l, _structureModel, content);
-
+                                k += _structureModel.Length * 2;
+                                l += _structureModel.Length * 2;
                             }
                         }
                     }
                 }
 
                 _blocs[0, 0] = new Bloc(new Vector2(0, 0), _scale, "bedrock", content);
+                _blocs[20, 20] = new Bloc(new Vector2(20*16, 20*16), _scale, "bedrock", content);
                 // Cave generation
                 for (int o = 130; o < _worldHeight; o++)
                 {
@@ -312,11 +338,11 @@ namespace Aviias
 
         }
 
-        public void SetBloc(Vector2 pos, ContentManager Content, Player player, string name)
+        public void SetBloc(Vector2 pos, ContentManager Content, Player player, string name,Map map)
         {
             int i = (int)pos.X / _scale;
             int j = (int)pos.Y / _scale;
-            if ((i >= 0) && (i < _worldHeight) && (j >= 0) && (j < _worldWidth)) player.setbloc(_blocs[i, j], Content, _blocs, i, j, _scale, name);
+            if ((i >= 0) && (i < _worldHeight) && (j >= 0) && (j < _worldWidth)) player.setbloc(_blocs[i, j], Content, _blocs, i, j, _scale, name, map);
 
         }
 
@@ -332,7 +358,7 @@ namespace Aviias
 
         int NextInt(int min, int max)
         {
-            return random.Next(min, max);
+            return Game1.random.Next(min, max);
         }
 
         public void ActualizeShadow(int x, int y)
@@ -398,12 +424,45 @@ namespace Aviias
                                 _blocs[i, j].ChangeLuminosity(GetBiggestNumber(_blocs[i - 1, j].Luminosity, _blocs[i + 1, j].Luminosity, _blocs[i, j - 1].Luminosity, _blocs[i, j + 1].Luminosity) - 2);
                             }
                         }
-                        if (_blocs[j, i]._isInContactWithTheSky) _blocs[j, i].ChangeLuminosity(skyLuminosity);
+                        if (_blocs[i, j]._isInContactWithTheSky) _blocs[i, j].ChangeLuminosity(skyLuminosity);
+                        if (TorchUpdate(i, j) > _blocs[i, j].Luminosity) _blocs[i, j].ChangeLuminosity(TorchUpdate(i, j));
                     }
 
                    
                 }
             }
+        }
+
+        public int TorchUpdate(int x, int y)
+        {
+             int xx = x - 6;
+             int yy = y - 6;
+             int shortest = 7;
+
+             for (int i = xx; i < x + 6; i++)
+             {
+                 for (int j = yy; j < y + 6; j++)
+                 {
+                     if (i > 0 && j > 0 && i < _worldWidth && j < _worldHeight && _blocs[i, j] != null && _blocs[i, j].Type == "torche")
+                     {
+                       if (Math.Abs(x - i) + Math.Abs(y - j) < shortest) shortest = (Math.Abs(x - i) + Math.Abs(y - j));
+                     } 
+                 }
+             }
+                  return Math.Abs(shortest - 7);
+        }
+
+        public void TimeForward()
+        {
+            if (_isNight)
+            {
+                skyLuminosity++;
+            }
+            else
+            {
+                skyLuminosity--;
+            }
+            if (skyLuminosity == 1 || skyLuminosity == 7) _isNight = !_isNight;
         }
 
         public void Reload(ContentManager content)

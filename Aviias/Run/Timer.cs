@@ -4,6 +4,7 @@ using System;
 
 namespace Aviias
 {
+    [Serializable]
     public class Timer
     {
         float _timeTo;

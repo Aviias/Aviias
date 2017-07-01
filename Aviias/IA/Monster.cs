@@ -7,27 +7,37 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Timers;
+using Aviias.IA;
 
 namespace Aviias
 {
-    class Monster 
+    [Serializable]
+    class Monster : Physics
     {
         Text text;
-        Player _ctx;
         int _id;
         int _health;
         float _speed;
-        Vector2 _pos;
+   /*     [field: NonSerialized]
+        Vector2 _pos;*/
         bool _isDie;
         double _regenerationRate;
         int _damageDealing;
+        int _baseHealth;
+        int _baseDamageDealing;
         int _resistance;
+        [field: NonSerialized]
         Texture2D _texture;
         Timer monsterTimer = new Timer(2f);
+        bool _reactToLight;
+        bool _bonusLightGiven;
+        List<Soul> _souls = new List<Soul>(16);
+        public Timer _healthRegenerationTimer = new Timer(4f);
 
         Random rnd = new Random();
 
         public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos)
+            : base(false,4,-12, pos)
         {
             _id = rnd.Next(0, int.MaxValue);
             _health = health;
@@ -37,9 +47,14 @@ namespace Aviias
             _damageDealing = damageDealing;
             _resistance = resistance;
             text = new Aviias.Text(content);
-            _pos = pos;
+         //   _pos = pos;
             _texture = texture;
+            _baseDamageDealing = damageDealing;
+            _baseHealth = health;
         }
+
+        public int BaseHealth => _baseHealth;
+        public int BaseDamage => _baseDamageDealing;
 
         public int Width
         {
@@ -100,6 +115,12 @@ namespace Aviias
             set { _pos = value; }
         }
 
+        public float Y
+        {
+            get { return _pos.Y; }
+            set { _pos.Y = value; }
+        }
+
         public bool IsDie
         {
             get { return _isDie; }
@@ -122,7 +143,7 @@ namespace Aviias
             {
                 _health = newHealth;
             }
-            
+            _healthRegenerationTimer.ReInit();
         }
 
         public float posX
@@ -137,12 +158,75 @@ namespace Aviias
             set { _pos.Y = value; }
         }
 
+        public void ReactToLight()
+        {
+            if (Game1.map._blocs[(int)MonsterPosition.X / 16, (int)MonsterPosition.Y / 16].Luminosity < 3) _reactToLight = true;
+            else
+            {
+                if (_bonusLightGiven)
+                {
+                    _bonusLightGiven = false;
+                    _health -= 25;
+                }
+                _reactToLight = false;
+            }
+
+            if (_reactToLight && !_bonusLightGiven)
+            {
+                _health += 25;
+                _bonusLightGiven = true;
+            }
+        }
+
+        public bool CheckSoul(List<Soul> souls)
+        {
+            foreach(Soul soul in souls)
+            {
+                Rectangle soulRect = new Rectangle((int)soul.Position.X, (int)soul.Position.Y, soul.Texture.Width, soul.Texture.Height);
+                Rectangle monsterRect = new Rectangle((int)MonsterPosition.X, (int)MonsterPosition.Y, Texture.Width, Texture.Height);
+                if (soulRect.Intersects(monsterRect)) return true;
+            }
+            return false;
+        }
+
+        public bool EatSoul(List<Soul> souls)
+        {
+            foreach (Soul soul in souls)
+            {
+                Rectangle soulRect = new Rectangle((int)soul.Position.X, (int)soul.Position.Y, soul.Texture.Width, soul.Texture.Height);
+                Rectangle monsterRect = new Rectangle((int)MonsterPosition.X, (int)MonsterPosition.Y, Texture.Width, Texture.Height);
+                if (soulRect.Intersects(monsterRect))
+                {
+                    _health += soul.Health;
+                    _damageDealing += soul.Damages;
+                    return true;
+                }
+                    //return eaten soul
+            }
+            return false;
+        }
+
+        public void ActualizeHealthRegeneration(GameTime gametime)
+        {
+            _healthRegenerationTimer.Decrem(gametime);
+            if (_healthRegenerationTimer.IsDown() && _health < _baseHealth)
+            {
+                _health++;
+            }
+
+        }
+
         public void MoveOnPlayer(Player player)
         {
             float alpha = (float)Math.Atan2((player.Y - posY), (player.X - posX));
             Vector2 direction = AngleToVector(alpha);
-            Vector2 move = new Vector2(direction.X * _speed, direction.Y * _speed);
-            _pos = new Vector2(posX + move.X, posY + move.Y);
+            Vector2 move = new Vector2(direction.X * _speed, /*direction.Y * _speed*/0);
+            //  if (move.X )
+            if (GetCollisionSide(GetBlocsAround(Game1.map), _texture).Contains(1))
+            {
+
+            }
+            else _pos = new Vector2(posX + move.X, posY /*+ move.Y*/);
         }
 
         public void Fight(Player player, GameTime gametime)
@@ -157,7 +241,7 @@ namespace Aviias
             {
                 if (monsterRect.Left <= playerRect.Right || monsterRect.Right == playerRect.Left || monsterRect.Top <= playerRect.Bottom || monsterRect.Bottom == playerRect.Top)
                 {
-                    if (monsterTimer.IsDown())
+                    if (monsterTimer.IsDown() && player.IsStopDamage == false)
                     {
                         player.GetDamage(Damage);
                         monsterTimer.ReInit();
@@ -169,8 +253,11 @@ namespace Aviias
         
         internal void Update(Player player, GameTime gametime)
         {
+            UpdatePhysics(Game1.map, _texture);
             MoveOnPlayer(player);
-            Fight(player, gametime);                                  
+            Fight(player, gametime);
+            ReactToLight();
+            ActualizeHealthRegeneration(gametime);                           
         }
 
         Vector2 AngleToVector(float angle)
