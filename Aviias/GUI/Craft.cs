@@ -56,6 +56,12 @@ namespace Aviias
                 }
             }
         }
+
+        public Vector2 Position
+        {
+            get { return Position; }
+        }
+
         public void IsCraftable(Inventory._cell[] inventory)
         {
             for(int i=0; i<_cellCraft.Length; i++)

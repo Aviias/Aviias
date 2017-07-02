@@ -18,6 +18,8 @@ namespace Aviias
         public string _texture;
         MouseState mouseState = Mouse.GetState();
         public bool IsTrue { get; set; }
+        public string _name { get; set; }
+        public int _id { get;set; }
 
         public Button(Vector2 position, int width, int height)
         {
@@ -25,6 +27,16 @@ namespace Aviias
             _width = width;
             _height = height;
             _texture = "";
+        }
+
+        public Button(Vector2 position, int width, int height, string texture, string name)
+        {
+            _position = position;
+            _width = width;
+            _height = height;
+            _texture = texture;
+            _name = name;
+            _id++;
         }
 
         public bool IsPressed(MouseState mouseState)
@@ -37,6 +49,12 @@ namespace Aviias
         {
 
             spriteBatch.Draw(content.Load<Texture2D>(_texture), pos, null, Color.White, 0f, Vector2.Zero, 1f,
+               SpriteEffects.None, 0f);
+        }
+
+        internal void Draw(SpriteBatch spriteBatch, ContentManager content)
+        {
+            spriteBatch.Draw(content.Load<Texture2D>(_texture), _position, null, Color.White, 0f, Vector2.Zero, 1.1f,
                SpriteEffects.None, 0f);
         }
     }

@@ -435,7 +435,6 @@ namespace Aviias
                         blocBreakTimer.ReInit();
                         blockDurationTimer.ReInit();
                     }
-                    
                 }
               
             }

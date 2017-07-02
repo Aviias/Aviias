@@ -15,6 +15,7 @@ namespace Aviias
         public _cell[]  _cellArray;
         private Text text;
         public Craft _craft;
+        public Button _buttonCraft;
         
         public Inventory(Player player)
         {
@@ -291,8 +292,8 @@ namespace Aviias
                 if (_craft._cellCraft[i].IsCraftable)
                 {
                     PositionCraft(i, camera, count);
-                    spriteBatch.Draw(content.Load<Texture2D>("craft"), _craft._cellCraft[i]._position, null, Color.White, 0f, Vector2.Zero, 1.1f,
-                            SpriteEffects.None, 0f);
+                    _buttonCraft = new Button(_craft._cellCraft[i]._position, 70, 69, "craft", _craft._cellCraft[i]._name);
+                    _buttonCraft.Draw(spriteBatch, content);
                     spriteBatch.Draw(content.Load<Texture2D>(_craft._cellCraft[i]._name), new Vector2(_craft._cellCraft[i]._position.X + 12, _craft._cellCraft[i]._position.Y +12), null, Color.White, 0f, Vector2.Zero, 0.8f,
                             SpriteEffects.None, 0f);
                     count++;

@@ -213,8 +213,8 @@ namespace Aviias
                         Vector2 monsterPosition = spawnMonster.SpawnOnSurface(map);
                         //drake = new Drake(Content, Content.Load<Texture2D>("drake"), monsterPosition);
                         
-                         monsters.Add(monster);
-                         monsters.Add(drake);
+                         //monsters.Add(monster);
+                         //monsters.Add(drake);
                         
                         spawnTimer.ReInit();
                     }
