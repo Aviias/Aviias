@@ -255,16 +255,16 @@ namespace Aviias
             }
         }
 
-        public void PostionCraft(int i, Camera2D camera)
+        public void PositionCraft(int i, Camera2D camera, int count)
         {
-            if (i == 0)
+            if (count == 0 && _craft._cellCraft[i].IsCraftable)
             {
-                _craft._cellCraft[i]._position = new Vector2(_cellArray[0].Position.X + 825, _cellArray[0].Position.Y -450);
+                _craft._cellCraft[i]._position = new Vector2(camera.Position.X + 1475, camera.Position.Y + 140);
             }
-            //else if (_craft._cellCraft[i].IsCraftable == true)
-            //{
-            //    _craft._cellCraft[i]._position = new Vector2(_craft._cellCraft[i - 1]._position.X + 500, _craft._cellCraft[i - 1]._position.Y - 250);
-            //}
+            else if (_craft._cellCraft[i].IsCraftable)
+            {
+                _craft._cellCraft[i]._position = new Vector2(_craft._cellCraft[i - 1]._position.X, _craft._cellCraft[i - 1]._position.Y + 75);
+            }
         }
 
         internal void Draw(SpriteBatch spriteBatch, ContentManager content, Camera2D camera)
@@ -284,16 +284,18 @@ namespace Aviias
                     text.DisplayText("" + _cellArray[i]._quantity, new Vector2(_cellArray[i].Position.X, _cellArray[i].Position.Y + 100), spriteBatch, Color.Black);
                 }
             }
-            _craft.IsCraftable(_cellArray);
+            int count = 0;
             for (int i = 0; i < _craft._cellCraft.Length; i++)
             {
-                PostionCraft(i, camera);
-                if (_craft._cellCraft[i].IsCraftable == true)
+                _craft.IsCraftable(_cellArray);
+                if (_craft._cellCraft[i].IsCraftable)
                 {
-                        spriteBatch.Draw(content.Load<Texture2D>("craft"), _craft._cellCraft[i]._position, null, Color.White, 0f, Vector2.Zero, 1.1f,
+                    PositionCraft(i, camera, count);
+                    spriteBatch.Draw(content.Load<Texture2D>("craft"), _craft._cellCraft[i]._position, null, Color.White, 0f, Vector2.Zero, 1.1f,
                             SpriteEffects.None, 0f);
-                        spriteBatch.Draw(content.Load<Texture2D>(_craft._cellCraft[i]._name), new Vector2(_craft._cellCraft[i]._position.X + 12, _craft._cellCraft[i]._position.Y +12), null, Color.White, 0f, Vector2.Zero, 0.8f,
+                    spriteBatch.Draw(content.Load<Texture2D>(_craft._cellCraft[i]._name), new Vector2(_craft._cellCraft[i]._position.X + 12, _craft._cellCraft[i]._position.Y +12), null, Color.White, 0f, Vector2.Zero, 0.8f,
                             SpriteEffects.None, 0f);
+                    count++;
                 }
             }
         }
