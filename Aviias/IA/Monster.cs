@@ -40,10 +40,10 @@ namespace Aviias
         bool _collisions;
         float _yVelocity;
         Timer EngeryDamageTimer = new Timer(1f);
-        Timer JumpTimer = new Timer(1f);
+        Timer JumpTimer = new Timer(50f);
 
         public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy)
-            : base(false,4,-5, pos)
+            : base(false,4,-10, pos)
         {
             _id = rnd.Next(0, int.MaxValue);
             _health = health;
