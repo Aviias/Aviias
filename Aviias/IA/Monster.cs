@@ -16,10 +16,9 @@ namespace Aviias
     {
         Text text;
         int _id;
+        int nextAction;
         int _health;
         float _speed;
-   /*     [field: NonSerialized]
-        Vector2 _pos;*/
         bool _isDie;
         double _regenerationRate;
         int _damageDealing;
@@ -36,29 +35,33 @@ namespace Aviias
         public Timer _healthRegenerationTimer = new Timer(4f);
         Timer _energyRegenTimer = new Timer(2f);
         float _energy;
-        Random rnd = new Random();
         bool _collisions;
         float _yVelocity;
         Timer EngeryDamageTimer = new Timer(1f);
         Timer JumpTimer = new Timer(50f);
+        public int[] proba;
+        public int[] _points;
+        
 
         public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy)
             : base(false,4,-10, pos)
         {
-            _id = rnd.Next(0, int.MaxValue);
+            _id = Game1.random.Next(0, int.MaxValue);
             _health = health;
             _speed = speed;
             _isDie = false;
             _regenerationRate = regenerationRate;
             _damageDealing = damageDealing;
             _resistance = resistance;
-            text = new Aviias.Text(content);
-         //   _pos = pos;
+            text = new Text(content);
             _texture = texture;
             _baseDamageDealing = damageDealing;
             _baseHealth = health;
             _baseEnergy = energy;
             _energy = energy;
+            proba = new int[6];
+            nextAction = 0;
+            _points = new int[5] { 0, 0, 0, 0, 0 };
         }
 
         public int BaseHealth => _baseHealth;
@@ -367,6 +370,51 @@ namespace Aviias
             }
 
             return _blocs;
+        }
+
+        internal void ChooseAction()
+        {
+            int prob = Game1.random.Next(1, (proba[0] + proba[1] + proba[2] + proba[3] + proba[4] + proba[5]));
+            if (prob <= proba[0]) nextAction = 0;           //Move on player
+            else if (prob <= proba[1]) nextAction = 1;      //Flight
+            else if (prob <= proba[2]) nextAction = 2;      //Fight
+            else if (prob <= proba[3]) nextAction = 3;      //Block
+            else if (prob <= proba[4]) nextAction = 4;      //GetOrb / EatMonster
+            else nextAction = 5;                            //Do nothing
+        }
+
+        internal void DoSomething(Player player, Map map, GameTime gametime)
+        {
+            switch(nextAction)
+            {
+                case 0:
+                    MoveOnPlayer(player, map, gametime);
+                    break;
+                case 1:
+                    Flight(player, map, gametime);
+                    break;
+                case 2:
+                    Fight(player, gametime);
+                    break;
+                case 3:
+                    MoveOnPlayer(player, map, gametime);
+                    break;
+                case 4:
+                    MoveOnPlayer(player, map, gametime);
+                    break;
+                case 5:
+                    MoveOnPlayer(player, map, gametime);
+                    break;
+            }
+        }
+
+        internal void UpdatePoints()
+        {
+            // 0 distance
+            // 1 dommages infligés
+            // 2 dommages bloqués
+            // 3 orbes ou monstres gobés
+            // 4
         }
 
         internal void Update(Player player, GameTime gametime, Map map)
