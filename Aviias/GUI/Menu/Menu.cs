@@ -75,6 +75,5 @@ namespace Aviias
                 _quitter.Draw(spriteBatch, content, new Vector2(_quitter._position.X, _quitter._position.Y + 20));
             }
         }
-
     }
 }

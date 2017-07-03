@@ -435,9 +435,32 @@ namespace Aviias
                         blocBreakTimer.ReInit();
                         blockDurationTimer.ReInit();
                     }
-                    
                 }
-              
+
+                if (mouseState.LeftButton == ButtonState.Pressed && craftTimer.IsDown() && IsInventoryOpen)
+                {
+                    craftTimer.Decrem(gameTime);
+                    Craft craft = _inv._craft;
+                    craft.IsCraftable(_inv._cellArray);
+                    for (int i=0; i<craft._cellCraft.Length; i++)
+                    {
+                        if (craftTimer.IsDown() && position.X >= craft._cellCraft[i]._position.X && position.Y >= craft._cellCraft[i]._position.Y && position.X <= craft._cellCraft[i]._position.X + craft._cellCraft[i]._width && position.Y <= craft._cellCraft[i]._position.Y + craft._cellCraft[i]._height)
+                        {
+                            string name = craft._cellCraft[i]._name;
+                            if (_inv._craft._cellCraft[i].IsCraftable == true)
+                            {
+                                _inv.AddInventory(_inv._craft._cellCraft[i]._quantity, _inv._craft._cellCraft[i]._name);
+
+                                foreach (KeyValuePair<int, Ressource> element in _inv._craft._cellCraft[i]._ressource)
+                                {
+                                    _inv.DecreaseInventory(element.Key, element.Value.Name);
+                                }
+                            }
+                            craftTimer.ReInit();
+                        }
+                    }
+                }
+
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.NumPad1) && scrollToolBarTimer.IsDown())

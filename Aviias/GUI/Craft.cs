@@ -17,6 +17,8 @@ namespace Aviias
                 _cellCraft[i] = new _craft();
                 _cellCraft[i]._name = "";
                 _cellCraft[i]._quantity = -1;
+                _cellCraft[i]._width = 70;
+                _cellCraft[i]._height = 69;
                 
             }
             AddCraft("oak_plank", 4, Add(1, "oak_wood"));
@@ -31,6 +33,8 @@ namespace Aviias
             public bool IsCraftable { get; set; }
             public int _quantity { get; set; }
             public Vector2 _position { get; set; }
+            public int _width { get; set; }
+            public int _height { get; set; }
             public Dictionary<int, Ressource> _ressource { get; set; }
         }
 
@@ -56,6 +60,12 @@ namespace Aviias
                 }
             }
         }
+
+        public Vector2 Position
+        {
+            get { return Position; }
+        }
+
         public void IsCraftable(Inventory._cell[] inventory)
         {
             for(int i=0; i<_cellCraft.Length; i++)
@@ -79,6 +89,7 @@ namespace Aviias
                         else
                         {
                             _cellCraft[i].IsCraftable = false;
+                            _cellCraft[i]._position = new Vector2(0, 0);
                         }
                     }
                 }
