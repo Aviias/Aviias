@@ -375,24 +375,24 @@ namespace Aviias
                 invenTimer.ReInit();
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.C) && craftTimer.IsDown() && IsInventoryOpen)
-            {
-                for (int i = 0; i < _inv._craft._cellCraft.Length; i++)
-                {
-                    if (_inv._craft._cellCraft[i].IsCraftable == true)
-                    {
-                        _inv.AddInventory(_inv._craft._cellCraft[i]._quantity, _inv._craft._cellCraft[i]._name);
+            //if (currentKeyboardState.IsKeyDown(Keys.C) && craftTimer.IsDown() && IsInventoryOpen)
+            //{
+            //    for (int i = 0; i < _inv._craft._cellCraft.Length; i++)
+            //    {
+            //        if (_inv._craft._cellCraft[i].IsCraftable == true)
+            //        {
+            //            _inv.AddInventory(_inv._craft._cellCraft[i]._quantity, _inv._craft._cellCraft[i]._name);
 
-                        foreach (KeyValuePair<int, Ressource> element in _inv._craft._cellCraft[i]._ressource)
-                        {
-                            _inv.DecreaseInventory(element.Key, element.Value.Name);
-                        }
-                        break;
-                    }
-                }
-                craftTimer.ReInit();
+            //            foreach (KeyValuePair<int, string> element in _inv._craft._cellCraft[i]._ressource)
+            //            {
+            //                _inv.DecreaseInventory(element.Key, element.Value.Name);
+            //            }
+            //            break;
+            //        }
+            //    }
+            //    craftTimer.ReInit();
 
-            }
+            //}
 
 
             if (currentKeyboardState.IsKeyDown(Keys.Space) /*|| currentKeyboardState.IsKeyDown(Keys.Up)*/)
@@ -451,9 +451,9 @@ namespace Aviias
                             {
                                 _inv.AddInventory(_inv._craft._cellCraft[i]._quantity, _inv._craft._cellCraft[i]._name);
 
-                                foreach (KeyValuePair<int, Ressource> element in _inv._craft._cellCraft[i]._ressource)
+                                foreach (KeyValuePair<int, string> element in _inv._craft._cellCraft[i]._ressource)
                                 {
-                                    _inv.DecreaseInventory(element.Key, element.Value.Name);
+                                    _inv.DecreaseInventory(element.Key, element.Value);
                                 }
                             }
                             craftTimer.ReInit();

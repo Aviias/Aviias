@@ -9,6 +9,17 @@ namespace Aviias
     {
         public _craft[] _cellCraft;
 
+        public struct _craft
+        {
+            public string _name { get; set; }
+            public bool IsCraftable { get; set; }
+            public int _quantity { get; set; }
+            public Vector2 _position { get; set; }
+            public int _width { get; set; }
+            public int _height { get; set; }
+            public Dictionary<int, string> _ressource { get; set; }
+        }
+
         public Craft()
         {
             _cellCraft = new _craft[40];
@@ -19,47 +30,43 @@ namespace Aviias
                 _cellCraft[i]._quantity = -1;
                 _cellCraft[i]._width = 70;
                 _cellCraft[i]._height = 69;
-                
+                _cellCraft[i]._ressource = new Dictionary<int, string>();
+
             }
-            AddCraft("oak_plank", 4, Add(1, "oak_wood"));
-            AddCraft("stick", 4, Add(2, "oak_plank"));
-            AddCraft("wood_shovel", 1, Add(2, "stick"));
+            AddCraft("oak_plank", 4, 1, "oak_wood");
+            AddCraft("stick", 4, 2, "oak_plank");
+            AddCraft("wood_shovel", 1, 2, "stick", 1, "oak_plank");
         }
 
-        [Serializable]
-        public struct _craft
+        public void AddCraft(string name, int quantity, int number, string ressource)
         {
-            public string _name { get; set; }
-            public bool IsCraftable { get; set; }
-            public int _quantity { get; set; }
-            public Vector2 _position { get; set; }
-            public int _width { get; set; }
-            public int _height { get; set; }
-            public Dictionary<int, Ressource> _ressource { get; set; }
-        }
-
-        public Dictionary<int,Ressource> Add(int number, string ressource)
-        {
-            Dictionary<int, Ressource> _ressource = new Dictionary<int, Ressource>();
-            Ressource t = new Ressource(ressource);
-            _ressource.Add(number, t);
-
-            return _ressource;
-        }
-
-        public void AddCraft(string name, int quantity, Dictionary<int, Ressource> ressource)
-        {
-            for(int i=0; i<_cellCraft.Length; i++)
+            for (int i = 0; i < _cellCraft.Length; i++)
             {
-                if(_cellCraft[i]._name == "")
+                if (_cellCraft[i]._name == "")
                 {
                     _cellCraft[i]._name = name;
                     _cellCraft[i]._quantity = quantity;
-                    _cellCraft[i]._ressource = ressource;
+                    _cellCraft[i]._ressource.Add(number, ressource);
                     break;
                 }
             }
         }
+
+        public void AddCraft(string name, int quantity, int number, string ressource, int number2, string ressource2)
+        {
+            for (int i = 0; i < _cellCraft.Length; i++)
+            {
+                if (_cellCraft[i]._name == "")
+                {
+                    _cellCraft[i]._name = name;
+                    _cellCraft[i]._quantity = quantity;
+                    _cellCraft[i]._ressource.Add(number, ressource);
+                    _cellCraft[i]._ressource.Add(number2, ressource2);
+                    break;
+                }
+            }
+        }
+
 
         public Vector2 Position
         {
@@ -68,32 +75,33 @@ namespace Aviias
 
         public void IsCraftable(Inventory._cell[] inventory)
         {
-            for(int i=0; i<_cellCraft.Length; i++)
+            for (int i = 0; i < _cellCraft.Length; i++)
             {
                 if (_cellCraft[i]._name != "")
                 {
-                    foreach (KeyValuePair<int, Ressource> element in _cellCraft[i]._ressource)
+                    int count = 0;
+                    for (int j = 0; j < inventory.Length; j++)
                     {
-                        int count = 0;
-                        for (int j = 0; j < inventory.Length; j++)
+                        foreach (KeyValuePair<int, string> element in _cellCraft[i]._ressource)
                         {
-                            if (element.Value.Name == inventory[j]._ressource.Name && element.Key <= inventory[j]._quantity)
+                            if (inventory[j]._ressource.Name == element.Value && element.Key <= inventory[j]._quantity)
                             {
                                 count++;
                             }
                         }
-                        if (count == _cellCraft[i]._ressource.Count)
-                        {
-                            _cellCraft[i].IsCraftable = true;
-                        }
-                        else
-                        {
-                            _cellCraft[i].IsCraftable = false;
-                            _cellCraft[i]._position = new Vector2(0, 0);
-                        }
+                    }
+                    if (count == _cellCraft[i]._ressource.Count)
+                    {
+                        _cellCraft[i].IsCraftable = true;
+                    }
+                    else
+                    {
+                        _cellCraft[i].IsCraftable = false;
+                        _cellCraft[i]._position = new Vector2(0, 0);
                     }
                 }
             }
         }
     }
 }
+
