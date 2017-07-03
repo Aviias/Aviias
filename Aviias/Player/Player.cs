@@ -415,7 +415,7 @@ namespace Aviias
                 {
                     if (position.X >= monsters[i].MonsterPosition.X && position.X <= monsters[i].MonsterPosition.X + monsters[i].Width && position.Y >= monsters[i].MonsterPosition.Y && position.Y <= monsters[i].MonsterPosition.Y + monsters[i].Height)
                     {
-                        if (playerTimer.IsDown() && Vector2.Distance(player.PlayerPosition, position) <= 400)
+                        if (playerTimer.IsDown() && Vector2.Distance(player.PlayerPosition, position) <= 400 && monsters[i].IsStopDamage == false)
                         {
                             monsters[i].GetDamage(player.Damage);
                             if (monsters[i].IsDie)
