@@ -17,6 +17,8 @@ namespace Aviias
                 _cellCraft[i] = new _craft();
                 _cellCraft[i]._name = "";
                 _cellCraft[i]._quantity = -1;
+                _cellCraft[i]._width = 70;
+                _cellCraft[i]._height = 69;
                 
             }
             AddCraft("oak_plank", 4, Add(1, "oak_wood"));
@@ -31,6 +33,8 @@ namespace Aviias
             public bool IsCraftable { get; set; }
             public int _quantity { get; set; }
             public Vector2 _position { get; set; }
+            public int _width { get; set; }
+            public int _height { get; set; }
             public Dictionary<int, Ressource> _ressource { get; set; }
         }
 
