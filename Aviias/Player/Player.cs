@@ -473,21 +473,21 @@ namespace Aviias
                         {
                             firsclick = i;
                             IsFirstclick = false;
+                            break;
                         }
                     }
                     TriTimer.ReInit();
                 }
-
-                if (mouseState.LeftButton == ButtonState.Pressed && IsInventoryOpen && TriTimer.IsDown() && !IsFirstclick)
+                else if (mouseState.LeftButton == ButtonState.Pressed && IsInventoryOpen && TriTimer.IsDown() && !IsFirstclick)
                 {
                     for (int i = 0; i < _inv._cellArray.Length; i++)
                     {
                         if (position.X >= _inv._cellArray[i].Position.X && position.Y >= _inv._cellArray[i].Position.Y && position.X <= _inv._cellArray[i].Position.X + _inv._cellArray[i]._width && position.Y <= _inv._cellArray[i].Position.Y + _inv._cellArray[i]._height)
                         {
-                            
-                            IsFirstclick = true;
                             _inv.ChangePlace(firsclick, i);
+                            IsFirstclick = true;
                             firsclick = -1;
+                            break;
                         }
                     }
                     TriTimer.ReInit();
