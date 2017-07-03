@@ -41,6 +41,7 @@ namespace Aviias
         float _yVelocity;
         Timer EngeryDamageTimer = new Timer(1f);
         Timer JumpTimer = new Timer(50f);
+        double _score;
 
         public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy)
             : base(false,4,-10, pos)
@@ -59,6 +60,7 @@ namespace Aviias
             _baseHealth = health;
             _baseEnergy = energy;
             _energy = energy;
+            _score = 0;
         }
 
         public int BaseHealth => _baseHealth;
@@ -73,6 +75,11 @@ namespace Aviias
         {
             get { return text; }
             set { text = value; }
+        }
+
+        public double Score
+        {
+            get { return _score; }
         }
 
         public int Height

@@ -65,12 +65,6 @@ namespace Aviias
         {
             get { return _isSetable; }
         }
-        
-
-        public void setBloc(Bloc bloc, Vector2 position, ContentManager content)
-        {
-            
-        }
 
         public bool IsBreakable
         {

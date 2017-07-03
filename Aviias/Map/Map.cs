@@ -39,6 +39,7 @@ namespace Aviias
         int _mtest;
         bool _isNight;
         public int skyLuminosity;
+        List<Vector2> _AllCave = new List<Vector2>();
 
         public int WorldWidth
         {
@@ -245,6 +246,17 @@ namespace Aviias
                     if (_blocs[j, i] != null && _blocs[j, i].Type != "bedrock") _blocs[j, i]._texture = content.Load<Texture2D>("air");
                 }
             }
+            if (caveRandomX >= 3 && caveRandomY >= 3)
+            {
+                Vector2 caveBegin = new Vector2(x - caveRandomX, y - caveRandomY);
+                _AllCave.Add(caveBegin);
+            }
+            
+        }
+
+        public List<Vector2> AllCave
+        {
+            get { return _AllCave; }
         }
 
         public int GetAdjacentWalls(int x, int y, int scopeX, int scopeY)
@@ -360,7 +372,7 @@ namespace Aviias
         {
             return Game1.random.Next(min, max);
         }
-
+        
         public void ActualizeShadow(int x, int y)
         {
             int xx = x / 16;
@@ -409,7 +421,8 @@ namespace Aviias
                             /*  if (!_blocs[i, j]._isInContactWithTheSky)
                               {
                                   _blocs[i, j].ChangeLuminosity(_blocs[i, j - 1].Luminosity - 1);
-                              }*/
+                              }
+                              */
                         }
                         else
                         {
@@ -433,6 +446,7 @@ namespace Aviias
             }
         }
 
+        
         public int TorchUpdate(int x, int y)
         {
              int xx = x - 6;
@@ -451,7 +465,7 @@ namespace Aviias
              }
                   return Math.Abs(shortest - 7);
         }
-
+        
         public void TimeForward()
         {
             if (_isNight)

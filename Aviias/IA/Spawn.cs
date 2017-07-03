@@ -25,11 +25,11 @@ namespace Aviias.IA
         {
             Vector2 spawn;
             int x = _rnd.Next(0, _worldWidth);
-            spawn = new Vector2(x, FindYPos(map, x));
+            spawn = new Vector2(x, FindYPosSurface(map, x));
             return spawn;
         }
 
-        public int FindYPos (Map map, int x)
+        public int FindYPosSurface (Map map, int x)
         {
             int spawnok = 0;
             for(int y = 1; y < _worldHeight; y++)
@@ -42,6 +42,12 @@ namespace Aviias.IA
             return spawnok;
         }
 
-        
+        public Vector2 SpawnOnCave(Map map)
+        {
+            int i = _rnd.Next(0, map.AllCave.Count - 1);
+            Vector2 cave = map.AllCave[i];
+            return cave;
+        }
+
     }
 }
