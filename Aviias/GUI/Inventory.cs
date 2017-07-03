@@ -28,6 +28,8 @@ namespace Aviias
             {
                 _cellArray[i] = new _cell();
                 _cellArray[i]._name = "";
+                _cellArray[i]._width = 70;
+                _cellArray[i]._height = 69;
                 _cellArray[i]._ressource = new Ressource("air");
             }
         }
@@ -124,6 +126,8 @@ namespace Aviias
             public bool IsFull { get; set; }
             public string _name { get; set; }
             public int _quantity { get; set; }
+            public int _width { get; set; }
+            public int _height { get; set; }
             public Ressource _ressource { get; set; }
         }
 
@@ -135,6 +139,8 @@ namespace Aviias
             _cellArray[i]._name = "";
             _cellArray[i]._quantity = 0;
             _cellArray[i].IsFull = false;
+            _cellArray[i]._width = 70;
+            _cellArray[i]._height = 69;
             _cellArray[i]._ressource = new Ressource("air");
         }
 
@@ -170,6 +176,28 @@ namespace Aviias
                 }
             }
             return false;         
+        }
+
+        public void ChangePlace(int i, int j)
+        {
+            if( i != -1)
+            {
+                bool full = _cellArray[i].IsFull;
+                string name = _cellArray[i]._name;
+                int quantity = _cellArray[i]._quantity;
+                Ressource res = _cellArray[i]._ressource;
+
+                _cellArray[i].IsFull = _cellArray[j].IsFull;
+                _cellArray[i]._name = _cellArray[j]._name;
+                _cellArray[i]._quantity = _cellArray[j]._quantity;
+                _cellArray[i]._ressource = _cellArray[j]._ressource;
+
+                _cellArray[j].IsFull = full;
+                _cellArray[j]._name = name;
+                _cellArray[j]._quantity = quantity;
+                _cellArray[j]._ressource = res;
+            }
+            
         }
 
         public int Quantity(string name)

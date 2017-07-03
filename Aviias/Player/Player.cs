@@ -51,7 +51,6 @@ namespace Aviias
         [field: NonSerialized]
         MouseState mouseState = Mouse.GetState();
         [field: NonSerialized]
-        MouseState currentMouseState = Mouse.GetState();
         public bool isInAir;
         public float _yVelocity;
         public double _gravity;
@@ -73,6 +72,8 @@ namespace Aviias
         Timer stopDamageTimer = new Timer(12f);
         Timer stopDamageCDTimer = new Timer(5f);
         Timer TriTimer = new Timer(1.1f);
+        int firsclick;
+        bool IsFirstclick;
 
         List<string> CraftNotPutable = new List<string>();
         //   MonoGame.Extended.Camera2D Camera;
@@ -124,6 +125,7 @@ namespace Aviias
         {
             PMoveLeft = new Animation(content, "gauche", 50f,3,Position);
             PMoveRight = new Animation(content, "droite", 50f, 3, Position);
+
         }
 
         public void Initialize(Texture2D texture, Vector2 position, ContentManager content, Map map)
@@ -148,6 +150,8 @@ namespace Aviias
             y = position.Y;
             _texture = texture.Name;
             _stopDamage = false;
+            firsclick = -1;
+            IsFirstclick = true;
 
             CraftNotPutable.Add("stick");
             CraftNotPutable.Add("wood_shovel");
@@ -317,7 +321,7 @@ namespace Aviias
             stopDamageCDTimer.Decrem(gameTime);
             stopDamageTimer.Decrem(gameTime);
             TriTimer.Decrem(gameTime);
-            bool tmp = false;
+            bool tmp = false;            
 
             foreach (Soul soul in _souls)
             {
@@ -460,7 +464,34 @@ namespace Aviias
                         }
                     }
                 }
+                
+                if (mouseState.LeftButton == ButtonState.Pressed && IsInventoryOpen && TriTimer.IsDown() && IsFirstclick)
+                {
+                    for (int i = 0; i < _inv._cellArray.Length; i++)
+                    {
+                        if (position.X >= _inv._cellArray[i].Position.X && position.Y >= _inv._cellArray[i].Position.Y && position.X <= _inv._cellArray[i].Position.X + _inv._cellArray[i]._width && position.Y <= _inv._cellArray[i].Position.Y + _inv._cellArray[i]._height)
+                        {
+                            firsclick = i;
+                            IsFirstclick = false;
+                        }
+                    }
+                    TriTimer.ReInit();
+                }
 
+                if (mouseState.LeftButton == ButtonState.Pressed && IsInventoryOpen && TriTimer.IsDown() && !IsFirstclick)
+                {
+                    for (int i = 0; i < _inv._cellArray.Length; i++)
+                    {
+                        if (position.X >= _inv._cellArray[i].Position.X && position.Y >= _inv._cellArray[i].Position.Y && position.X <= _inv._cellArray[i].Position.X + _inv._cellArray[i]._width && position.Y <= _inv._cellArray[i].Position.Y + _inv._cellArray[i]._height)
+                        {
+                            
+                            IsFirstclick = true;
+                            _inv.ChangePlace(firsclick, i);
+                            firsclick = -1;
+                        }
+                    }
+                    TriTimer.ReInit();
+                }
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.NumPad1) && scrollToolBarTimer.IsDown())
