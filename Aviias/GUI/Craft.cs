@@ -89,6 +89,7 @@ namespace Aviias
                         else
                         {
                             _cellCraft[i].IsCraftable = false;
+                            _cellCraft[i]._position = new Vector2(0, 0);
                         }
                     }
                 }
