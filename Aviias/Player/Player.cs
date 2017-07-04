@@ -223,6 +223,10 @@ namespace Aviias
                 
                 if (bloc.IsBreakable)
                 {
+                    if(bloc.Type == "oak_leaves")
+                    {
+                        _inv.AddInventory(1,"apple");
+                    }
                     bloc1 = new Bloc(blocs[i,j].GetPosBlock ,scale, "air", content);
                     _inv.AddInventory(1, blocs[i, j].Type);
                     blocs[i, j] = bloc1;

@@ -38,8 +38,8 @@ namespace Aviias
         {
             int _difX = 77;
             int _difY = 80;
-            float x = camera.Position.X + 645 + (i % 10) * _difX;
-            float y = camera.Position.Y + 585 + (i / 10) * _difY;
+            float x = camera.Position.X + 650 + (i % 10) * _difX;
+            float y = camera.Position.Y + 590 + (i / 10) * _difY;
             _cellArray[i].Position = new Vector2(x, y);
         }
 
