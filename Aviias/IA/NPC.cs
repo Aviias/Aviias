@@ -1,5 +1,6 @@
 ﻿using Aviias.IA;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -30,7 +31,8 @@ namespace Aviias
         Timer _moving;
         int _direction;
         Timer _movingCooldown;
-        
+        SoundEffect talkNpc;
+        SoundEffect questReward;
 
         public NPC(ContentManager content, string texture, SpriteBatch spriteBatch, Vector2 position, int nbQuest)
             :base(false, 4, -10, position)
@@ -50,6 +52,8 @@ namespace Aviias
             _isQuestActive = false;
             _isTalking = false;
             _movingCooldown = new Timer(0f);
+            talkNpc = content.Load<SoundEffect>("Sounds/talk_npc");
+            questReward = content.Load<SoundEffect>("Sounds/quest_reward");
         }
 
         public void Interact(Player player)
@@ -64,6 +68,7 @@ namespace Aviias
                     player.RemoveQuest(_questActive);
                     quest._startNpc._isTalking = false; ;
                     player._activeQuest.Remove(quest);
+                    questReward.Play();
                     break;
                 }
 
@@ -81,12 +86,17 @@ namespace Aviias
 
             if (_isQuestActive)
             {
-                if (_questActive.CheckGoal(player, _id)) EndQuest(player);
+                if (_questActive.CheckGoal(player, _id))
+                {
+                    EndQuest(player);
+                    questReward.Play();
+                }
             }
             else if (_isTalking == false)
             {
                 GiveQuest(player);
                 _isTalking = true;
+                talkNpc.Play();
             }
         }
 

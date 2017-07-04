@@ -41,7 +41,10 @@ namespace Aviias
         Timer JumpTimer = new Timer(50f);
         public int[] proba;
         public int[] _points;
-        
+        Timer stopDamageTimer = new Timer(4f);
+        Timer stopDamageCDTimer = new Timer(5f);
+        bool _isStopDamage;
+        Genetic genetic = new Genetic();
 
         public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy)
             : base(false,4,-10, pos)
@@ -62,6 +65,8 @@ namespace Aviias
             proba = new int[6];
             nextAction = 0;
             _points = new int[5] { 0, 0, 0, 0, 0 };
+            _isStopDamage = false;
+            genetic.AddMonster(this);
         }
 
         public int BaseHealth => _baseHealth;
@@ -88,6 +93,12 @@ namespace Aviias
         {
             get { return _texture; }
             set { _texture = value; }
+        }
+
+        public bool IsStopDamage
+        {
+            get { return _isStopDamage; }
+            set { _isStopDamage = value; }
         }
 
         public float moveSpeed
@@ -216,6 +227,7 @@ namespace Aviias
                 {
                     _health += soul.Health;
                     _damageDealing += soul.Damages;
+                    _points[3] += 10;
                     return true;
                 }
                     //return eaten soul
@@ -293,6 +305,7 @@ namespace Aviias
                         if (Energy < (Energy * (0.75)))
                         {
                             player.GetDamage(Damage);
+                            _points[1] += Damage;
                             monsterTimer.ReInit();
                             Energy = Energy - 0.8f;
                         }
@@ -372,6 +385,15 @@ namespace Aviias
             return _blocs;
         }
 
+        public void Dodge()
+        {
+            if (stopDamageCDTimer.IsDown())
+            {
+                IsStopDamage = true;
+                stopDamageCDTimer.ReInit();
+            }
+        }
+
         internal void ChooseAction()
         {
             int prob = Game1.random.Next(1, (proba[0] + proba[1] + proba[2] + proba[3] + proba[4] + proba[5]));
@@ -411,8 +433,12 @@ namespace Aviias
         internal void UpdatePoints()
         {
             // 0 distance
+            if (Math.Abs((Math.Abs((int)MonsterPosition.X - (int)Game1.player.Position.X) - Math.Abs((int)MonsterPosition.Y - (int)Game1.player.Position.Y))) < 40) _points[0] += 3;
+            else if (Math.Abs((Math.Abs((int)MonsterPosition.X - (int)Game1.player.Position.X) - Math.Abs((int)MonsterPosition.Y - (int)Game1.player.Position.Y))) < 100) _points[0] += 1;
+
             // 1 dommages infligés
-            // 2 dommages bloqués
+            // 2 dommages bloqués / 2
+
             // 3 orbes ou monstres gobés
             // 4
         }
@@ -420,6 +446,14 @@ namespace Aviias
         internal void Update(Player player, GameTime gametime, Map map)
         {
             EngeryDamageTimer.Decrem(gametime);
+            stopDamageCDTimer.Decrem(gametime);
+            stopDamageTimer.Decrem(gametime);
+
+            if (stopDamageTimer.IsDown())
+            {
+                IsStopDamage = false;
+                stopDamageTimer.ReInit();
+            }
 
             if (_health >= 50)
             {
@@ -432,6 +466,7 @@ namespace Aviias
               Energy = Energy - 0.2f;
                                
             }
+
 
             Fight(player, gametime);
 

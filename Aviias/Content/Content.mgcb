@@ -64,7 +64,6 @@
 #begin font.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:font.spritefont
 
@@ -179,7 +178,6 @@
 #begin msg_font.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:msg_font.spritefont
 
@@ -771,7 +769,6 @@
 /processorParam:TextureFormat=Color
 /build:gold_ore.png
 
-
 #begin Menu/Button/quitter_gris.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -880,4 +877,51 @@
 /processorParam:TextureFormat=Color
 /build:Menu/Button/retour_rouge.png
 
+#begin Sounds/break_bloc.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/break_bloc.ogg
+
+#begin Sounds/put_bloc.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/put_bloc.ogg
+
+#begin Sounds/talk_npc.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/talk_npc.wav
+
+#begin Sounds/sucess_reward.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/sucess_reward.wav
+
+#begin Sounds/quest_reward.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/quest_reward.wav
+
+#begin Sounds/player_die.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/player_die.wav
+
+#begin Sounds/close_chest.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/close_chest.ogg
+
+#begin Sounds/open_chest.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/open_chest.ogg
 

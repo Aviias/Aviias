@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Audio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,7 +27,7 @@ namespace Aviias
             _idEndNpc = idEndNpc;
             _goal = new Dictionary<string, int>(4);
             _reward = new Dictionary<string, int>(2);
-             _goal.Add("stone", 8);
+            _goal.Add("stone", 8);
             _goal.Add("wood_shovel", 1);
             _startNpc = startNPC;
             CreateSpitch();

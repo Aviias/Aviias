@@ -13,6 +13,7 @@ namespace Aviias.IA
         static IChromosome chronos = new ShortArrayChromosome(chromosomeLength);
         static Population Population = new Population(10, chronos, new FitnessRepartitionActions(), new RouletteEliteSelection());
         static ShortArrayChromosome Meilleur = null;
+        public Monster _monster;
 
        /* static void Main(string[] args)
         {
@@ -31,6 +32,11 @@ namespace Aviias.IA
             Console.ReadLine();
         }*/
 
+        public void AddMonster(Monster monster)
+        {
+            _monster = monster;
+        }
+
         static internal void RunGeneration()
         {
             Population.RunEpoch();
@@ -41,7 +47,7 @@ namespace Aviias.IA
             Meilleur = (ShortArrayChromosome)Population.BestChromosome;
         }
 
-        static internal int[] GetProb(IChromosome chromosome)
+       /* static internal int[] GetProb(IChromosome chromosome)
         {
             int[] prob = new int[5];
             for (int i = 5; i < 10; i++)
@@ -49,7 +55,7 @@ namespace Aviias.IA
                 prob[i - 5] = ((ShortArrayChromosome)chromosome).Value[i];
             }
             return prob;
-        }
+        }*/
     }
 
     class FitnessRepartitionActions : IFitnessFunction
@@ -61,8 +67,8 @@ namespace Aviias.IA
             // ushort[] genes = ((ShortArrayChromosome)chromosome).Value;
             for (int i = 0; i < points.Length; i++)
             {
-                if (i != 2) a += points[i];
-                else a -= 2 * points[i];
+                a += points[i];
+             //   else a -= 2 * points[i];
             }
             if (a < 0) a = 0;
             return a;
@@ -70,12 +76,13 @@ namespace Aviias.IA
 
         static int[] GetPoints(IChromosome chromosome)
         {
-            ushort[] genes = ((ShortArrayChromosome)chromosome).Value;
+           // ushort[] genes = ((ShortArrayChromosome)chromosome).Value;
             int[] points = new int[4];
-            for (int i = 0; i < points.Length; i++)
+
+        /*    for (int i = 0; i < 4; i++)
             {
                 points[i] = 2 * genes[i];
-            }
+            }*/
             return points;
         }
     }

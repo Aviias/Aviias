@@ -48,6 +48,7 @@ namespace Aviias.IA
                 this.moveSpeed += 0.2f;
                 this.Texture = content.Load<Texture2D>(texture);
                 _stepEvolve += 1;
+                _points[3] += 10;
             }
             
         }

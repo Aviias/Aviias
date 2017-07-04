@@ -12,6 +12,8 @@ using MonoGame.Extended;
 using MonoGame.Extended.ViewportAdapters;
 using Aviias.GUI;
 using Aviias.IA;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace Aviias
 {
@@ -80,6 +82,8 @@ namespace Aviias
         internal Inventory _inv;
         private SpriteBatch spriteBatch;
         List<Soul> _souls = new List<Soul>(32);
+        Song sPutBloc;
+        Song sBreakBloc;
 
         public int Width
         {
@@ -124,6 +128,8 @@ namespace Aviias
         {
             PMoveLeft = new Animation(content, "gauche", 50f,3,Position);
             PMoveRight = new Animation(content, "droite", 50f, 3, Position);
+            sPutBloc = content.Load<Song>("Sounds/put_bloc");
+            sBreakBloc = content.Load<Song>("Sounds/break_bloc");
         }
 
         public void Initialize(Texture2D texture, Vector2 position, ContentManager content, Map map)
@@ -168,6 +174,7 @@ namespace Aviias
             _inv.AddInventory(1000, "stonebrick");
             _inv.AddInventory(247, "oak_leaves");
             */
+
         }
 
         public Vector2 PlayerPosition
@@ -222,7 +229,7 @@ namespace Aviias
                     bloc1 = new Bloc(blocs[i,j].GetPosBlock ,scale, "air", content);
                     _inv.AddInventory(1, blocs[i, j].Type);
                     blocs[i, j] = bloc1;
-                                       
+                    MediaPlayer.Play(sBreakBloc);
                 }
             }
             _map.ActualizeShadow((int)Position.X, (int)Position.Y);
@@ -236,6 +243,7 @@ namespace Aviias
                 bloc1 = new Bloc(blocs[i, j].GetPosBlock, scale, name, content);
                 _inv.DecreaseInventory(1, name);
                 blocs[i, j] = bloc1;
+                MediaPlayer.Play(sPutBloc);
                 map.ActualizeShadow((int)PlayerPosition.X,(int)PlayerPosition.Y);
             }
         }
@@ -413,14 +421,18 @@ namespace Aviias
                     {
                         if (playerTimer.IsDown() && Vector2.Distance(player.PlayerPosition, position) <= 400)
                         {
-                            monsters[i].GetDamage(player.Damage);
-                            if (monsters[i].IsDie)
+                            if (monsters[i].IsStopDamage == false)
                             {
-                                Soul soul = new Soul(monsters[i].MonsterPosition, Content, monsters[i].BaseDamage, monsters[i].BaseHealth);
-                                _souls.Add(soul);
-                                monsters.Remove(monsters[i]);
+                                monsters[i].GetDamage(player.Damage);
+                                if (monsters[i].IsDie)
+                                {
+                                    Soul soul = new Soul(monsters[i].MonsterPosition, Content, monsters[i].BaseDamage, monsters[i].BaseHealth);
+                                    _souls.Add(soul);
+                                    monsters.Remove(monsters[i]);
+                                }
+                                playerTimer.ReInit();
                             }
-                            playerTimer.ReInit();
+                            else monsters[i]._points[2] += Damage / 2;
                         }
                             
                     }
@@ -522,7 +534,7 @@ namespace Aviias
             {
                 player.AddStr("a");
             }
-            if (currentKeyboardState.IsKeyDown(Keys.I))
+            if (currentKeyboardState.IsKeyDown(Keys.I) && !previousKeyboardState.IsKeyDown(Keys.I))
             {
                 foreach (NPC npc in _npc) if (map.GetDistance(player.PlayerPosition, npc.Position) < 400) npc.Interact(player);
             }
@@ -587,6 +599,8 @@ namespace Aviias
                 save.SerializePlayer();
                 save.SerializeNpc();
             }
+
+            previousKeyboardState = currentKeyboardState;
         }
 
         internal void RegenerateHealth(int quantity)
