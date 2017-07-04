@@ -270,6 +270,7 @@ namespace Aviias
 
         internal void Draw(SpriteBatch spriteBatch, ContentManager content, Camera2D camera)
         {
+            _craft.IsCraftable(_cellArray);
             text = new Text(content);
             spriteBatch.Draw(content.Load<Texture2D>("Inventaire"), new Vector2(camera.Position.X + 576, camera.Position.Y + 140), null, Color.White, 0f, Vector2.Zero, 1f,
                 SpriteEffects.None, 0f);

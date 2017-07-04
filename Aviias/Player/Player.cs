@@ -154,8 +154,14 @@ namespace Aviias
             CraftNotPutable.Add("heal_potion");
             _inv.AddInventory(2, "oak_wood");
             _inv.AddInventory(2, "dirt");
+            _inv.AddInventory(8, "oak_plank");
             _inv.AddInventory(2, "bedrock");
             _inv.AddInventory(2, "glass");
+            _inv.AddInventory(2, "door_wood");
+            _inv.AddInventory(10, "iron_ore");
+            _inv.AddInventory(10, "gold_ore");
+            _inv.AddInventory(10, "diamond");
+            _inv.AddInventory(2, "coal_ore");
             /*
             _inv.AddInventory(4, "oak_plank");
             _inv.AddInventory(500, "dirt");
@@ -318,6 +324,7 @@ namespace Aviias
             stopDamageTimer.Decrem(gameTime);
             TriTimer.Decrem(gameTime);
             bool tmp = false;
+            _inv._craft.IsCraftable(_inv._cellArray);
 
             foreach (Soul soul in _souls)
             {
@@ -458,6 +465,7 @@ namespace Aviias
                             }
                             craftTimer.ReInit();
                         }
+                        craft.IsCraftable(_inv._cellArray);
                     }
                 }
 
