@@ -96,13 +96,13 @@ namespace Aviias
                 for (int i = 0; i < monsterneed; i++)
                 {
                     monsterPosition = spawnMonster.SpawnOnSurface(map);
-                    wolf = new Wolf(Content, Content.Load<Texture2D>("loup"), monsterPosition);
+                    wolf = new Wolf(Content, Content.Load<Texture2D>("Wolfface"), monsterPosition);
                     monsters.Add(wolf);
                 }
             }
             //Vector2 gloutoPos = spawnMonster.SpawnOnSurface(map);
             //glouto = new Gloutogobe(Content, Content.Load<Texture2D>("Blopred"), gloutoPos);
-
+            //monsters.Add(glouto);
             base.Initialize();
 
             graphics.IsFullScreen = false;
@@ -127,6 +127,14 @@ namespace Aviias
             for (int i = 0; i < _npc.Count; i++)
             {
                 _npc[i].LoadContent(Content);
+            }
+
+            for (int i = 0; i < monsters.Count; i++)
+            {
+                if (monsters[i].Type == "wolf")
+                {
+                    monsters[i].LoadContent(Content, "Wolfface", "Wolfleft", "Wolfright", 50f, 5);
+                }
             }
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);         
@@ -207,13 +215,13 @@ namespace Aviias
 
                     if (spawnTimer.IsDown())
 
-                    {                       
-                        //Vector2 monsterPosition = spawnMonster.SpawnOnSurface(map);
-                        //drake = new Drake(Content, Content.Load<Texture2D>("drake"), monsterPosition);
-                        
-                         //monsters.Add(monster);
-                         //monsters.Add(drake);
-                        
+                    {     
+                        /*                  
+                        Vector2 monsterPosition = spawnMonster.SpawnOnSurface(map);
+                        drake = new Drake(Content, Content.Load<Texture2D>("drake"), monsterPosition);
+                        drake.LoadContent(Content, "phenixface", "phenixleft", "phenixright", 50f, 4);
+                        monsters.Add(drake);
+                        */
                         spawnTimer.ReInit();
                     }
                 }

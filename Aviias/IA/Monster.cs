@@ -19,7 +19,7 @@ namespace Aviias
         int _id;
         int _health;
         float _speed;
-   /*     [field: NonSerialized]
+   /*   [field: NonSerialized]
         Vector2 _pos;*/
         bool _isDie;
         double _regenerationRate;
@@ -46,9 +46,11 @@ namespace Aviias
         Timer stopDamageCDTimer = new Timer(5f);
         bool _isStopDamage;
         double _score;
+        string _type;
+        Animation Left, Right, Face, CurrentAnim;
 
 
-        public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy)
+        public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy, string type)
             : base(false,4,-10, pos)
         {
             _id = rnd.Next(0, int.MaxValue);
@@ -67,6 +69,14 @@ namespace Aviias
             _energy = energy;
             _score = 0;
             _isStopDamage = false;
+            _type = type;
+        }
+
+        public void LoadContent(ContentManager content, string assertface, string assertleft,string assertright, float speed, int numOfFrames)
+        {
+            Face = new Animation(content, assertface, speed, 1, MonsterPosition);
+            Left = new Animation(content, assertleft, speed, numOfFrames, MonsterPosition);
+            Right = new Animation(content, assertright, speed, numOfFrames, MonsterPosition);
         }
 
         public int BaseHealth => _baseHealth;
@@ -81,6 +91,11 @@ namespace Aviias
         {
             get { return text; }
             set { text = value; }
+        }
+
+        public string Type
+        {
+            get { return _type; }
         }
 
         public double Score
@@ -390,6 +405,7 @@ namespace Aviias
 
         internal void Update(Player player, GameTime gametime, Map map)
         {
+            float x = posX;
             EngeryDamageTimer.Decrem(gametime);
             stopDamageCDTimer.Decrem(gametime);
             stopDamageTimer.Decrem(gametime);
@@ -425,6 +441,19 @@ namespace Aviias
                 EngeryDamageTimer.ReInit();
             }
 
+            if ( x == posX)
+            {
+
+            } else if (x < posX)
+            {
+                Right.PlayAnim(gametime);
+                CurrentAnim = Right;
+            } else
+            {
+                Left.PlayAnim(gametime);
+                CurrentAnim = Left;
+            }
+
             UpdatePhysics(map, Texture);
                 
             ReactToLight();
@@ -439,7 +468,8 @@ namespace Aviias
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _pos, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, _pos);
+            //spriteBatch.Draw(_texture, _pos, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             text.DisplayText(("Life : " + _health), new Vector2(_pos.X + 60, _pos.Y - 30), spriteBatch, Color.Orange);
         }
     }
