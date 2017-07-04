@@ -1,4 +1,5 @@
-﻿using Aviias.IA;
+﻿using Aviias.GUI;
+using Aviias.IA;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -30,7 +31,16 @@ namespace Aviias
         Timer _moving;
         int _direction;
         Timer _movingCooldown;
-        
+        Animation MoveLeft1;
+        Animation MoveRight1;
+        Animation MoveLeft2;
+        Animation MoveRight2;
+        Animation CurrentAnim;
+        Animation Face1;
+        Animation Face2;
+
+
+
 
         public NPC(ContentManager content, string texture, SpriteBatch spriteBatch, Vector2 position, int nbQuest)
             :base(false, 4, -10, position)
@@ -50,6 +60,16 @@ namespace Aviias
             _isQuestActive = false;
             _isTalking = false;
             _movingCooldown = new Timer(0f);
+        }
+
+        public void LoadContent(ContentManager content)
+        {
+             Face1 = new Animation(content, "Face1", 110f, 1, _pos);
+             Face2 = new Animation(content, "Face2", 110f, 1, _pos);
+             MoveLeft1 = new Animation(content, "Left1", 110f, 3, _pos);
+             MoveRight1= new Animation(content, "Right1", 110f, 3, _pos);
+             MoveLeft2 = new Animation(content, "Left2", 110f, 3, _pos);
+             MoveRight2 = new Animation(content, "Right2", 110f, 3, _pos);
         }
 
         public void Interact(Player player)
@@ -92,9 +112,50 @@ namespace Aviias
 
         public void Update(GameTime gametime, SpriteBatch spriteBatch)
         {
-
+            float x = _pos.X;
             UpdatePhysics(Game1.map, _texture);
             RandomMove(gametime);
+            
+            if( x == _pos.X)
+            {
+                if (_textureName == "Face1")
+                {
+                    Face1.PlayAnim(gametime);
+                    CurrentAnim = Face1;
+                }
+                else
+                {
+                    Face2.PlayAnim(gametime);
+                    CurrentAnim = Face2;
+                }
+            }
+            else if ( x < _pos.X)
+            {
+                if (_textureName == "Face1")
+                {
+                    MoveRight1.PlayAnim(gametime);
+                    CurrentAnim = MoveRight1;
+                }
+                else
+                {
+                    MoveRight2.PlayAnim(gametime);
+                    CurrentAnim = MoveRight2;
+                }
+            } else
+            {
+                if (_textureName == "Face1")
+                {
+                    MoveLeft1.PlayAnim(gametime);
+                    CurrentAnim = MoveLeft1;
+                }
+                else
+                {
+                    MoveLeft2.PlayAnim(gametime);
+                    CurrentAnim = MoveLeft2;
+                }
+            }
+
+
         }
 
         public void GraphicUpdate(SpriteBatch spriteBatch)
@@ -121,8 +182,9 @@ namespace Aviias
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _pos, null, Color.White, 0f, Vector2.Zero, 1f,
-               SpriteEffects.None, 0f);
+            if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, _pos);
+            //spriteBatch.Draw(_texture, _pos, null, Color.White, 0f, Vector2.Zero, 1f,
+            //   SpriteEffects.None, 0f);
             GraphicUpdate(spriteBatch);
         }
 
@@ -152,11 +214,22 @@ namespace Aviias
 
         public void RandomMove(GameTime gametime)
         {
+            float x = _pos.X;
             if (_isMoving && !_moving.IsDown())
             {
-                if (_direction == 0) _pos.X += 1;
-                else _pos.X -= 1;
+                if (_direction == 0)
+                {
+                    _pos.X += 1;
+
+                }
+                else
+                {
+                    _pos.X -= 1;
+                }
+                                  
+                
                 _moving.Decrem(gametime);
+
                 if (_moving.IsDown())
                 {
                     _isMoving = false;
@@ -176,6 +249,7 @@ namespace Aviias
                     _isMoving = true;
                 }
             }
+
         }
 
         public Vector2 Position => _pos;

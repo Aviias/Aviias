@@ -65,7 +65,7 @@ namespace Aviias
         Animation Blood;
         Animation currentBlood;
         Animation SoulAnim;
-        Animation CurrentSoul;
+        Animation MonsterBlood;
         Timer playerTimer = new Timer(1.2f);
         Timer invenTimer = new Timer(1.3f);
         Timer craftTimer = new Timer(1.5f);
@@ -78,6 +78,7 @@ namespace Aviias
         Timer TriTimer = new Timer(1.1f);
         Timer EatTimer = new Timer(1.1f);
         Timer BloodTimer = new Timer(1.8f);
+        Timer MonsterBloodTimer = new Timer(1.5f);
         int firsclick;
         bool IsFirstclick;
         bool _isGetDamage;
@@ -88,6 +89,9 @@ namespace Aviias
         private SpriteBatch spriteBatch;
         List<Soul> _souls = new List<Soul>(32);
         List<Animation> _soulsAnim = new List<Animation>(32);
+        bool _isMonsterGetDamage;
+        List<Animation> _monsterBlood = new List<Animation>();
+        List<Monster> _monsterBloodPos = new List<Monster>();
 
         public int Width
         {
@@ -160,6 +164,7 @@ namespace Aviias
             firsclick = -1;
             IsFirstclick = true;
             _isGetDamage = false;
+            _isMonsterGetDamage = false;
             CraftNotPutable.Add("stick");
             CraftNotPutable.Add("wood_shovel");
             CraftNotPutable.Add("heal_potion");
@@ -342,6 +347,7 @@ namespace Aviias
             TriTimer.Decrem(gameTime);
             EatTimer.Decrem(gameTime);
             BloodTimer.Decrem(gameTime);
+            MonsterBloodTimer.Decrem(gameTime);
             bool tmp = false;         
             _inv._craft.IsCraftable(_inv._cellArray);
             
@@ -362,6 +368,16 @@ namespace Aviias
             }           
             
             list = GetCollisionSide(GetBlocsAround(map));
+
+           for(int i = 0; i < _monsterBlood.Count; i++)
+            {
+                _monsterBlood[i].PlayAnim(gameTime);
+                if (MonsterBloodTimer.IsDown())
+                {
+                    _monsterBlood.Remove(_monsterBlood[i]);
+                    MonsterBloodTimer.ReInit();
+                }
+            }
 
             if(_isGetDamage)
             {
@@ -438,6 +454,10 @@ namespace Aviias
                         if (playerTimer.IsDown() && Vector2.Distance(player.PlayerPosition, position) <= 400 && monsters[i].IsStopDamage == false)
                         {
                             monsters[i].GetDamage(player.Damage);
+                            _isMonsterGetDamage = true;
+                            MonsterBlood = new Animation(Content, "blood", 50f, 1, monsters[i].MonsterPosition);
+                            _monsterBlood.Add(MonsterBlood);
+                            _monsterBloodPos.Add(monsters[i]);
                             if (monsters[i].IsDie)
                             {
                                 Soul soul = new Soul(monsters[i].MonsterPosition, Content, monsters[i].BaseDamage, monsters[i].BaseHealth);
@@ -845,6 +865,10 @@ namespace Aviias
                 _soulsAnim[i].Draw(spriteBatch, _souls[i].Position);
             }
 
+            for(int i = 0; i < _monsterBlood.Count && i < _monsterBloodPos.Count; i++)
+            {
+                _monsterBlood[i].Draw(spriteBatch, _monsterBloodPos[i].MonsterPosition);
+            }
 
             if (IsDie == true)
             {

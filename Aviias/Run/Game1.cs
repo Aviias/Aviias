@@ -86,8 +86,8 @@ namespace Aviias
 
 
             _npc = new List<NPC>(8);
-            _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(500, 250), 5));
-            _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(1400, 300), 3));
+            _npc.Add(new NPC(Content, "Face1", spriteBatch, new Vector2(500, 250), 5));
+            _npc.Add(new NPC(Content, "Face2", spriteBatch, new Vector2(1400, 300), 3));
 
             spawnMonster = new Spawn(map);
             int monsterneed = 1 - monsters.Count;
@@ -124,6 +124,10 @@ namespace Aviias
             _camera = new Camera2D(_viewportAdapter);
             _interface = new Camera2D(_viewportAdapter);
 
+            for (int i = 0; i < _npc.Count; i++)
+            {
+                _npc[i].LoadContent(Content);
+            }
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);         
 
