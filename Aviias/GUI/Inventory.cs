@@ -251,7 +251,7 @@ namespace Aviias
             text = new Text(content);
             spriteBatch.Draw(content.Load<Texture2D>("Inventaire"), new Vector2(camera.Position.X + 576, camera.Position.Y + 140), null, Color.White, 0f, Vector2.Zero, 1f,
                 SpriteEffects.None, 0f);
-            spriteBatch.Draw(content.Load<Texture2D>("babyplayer"), new Vector2(camera.Position.X + 965, camera.Position.Y + 190), null, Color.White, 0f, Vector2.Zero, 3.4f,
+            spriteBatch.Draw(content.Load<Texture2D>("face"), new Vector2(camera.Position.X + 976, camera.Position.Y + 230), null, Color.White, 0f, Vector2.Zero, 3.4f,
                 SpriteEffects.None, 0f);
             for (int i=0; i<40; i++)
             {
