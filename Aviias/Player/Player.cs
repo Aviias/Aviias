@@ -65,6 +65,7 @@ namespace Aviias
         Animation Blood;
         Animation currentBlood;
         Animation SoulAnim;
+        Animation CurrentSoul;
         Timer playerTimer = new Timer(1.2f);
         Timer invenTimer = new Timer(1.3f);
         Timer craftTimer = new Timer(1.5f);
@@ -86,6 +87,7 @@ namespace Aviias
         internal Inventory _inv;
         private SpriteBatch spriteBatch;
         List<Soul> _souls = new List<Soul>(32);
+        List<Animation> _soulsAnim = new List<Animation>(32);
 
         public int Width
         {
@@ -340,19 +342,24 @@ namespace Aviias
             TriTimer.Decrem(gameTime);
             EatTimer.Decrem(gameTime);
             BloodTimer.Decrem(gameTime);
-            bool tmp = false;            
+            bool tmp = false;         
             _inv._craft.IsCraftable(_inv._cellArray);
             
-            foreach (Soul soul in _souls)
+
+            for(int i = 0; i < _souls.Count && i < _soulsAnim.Count; i++)
             {
-                soul.Update(gameTime);
-                if (soul.IsDown())
+                _souls[i].Update(gameTime);
+                _soulsAnim[i].PlayAnim(gameTime);
+
+                if(_souls[i].IsDown())
                 {
-                    _souls.Remove(soul);
+                    _soulsAnim.Remove(_soulsAnim[i]);
+                    _souls.Remove(_souls[i]);
                     tmp = true;
                 }
+
                 if (tmp) break;
-            }
+            }           
             
             list = GetCollisionSide(GetBlocsAround(map));
 
@@ -412,26 +419,6 @@ namespace Aviias
                 invenTimer.ReInit();
             }
 
-            //if (currentKeyboardState.IsKeyDown(Keys.C) && craftTimer.IsDown() && IsInventoryOpen)
-            //{
-            //    for (int i = 0; i < _inv._craft._cellCraft.Length; i++)
-            //    {
-            //        if (_inv._craft._cellCraft[i].IsCraftable == true)
-            //        {
-            //            _inv.AddInventory(_inv._craft._cellCraft[i]._quantity, _inv._craft._cellCraft[i]._name);
-
-            //            foreach (KeyValuePair<int, string> element in _inv._craft._cellCraft[i]._ressource)
-            //            {
-            //                _inv.DecreaseInventory(element.Key, element.Value.Name);
-            //            }
-            //            break;
-            //        }
-            //    }
-            //    craftTimer.ReInit();
-
-            //}
-
-
             if (currentKeyboardState.IsKeyDown(Keys.Space) /*|| currentKeyboardState.IsKeyDown(Keys.Up)*/)
             {
                 Jump(map);
@@ -453,11 +440,11 @@ namespace Aviias
                             monsters[i].GetDamage(player.Damage);
                             if (monsters[i].IsDie)
                             {
-                                SoulAnim = new Animation(Content, "amesprite", 50f, 6, monsters[i].MonsterPosition);
                                 Soul soul = new Soul(monsters[i].MonsterPosition, Content, monsters[i].BaseDamage, monsters[i].BaseHealth);
                                 _souls.Add(soul);
+                                SoulAnim = new Animation(Content, "amesprite", 50f, 6, monsters[i].MonsterPosition);
+                                _soulsAnim.Add(SoulAnim);
                                 monsters.Remove(monsters[i]);
-                                SoulAnim.PlayAnim(gameTime);
                             }
                             playerTimer.ReInit();
                         }
@@ -853,9 +840,9 @@ namespace Aviias
 
             }
 
-            for (int i = 0; i < _souls.Count; i++)
+            for(int i = 0; i < _souls.Count && i < _soulsAnim.Count; i++)
             {
-                SoulAnim.Draw(spriteBatch, _souls[i].Position);
+                _soulsAnim[i].Draw(spriteBatch, _souls[i].Position);
             }
 
 

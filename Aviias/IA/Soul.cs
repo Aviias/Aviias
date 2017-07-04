@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Aviias.GUI;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -17,6 +18,7 @@ namespace Aviias.IA
         int _damages;
         int _health;
         Timer _lifeTime = new Timer(3f);
+        Animation SoulAnim;
 
         public Soul(Vector2 position, ContentManager content, int damages, int health)
         {
@@ -25,6 +27,7 @@ namespace Aviias.IA
             _position = position;
             //_texture = content.Load<Texture2D>("soul");
         }
+
 
         public Vector2 Position => _position;
         public Texture2D Texture => _texture;

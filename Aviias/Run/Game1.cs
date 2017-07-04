@@ -90,7 +90,7 @@ namespace Aviias
             _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(1400, 300), 3));
 
             spawnMonster = new Spawn(map);
-            int monsterneed = 15 - monsters.Count;
+            int monsterneed = 1 - monsters.Count;
             if (monsterneed != 0)
             {
                 for (int i = 0; i < monsterneed; i++)
