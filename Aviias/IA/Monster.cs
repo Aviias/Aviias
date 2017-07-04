@@ -39,12 +39,12 @@ namespace Aviias
         float _yVelocity;
         Timer EngeryDamageTimer = new Timer(1f);
         Timer JumpTimer = new Timer(50f);
-        public int[] proba;
+        public ushort[] proba;
         public int[] _points;
         Timer stopDamageTimer = new Timer(4f);
         Timer stopDamageCDTimer = new Timer(5f);
         bool _isStopDamage;
-        Genetic genetic = new Genetic();
+        Timer _action = new Timer(2f);
 
         public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy)
             : base(false,4,-10, pos)
@@ -62,11 +62,11 @@ namespace Aviias
             _baseHealth = health;
             _baseEnergy = energy;
             _energy = energy;
-            proba = new int[6];
+            proba = new ushort[6];
             nextAction = 0;
-            _points = new int[5] { 0, 0, 0, 0, 0 };
+            _points = new int[5] { 10, 10, 10, 10, 10 };
             _isStopDamage = false;
-            genetic.AddMonster(this);
+            Genetic.AddPoints(this);
         }
 
         public int BaseHealth => _baseHealth;
@@ -305,7 +305,7 @@ namespace Aviias
                         if (Energy < (Energy * (0.75)))
                         {
                             player.GetDamage(Damage);
-                            _points[1] += Damage;
+                            _points[1] += (ushort)Damage;
                             monsterTimer.ReInit();
                             Energy = Energy - 0.8f;
                         }
@@ -396,13 +396,17 @@ namespace Aviias
 
         internal void ChooseAction()
         {
-            int prob = Game1.random.Next(1, (proba[0] + proba[1] + proba[2] + proba[3] + proba[4] + proba[5]));
-            if (prob <= proba[0]) nextAction = 0;           //Move on player
-            else if (prob <= proba[1]) nextAction = 1;      //Flight
-            else if (prob <= proba[2]) nextAction = 2;      //Fight
-            else if (prob <= proba[3]) nextAction = 3;      //Block
-            else if (prob <= proba[4]) nextAction = 4;      //GetOrb / EatMonster
-            else nextAction = 5;                            //Do nothing
+            if (_action.IsDown())
+            {
+                int prob = Game1.random.Next(1, (proba[0] + proba[1] + proba[2] + proba[3] + proba[4]));
+                if (prob <= proba[0]) nextAction = 0;           //Move on player
+                else if (prob <= proba[1] + proba[0]) nextAction = 1;      //Flight
+                else if (prob <= proba[2] + proba[1] + proba[0]) nextAction = 2;      //Fight
+                else if (prob <= proba[3] + proba[2] + proba[1] + proba[0]) nextAction = 3;      //Block
+                else if (prob <= proba[4] + proba[3] + proba[2] + proba[1] + proba[0]) nextAction = 4;      //GetOrb / EatMonster
+                else nextAction = 5;                            //Do nothing
+            }
+            
         }
 
         internal void DoSomething(Player player, Map map, GameTime gametime)
@@ -419,7 +423,7 @@ namespace Aviias
                     Fight(player, gametime);
                     break;
                 case 3:
-                    MoveOnPlayer(player, map, gametime);
+                    Dodge();
                     break;
                 case 4:
                     MoveOnPlayer(player, map, gametime);
@@ -437,47 +441,25 @@ namespace Aviias
             else if (Math.Abs((Math.Abs((int)MonsterPosition.X - (int)Game1.player.Position.X) - Math.Abs((int)MonsterPosition.Y - (int)Game1.player.Position.Y))) < 100) _points[0] += 1;
 
             // 1 dommages infligés
-            // 2 dommages bloqués / 2
-
+            // 2 dommages bloqués
             // 3 orbes ou monstres gobés
             // 4
         }
 
         internal void Update(Player player, GameTime gametime, Map map)
         {
+            
+            Genetic.AddPoints(this);
+            proba = Genetic.Meilleur.Value;
+            ChooseAction();
+            DoSomething(player, map, gametime);
+
             EngeryDamageTimer.Decrem(gametime);
             stopDamageCDTimer.Decrem(gametime);
             stopDamageTimer.Decrem(gametime);
 
-            if (stopDamageTimer.IsDown())
-            {
-                IsStopDamage = false;
-                stopDamageTimer.ReInit();
-            }
-
-            if (_health >= 50)
-            {
-                MoveOnPlayer(player, map, gametime);
-                Energy = Energy - 0.2f;
-            }
-            else
-            {
-              Flight(player, map, gametime);
-              Energy = Energy - 0.2f;
-                               
-            }
-
-
-            Fight(player, gametime);
-
-            if (Energy < 0f && EngeryDamageTimer.IsDown())
-            {
-                this.GetDamage(1);
-                EngeryDamageTimer.ReInit();
-            }
-
             UpdatePhysics(map, Texture);
-                
+            _action.Decrem(gametime);
             ReactToLight();
             ActualizeHealthRegeneration(gametime);
             ActualizeEnergieRegeneration(gametime);                       
@@ -492,6 +474,7 @@ namespace Aviias
         {
             spriteBatch.Draw(_texture, _pos, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             text.DisplayText(("Life : " + _health), new Vector2(_pos.X + 60, _pos.Y - 30), spriteBatch, Color.Orange);
+            text.DisplayText(nextAction.ToString(), new Vector2(_pos.X + 30, _pos.Y - 50), spriteBatch, Color.Black);
         }
     }
 }

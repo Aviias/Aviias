@@ -10,34 +10,22 @@ namespace Aviias.IA
     class Genetic
     {
         static int chromosomeLength = 5;             //[%action1, %action2,...]
-        static IChromosome chronos = new ShortArrayChromosome(chromosomeLength);
-        static Population Population = new Population(10, chronos, new FitnessRepartitionActions(), new RouletteEliteSelection());
-        static ShortArrayChromosome Meilleur = null;
-        public Monster _monster;
+        public static IChromosome chronos = new ShortArrayChromosome(chromosomeLength);
+        Population Population = new Population(10, chronos, new FitnessRepartitionActions(), new RouletteEliteSelection());
+        public static ShortArrayChromosome Meilleur = null;
+        static internal int[] _points = new int[5];
 
-       /* static void Main(string[] args)
+        internal Genetic()
         {
-            Random rand = new Random();
-
-            int Iteration = 0;
-
-            while (Iteration++ < 500)
-            {
-
-                RunGeneration();
-            }
-
-            //       int[] test = GetProb(Population[1]);
-
-            Console.ReadLine();
-        }*/
-
-        public void AddMonster(Monster monster)
-        {
-            _monster = monster;
+            //RunGeneration();
         }
 
-        static internal void RunGeneration()
+        static public void AddPoints(Monster monster)
+        {
+            _points = monster._points;
+        }
+
+        internal void RunGeneration()
         {
             Population.RunEpoch();
             for (int i = 0; i < Population.Size; i++)
@@ -46,16 +34,6 @@ namespace Aviias.IA
             }
             Meilleur = (ShortArrayChromosome)Population.BestChromosome;
         }
-
-       /* static internal int[] GetProb(IChromosome chromosome)
-        {
-            int[] prob = new int[5];
-            for (int i = 5; i < 10; i++)
-            {
-                prob[i - 5] = ((ShortArrayChromosome)chromosome).Value[i];
-            }
-            return prob;
-        }*/
     }
 
     class FitnessRepartitionActions : IFitnessFunction
@@ -79,11 +57,11 @@ namespace Aviias.IA
            // ushort[] genes = ((ShortArrayChromosome)chromosome).Value;
             int[] points = new int[4];
 
-        /*    for (int i = 0; i < 4; i++)
+           /* for (int i = 0; i < 4; i++)
             {
                 points[i] = 2 * genes[i];
             }*/
-            return points;
+            return Genetic._points;
         }
     }
 

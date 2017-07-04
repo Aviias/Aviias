@@ -47,6 +47,7 @@ namespace Aviias
         Timer _nightDay = new Timer(150f);
         //Ressource _testRessource = new Ressource();
         Spawn spawnMonster;
+        internal Genetic genetic = new Genetic();
 
         public Game1()
         {
@@ -63,6 +64,8 @@ namespace Aviias
                 return _camera;
             }
         }
+
+        internal Genetic Genetic => genetic;
 
         protected override void Initialize()
         {
@@ -221,7 +224,11 @@ namespace Aviias
                 }
 
             }
+        }
 
+        public void RunGeneration()
+        {
+            genetic.RunGeneration();
         }
 
         /// <summary>

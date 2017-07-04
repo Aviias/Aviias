@@ -428,6 +428,7 @@ namespace Aviias
                                 {
                                     Soul soul = new Soul(monsters[i].MonsterPosition, Content, monsters[i].BaseDamage, monsters[i].BaseHealth);
                                     _souls.Add(soul);
+                                    
                                     monsters.Remove(monsters[i]);
                                 }
                                 playerTimer.ReInit();
