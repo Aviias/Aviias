@@ -592,8 +592,18 @@ namespace Aviias
             {
                 if(_inv._cellArray[_inv.ActualCell]._name == "apple" && _inv._cellArray[_inv.ActualCell]._quantity >= 1)
                 {
-                    RegenerateHealth(5);
+                    RegenerateHealth(3);
                     _inv.DecreaseInventory(1,"apple");
+                    EatTimer.ReInit();
+                }
+            }
+
+            if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Right) == System.Windows.Forms.MouseButtons.Right && EatTimer.IsDown())
+            {
+                if (_inv._cellArray[_inv.ActualCell]._name == "apple_golden" && _inv._cellArray[_inv.ActualCell]._quantity >= 1)
+                {
+                    RegenerateHealth(30);
+                    _inv.DecreaseInventory(1, "apple_golden");
                     EatTimer.ReInit();
                 }
             }
