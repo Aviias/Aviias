@@ -24,7 +24,7 @@ namespace Aviias
         public Vector2 Position;
         int _health;
        // [field: NonSerialized]
-        Text text;
+        public Text text;
         public bool _displayPos;
         string _str;
        // [field: NonSerialized]
@@ -72,6 +72,7 @@ namespace Aviias
         Timer stopDamageTimer = new Timer(12f);
         Timer stopDamageCDTimer = new Timer(5f);
         Timer TriTimer = new Timer(1.1f);
+        Timer successTimer = new Timer(1.3f);
         int firsclick;
         bool IsFirstclick;
 
@@ -331,6 +332,7 @@ namespace Aviias
             stopDamageCDTimer.Decrem(gameTime);
             stopDamageTimer.Decrem(gameTime);
             TriTimer.Decrem(gameTime);
+            successTimer.Decrem(gameTime);
             bool tmp = false;            
             _inv._craft.IsCraftable(_inv._cellArray);
 
@@ -390,25 +392,11 @@ namespace Aviias
                 invenTimer.ReInit();
             }
 
-            //if (currentKeyboardState.IsKeyDown(Keys.C) && craftTimer.IsDown() && IsInventoryOpen)
-            //{
-            //    for (int i = 0; i < _inv._craft._cellCraft.Length; i++)
-            //    {
-            //        if (_inv._craft._cellCraft[i].IsCraftable == true)
-            //        {
-            //            _inv.AddInventory(_inv._craft._cellCraft[i]._quantity, _inv._craft._cellCraft[i]._name);
-
-            //            foreach (KeyValuePair<int, string> element in _inv._craft._cellCraft[i]._ressource)
-            //            {
-            //                _inv.DecreaseInventory(element.Key, element.Value.Name);
-            //            }
-            //            break;
-            //        }
-            //    }
-            //    craftTimer.ReInit();
-
-            //}
-
+            if (currentKeyboardState.IsKeyDown(Keys.H) && invenTimer.IsDown())
+            {
+                IsInventoryOpen = !IsInventoryOpen;
+                invenTimer.ReInit();
+            }
 
             if (currentKeyboardState.IsKeyDown(Keys.Space) /*|| currentKeyboardState.IsKeyDown(Keys.Up)*/)
             {
@@ -846,7 +834,7 @@ namespace Aviias
              _str += str;
         }
 
-        void ReloadPlayer(ContentManager content)
+        public void ReloadPlayer(ContentManager content)
         {
             Position = new Vector2(x, y);
             PlayerTexture = content.Load<Texture2D>(_texture);

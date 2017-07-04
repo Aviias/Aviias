@@ -18,6 +18,7 @@ namespace Aviias
         internal Timer ButtonNew = new Timer(1.5f);
         Timer ButtonLoad = new Timer(1.5f);
         bool IsTrue = false;
+        Save save;
 
         public MenuPlay()
         {
@@ -50,7 +51,15 @@ namespace Aviias
                 _load._texture = ".\\Menu\\Button\\reprendre_rouge";
                 IsTrue = true;
                 ButtonLoad.ReInit();
-            }
+
+                Game1.map = save.DeserializeMap();
+                Game1.map.Reload(Content);
+                Game1.player = save.DeserializePlayer();
+                Game1.player.ReloadPlayer(Content);
+                Game1.player.text.Reload(Content);
+                Game1._npc = save.DeserializeNpc();
+                foreach (NPC npc in Game1._npc) npc.Reload(Content);
+        }
             else
             {
                 _load._texture = ".\\Menu\\Button\\reprendre_gris";
