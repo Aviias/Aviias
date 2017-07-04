@@ -137,6 +137,7 @@ namespace Aviias
             _isQuestActive = false;
             player.RemoveQuest(_questActive);
             _isTalking = false;
+            if (player._success._quest != 5) player._success._quest++;
         }
 
         public void Talk(Quest quest, SpriteBatch spriteBatch)

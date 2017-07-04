@@ -4,12 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using MonoGame.Extended;
-using MonoGame.Extended.ViewportAdapters;
 using Aviias.GUI;
 using Aviias.IA;
 
@@ -42,7 +38,6 @@ namespace Aviias
         List<int> list = new List<int>(16);
       //  [field: NonSerialized]
         Save save;
-        [field: NonSerialized]
         KeyboardState currentKeyboardState;
         [field: NonSerialized]
         KeyboardState previousKeyboardState;
@@ -58,12 +53,15 @@ namespace Aviias
         int _nbBlocs;
         public bool flyMod;
         public bool IsInventoryOpen;
+        public bool IsSuccessOpen;
         Map _map;
         Animation PMoveLeft;
         Animation PMoveRight;
         Animation CurrentAnim;
+        internal Success _success;
         Timer playerTimer = new Timer(1.2f);
         Timer invenTimer = new Timer(1.3f);
+        Timer jumpTimer = new Timer(1.5f);
         Timer craftTimer = new Timer(1.5f);
         Timer blocBreakTimer = new Timer(1.5f);
         Timer blockDurationTimer = new Timer(1.5f);
@@ -146,6 +144,7 @@ namespace Aviias
             _map = map;
             _activeQuest = new List<Quest>(8);
             _inv = new Inventory(this);
+            _success = new Success();
             save = new Save(map, this, Game1._npc);
             x = position.X;
             y = position.Y;
@@ -237,7 +236,8 @@ namespace Aviias
                     bloc1 = new Bloc(blocs[i,j].GetPosBlock ,scale, "air", content);
                     _inv.AddInventory(1, blocs[i, j].Type);
                     blocs[i, j] = bloc1;
-                                       
+                    if (_success._breakblock1 != 200) _success._breakblock1++;
+                    if (_success._breakblock2 != 1000) _success._breakblock2++;
                 }
             }
             _map.ActualizeShadow((int)Position.X, (int)Position.Y);
@@ -332,6 +332,7 @@ namespace Aviias
             stopDamageCDTimer.Decrem(gameTime);
             stopDamageTimer.Decrem(gameTime);
             TriTimer.Decrem(gameTime);
+            jumpTimer.Decrem(gameTime);
             successTimer.Decrem(gameTime);
             bool tmp = false;            
             _inv._craft.IsCraftable(_inv._cellArray);
@@ -386,21 +387,23 @@ namespace Aviias
                 player.Position.Y += _playerMoveSpeed;
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.E) && invenTimer.IsDown())
+            if (currentKeyboardState.IsKeyDown(Keys.E) && invenTimer.IsDown() && !IsSuccessOpen)
             {
                 IsInventoryOpen = !IsInventoryOpen;
                 invenTimer.ReInit();
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.H) && invenTimer.IsDown())
+            if (currentKeyboardState.IsKeyDown(Keys.H) && successTimer.IsDown() && !IsInventoryOpen)
             {
-                IsInventoryOpen = !IsInventoryOpen;
-                invenTimer.ReInit();
+                IsSuccessOpen = !IsSuccessOpen;
+                successTimer.ReInit();
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.Space) /*|| currentKeyboardState.IsKeyDown(Keys.Up)*/)
+            if (currentKeyboardState.IsKeyDown(Keys.Space) && jumpTimer.IsDown() && !IsSuccessOpen /*|| currentKeyboardState.IsKeyDown(Keys.Up)*/)
             {
                 Jump(map);
+                if (_success._jump != 1000) _success._jump++;
+                jumpTimer.ReInit();
             }
 
                if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Left) == System.Windows.Forms.MouseButtons.Left)
@@ -419,6 +422,8 @@ namespace Aviias
                             monsters[i].GetDamage(player.Damage);
                             if (monsters[i].IsDie)
                             {
+                                if (_success._monster1 != 50) _success._monster1++;
+                                if (_success._monster2 != 500) _success._monster2++;
                                 Soul soul = new Soul(monsters[i].MonsterPosition, Content, monsters[i].BaseDamage, monsters[i].BaseHealth);
                                 _souls.Add(soul);
                                 monsters.Remove(monsters[i]);
@@ -458,6 +463,10 @@ namespace Aviias
                                 {
                                     _inv.DecreaseInventory(element.Value, element.Key);
                                 }
+                                if (_success._craft != 20) _success._craft++;
+                                if (_success._pickaxeDiamond != 1 && _inv._craft._cellCraft[i]._name == "diamond_pickaxe") _success._pickaxeDiamond++;
+                                if (_success._pickaxeIron != 1 && _inv._craft._cellCraft[i]._name == "iron_pickaxe") _success._pickaxeIron++;
+                                if (_success._goldenApple != 100 && _inv._craft._cellCraft[i]._name == "apple_golden") _success._goldenApple++;
                             }
                             craftTimer.ReInit();
                         }
@@ -789,14 +798,19 @@ namespace Aviias
             if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, Position);
             else spriteBatch.Draw(PlayerTexture, Position, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
-            spriteBatch.Draw(content.Load<Texture2D>(ImageHealth(_health)), new Vector2(camera.Position.X + 30, camera.Position.Y +50), null, Color.White, 0f, Vector2.Zero, 1.1f,
+            spriteBatch.Draw(content.Load<Texture2D>(ImageHealth(_health)), new Vector2(camera.Position.X + 30, camera.Position.Y + 50), null, Color.White, 0f, Vector2.Zero, 1.1f,
                SpriteEffects.None, 0f);
-            text.DisplayText(("" +_health + "/"  + "100"), new Vector2(camera.Position.X + 200, camera.Position.Y + 130), spriteBatch, Color.White);
+            text.DisplayText(("" + _health + "/" + "100"), new Vector2(camera.Position.X + 200, camera.Position.Y + 130), spriteBatch, Color.White);
 
-            if(IsInventoryOpen)
+            if (IsInventoryOpen)
             {
                 _inv.Draw(spriteBatch, content, camera);
-            }else
+            }
+            else if (IsSuccessOpen)
+            {
+                _success.Draw(spriteBatch, content, camera);
+            }
+            else
             {
                 spriteBatch.Draw(content.Load<Texture2D>("Barre d'inventaire"), new Vector2(camera.Position.X + 575, camera.Position.Y +1012), null, Color.White, 0f, Vector2.Zero, 1f,
                     SpriteEffects.None, 0f);

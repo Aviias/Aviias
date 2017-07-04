@@ -7,7 +7,6 @@ using MonoGame.Extended.ViewportAdapters;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Input;
 
 namespace Aviias
 {
