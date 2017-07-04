@@ -121,7 +121,7 @@ namespace Aviias.IA
             }
             else
             {
-                //UpdatePhysics(Game1.map, this);
+                //UpdatePhysics(Game1.map, this.Texture);
                 MoveOnPlayer(player, map, gametime);
                 Fight(player, gametime);
             }

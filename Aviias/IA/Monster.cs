@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Timers;
 using Aviias.IA;
+using Aviias.GUI;
 
 namespace Aviias
 {
@@ -41,11 +42,11 @@ namespace Aviias
         float _yVelocity;
         Timer EngeryDamageTimer = new Timer(1f);
         Timer JumpTimer = new Timer(50f);
-
         Timer stopDamageTimer = new Timer(4f);
         Timer stopDamageCDTimer = new Timer(5f);
         bool _isStopDamage;
         double _score;
+
 
         public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy)
             : base(false,4,-10, pos)
@@ -58,7 +59,7 @@ namespace Aviias
             _damageDealing = damageDealing;
             _resistance = resistance;
             text = new Aviias.Text(content);
-         //   _pos = pos;
+             _pos = pos;
             _texture = texture;
             _baseDamageDealing = damageDealing;
             _baseHealth = health;

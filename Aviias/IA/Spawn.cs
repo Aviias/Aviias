@@ -39,7 +39,7 @@ namespace Aviias.IA
                     spawnok = y;
                 }
             }
-            return spawnok;
+            return spawnok - 1;
         }
 
         public Vector2 SpawnOnCave(Map map)

@@ -23,7 +23,7 @@ namespace Aviias.IA
             _damages = damages;
             _health = health;
             _position = position;
-            _texture = content.Load<Texture2D>("soul");
+            //_texture = content.Load<Texture2D>("soul");
         }
 
         public Vector2 Position => _position;

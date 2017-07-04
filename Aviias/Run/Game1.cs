@@ -75,11 +75,9 @@ namespace Aviias
             _menu = new Menu();
             _menu.Initialize();
            
-            /*
-            Vector2 gloutoPos = spawnMonster.SpawnOnSurface(map);
-
-            glouto = new Gloutogobe(Content, Content.Load<Texture2D>("Blopred"), gloutoPos);
-            */
+            
+           
+            
             Vector2 playerPosition = new Vector2(1500, 345 + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
             player.Initialize(Content.Load<Texture2D>("face"), playerPosition, Content, map);
             map.GenerateMap(Content);
@@ -92,18 +90,18 @@ namespace Aviias
             _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(1400, 300), 3));
 
             spawnMonster = new Spawn(map);
-            int monsterneed = 1 - monsters.Count;
+            int monsterneed = 15 - monsters.Count;
             if (monsterneed != 0)
             {
                 for (int i = 0; i < monsterneed; i++)
                 {
-                    monsterPosition = spawnMonster.SpawnOnCave(map);
-                    //monsterPosition = spawnMonster.SpawnOnCave(map);
+                    monsterPosition = spawnMonster.SpawnOnSurface(map);
                     wolf = new Wolf(Content, Content.Load<Texture2D>("loup"), monsterPosition);
-                    //monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
                     monsters.Add(wolf);
                 }
             }
+            //Vector2 gloutoPos = spawnMonster.SpawnOnSurface(map);
+            //glouto = new Gloutogobe(Content, Content.Load<Texture2D>("Blopred"), gloutoPos);
 
             base.Initialize();
 
@@ -126,12 +124,8 @@ namespace Aviias
             _camera = new Camera2D(_viewportAdapter);
             _interface = new Camera2D(_viewportAdapter);
 
-
-
-
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-           
+            spriteBatch = new SpriteBatch(GraphicsDevice);         
 
             font = Content.Load<SpriteFont>("font");
             player.LoadContent(Content);
@@ -152,6 +146,7 @@ namespace Aviias
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) || _menu._close)
@@ -208,9 +203,8 @@ namespace Aviias
 
                     if (spawnTimer.IsDown())
 
-                    {
-                       
-                        Vector2 monsterPosition = spawnMonster.SpawnOnSurface(map);
+                    {                       
+                        //Vector2 monsterPosition = spawnMonster.SpawnOnSurface(map);
                         //drake = new Drake(Content, Content.Load<Texture2D>("drake"), monsterPosition);
                         
                          //monsters.Add(monster);
@@ -252,7 +246,7 @@ namespace Aviias
                 }
 
                 //glouto.Draw(spriteBatch);
-             //   foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
+                //   foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
                 foreach (NPC npc in _npc)
                 {
                     npc.Draw(spriteBatch);

@@ -62,6 +62,9 @@ namespace Aviias
         Animation PMoveLeft;
         Animation PMoveRight;
         Animation CurrentAnim;
+        Animation Blood;
+        Animation currentBlood;
+        Animation SoulAnim;
         Timer playerTimer = new Timer(1.2f);
         Timer invenTimer = new Timer(1.3f);
         Timer craftTimer = new Timer(1.5f);
@@ -72,9 +75,11 @@ namespace Aviias
         Timer stopDamageTimer = new Timer(12f);
         Timer stopDamageCDTimer = new Timer(5f);
         Timer TriTimer = new Timer(1.1f);
+        Timer EatTimer = new Timer(1.1f);
+        Timer BloodTimer = new Timer(1.8f);
         int firsclick;
         bool IsFirstclick;
-
+        bool _isGetDamage;
         List<string> CraftNotPutable = new List<string>();
         //   MonoGame.Extended.Camera2D Camera;
         float _playerMoveSpeed;
@@ -125,7 +130,7 @@ namespace Aviias
         {
             PMoveLeft = new Animation(content, "gauche", 50f,3,Position);
             PMoveRight = new Animation(content, "droite", 50f, 3, Position);
-
+            Blood = new Animation(content, "blood", 50f, 1, Position);
         }
 
         public void Initialize(Texture2D texture, Vector2 position, ContentManager content, Map map)
@@ -152,10 +157,11 @@ namespace Aviias
             _stopDamage = false;
             firsclick = -1;
             IsFirstclick = true;
-
+            _isGetDamage = false;
             CraftNotPutable.Add("stick");
             CraftNotPutable.Add("wood_shovel");
             CraftNotPutable.Add("heal_potion");
+            CraftNotPutable.Add("apple");
             _inv.AddInventory(2, "oak_wood");
             _inv.AddInventory(2, "dirt");
             _inv.AddInventory(8, "oak_plank");
@@ -218,6 +224,7 @@ namespace Aviias
             else
             {
                 _health = newHealth;
+                _isGetDamage = true;
             }
         }
 
@@ -331,9 +338,11 @@ namespace Aviias
             stopDamageCDTimer.Decrem(gameTime);
             stopDamageTimer.Decrem(gameTime);
             TriTimer.Decrem(gameTime);
+            EatTimer.Decrem(gameTime);
+            BloodTimer.Decrem(gameTime);
             bool tmp = false;            
             _inv._craft.IsCraftable(_inv._cellArray);
-
+            
             foreach (Soul soul in _souls)
             {
                 soul.Update(gameTime);
@@ -344,8 +353,21 @@ namespace Aviias
                 }
                 if (tmp) break;
             }
-
+            
             list = GetCollisionSide(GetBlocsAround(map));
+
+            if(_isGetDamage)
+            {
+                Blood.PlayAnim(gameTime);
+                currentBlood = Blood;
+                _isGetDamage = false;
+                
+            }
+            if (BloodTimer.IsDown())
+            {
+                currentBlood = null;
+                BloodTimer.ReInit();
+            }
 
             if(stopDamageTimer.IsDown())
             {
@@ -431,9 +453,11 @@ namespace Aviias
                             monsters[i].GetDamage(player.Damage);
                             if (monsters[i].IsDie)
                             {
+                                SoulAnim = new Animation(Content, "amesprite", 50f, 6, monsters[i].MonsterPosition);
                                 Soul soul = new Soul(monsters[i].MonsterPosition, Content, monsters[i].BaseDamage, monsters[i].BaseHealth);
                                 _souls.Add(soul);
                                 monsters.Remove(monsters[i]);
+                                SoulAnim.PlayAnim(gameTime);
                             }
                             playerTimer.ReInit();
                         }
@@ -557,6 +581,15 @@ namespace Aviias
                 scrollToolBarTimer.ReInit();
             }
 
+            if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Right) == System.Windows.Forms.MouseButtons.Right && EatTimer.IsDown())
+            {
+                if(_inv._cellArray[_inv.ActualCell]._name == "apple" && _inv._cellArray[_inv.ActualCell]._quantity >= 1)
+                {
+                    RegenerateHealth(5);
+                    _inv.DecreaseInventory(1,"apple");
+                    EatTimer.ReInit();
+                }
+            }
 
             if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Right) == System.Windows.Forms.MouseButtons.Right && setBlocTimer.IsDown())
             {
@@ -572,13 +605,7 @@ namespace Aviias
                     setBlocTimer.ReInit();
                 }
             }
-            /*
-            if(IsInventoryOpen && currentKeyboardState.IsKeyDown(Keys.T) && TriTimer.IsDown())
-            {
-                _inv.TriInventory(CraftNotPutable);
-                TriTimer.ReInit();
-            }
-            */
+           
                 if (currentKeyboardState.IsKeyDown(Keys.P))
             {
                 if (player._displayPos) player._displayPos = false;
@@ -598,16 +625,14 @@ namespace Aviias
                 flyMod = !flyMod;
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.N))
+            if ((System.Windows.Forms.Control.MouseButtons & System.Windows.Forms.MouseButtons.Right) == System.Windows.Forms.MouseButtons.Right && EatTimer.IsDown()) 
             {
-                for(int i = 0; i < _inv._cellArray.Length; i++)
+                if (_inv._cellArray[_inv.ActualCell]._name == "heal_potion" && _inv._cellArray[_inv.ActualCell]._quantity >= 1)
                 {
-                    if(_inv._cellArray[i]._name == "heal_potion" && _inv._cellArray[i]._quantity >= 1)
-                    {
-                        RegenerateHealth(50);
-                        _inv.DecreaseInventory(1, "heal_potion");
-                    }
-                }
+                    RegenerateHealth(50);
+                    _inv.DecreaseInventory(1, "heal_potion");
+                    EatTimer.ReInit();
+                }              
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.W))
@@ -801,6 +826,8 @@ namespace Aviias
             if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, Position);
             else spriteBatch.Draw(PlayerTexture, Position, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
+            if (currentBlood != null) Blood.Draw(spriteBatch, Position);
+
             spriteBatch.Draw(content.Load<Texture2D>(ImageHealth(_health)), new Vector2(camera.Position.X + 30, camera.Position.Y +50), null, Color.White, 0f, Vector2.Zero, 1.1f,
                SpriteEffects.None, 0f);
             text.DisplayText(("" +_health + "/"  + "100"), new Vector2(camera.Position.X + 200, camera.Position.Y + 130), spriteBatch, Color.White);
@@ -826,10 +853,11 @@ namespace Aviias
 
             }
 
-            foreach(Soul soul in _souls)
+            for (int i = 0; i < _souls.Count; i++)
             {
-                soul.Draw(spriteBatch);
+                SoulAnim.Draw(spriteBatch, _souls[i].Position);
             }
+
 
             if (IsDie == true)
             {
