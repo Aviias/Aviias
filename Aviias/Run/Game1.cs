@@ -97,8 +97,8 @@ namespace Aviias
             {
                 for (int i = 0; i < monsterneed; i++)
                 {
-                    monsterPosition = spawnMonster.SpawnOnSurface(map);
-
+                    monsterPosition = spawnMonster.SpawnOnCave(map);
+                    //monsterPosition = spawnMonster.SpawnOnCave(map);
                     wolf = new Wolf(Content, Content.Load<Texture2D>("loup"), monsterPosition);
                     //monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
                     monsters.Add(wolf);

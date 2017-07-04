@@ -18,6 +18,7 @@ namespace Aviias.IA
         bool flyMod;
         public int _gravity;
 
+
         public Physics(bool fly, int gravity, int jumpHeight, Vector2 position)
         {
             flyMod = fly;
@@ -37,7 +38,6 @@ namespace Aviias.IA
                 }
                 else
                 {
-                    //monster.Y += 50;
                     _yVelocity = 0;
                 }
             }
@@ -109,6 +109,7 @@ namespace Aviias.IA
             Rectangle playerRect2;
             playerRect = new Rectangle((int)_pos.X, (int)_pos.Y, texture.Width, texture.Height);
             playerRect2 = new Rectangle((int)_pos.X, (int)_pos.Y + 1, texture.Width, texture.Height);
+           
 
             Rectangle rectTest = new Rectangle((int)_pos.X, (int)_pos.Y - 10, texture.Width, texture.Height);
 
@@ -122,23 +123,25 @@ namespace Aviias.IA
                     {
                         if (playerRect.Bottom > blocRect.Top && playerRect.Bottom < blocRect.Bottom)
                         {
-                            result.Add(3);
+                            //result.Add(3);
+                            
                             _yVelocity = 0;
-                       //     if (!rectTest.Intersects(blocRect)) _pos.Y -= 1;
+                            _pos.Y -= 1;
+                            //     if (!rectTest.Intersects(blocRect)) _pos.Y -= 1;
                         }
                         if (playerRect.Top < blocRect.Bottom && playerRect.Top > blocRect.Top) result.Add(4);
                         //  if (playerRect.Left < blocRect.Right && playerRect.Left > blocRect.Left) result.Add(2);
                         //  if (playerRect.Right > blocRect.Left && playerRect.Right < blocRect.Right) result.Add(1);
                         if (rectTest.Left < blocRect.Right && rectTest.Left > blocRect.Left) result.Add(2);
                         if (rectTest.Right > blocRect.Left && rectTest.Right < blocRect.Right) result.Add(1);
-                        _collisions = true;
+                        //_collisions = true;
                     }
                     if (playerRect2.Intersects(blocRect))
                     {
-                        if (playerRect2.Bottom - 1 > blocRect.Top && playerRect2.Bottom < blocRect.Bottom)
+                        if (playerRect2.Bottom  > blocRect.Top && playerRect2.Bottom < blocRect.Bottom)
                         {
+                            //_pos.Y -= 1;
                             _yVelocity = 0;
-                            _pos.Y -= 1;
                             result.Add(3);
                         }
                     }

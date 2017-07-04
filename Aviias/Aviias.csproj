@@ -46,6 +46,7 @@
     <Compile Include="GUI\Button.cs" />
     <Compile Include="GUI\Menu\Menu.cs" />
     <Compile Include="GUI\Sprite.cs" />
+    <Compile Include="IA\Genetic.cs" />
     <Compile Include="IA\Gloutogobe.cs" />
     <Compile Include="IA\Soul.cs" />
     <Compile Include="IA\Physics.cs" />
@@ -59,7 +60,6 @@
     <Compile Include="GUI\Inventory.cs" />
     <Compile Include="Map\Map.cs" />
     <Compile Include="IA\Monster.cs" />
-    <Compile Include="IA\NeuronalNetwork.cs" />
     <Compile Include="IA\NPC.cs" />
     <Compile Include="Player\Player.cs" />
     <Compile Include="Run\Program.cs" />
@@ -74,6 +74,18 @@
     <Compile Include="Run\Timer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="AForge, Version=2.2.5.0, Culture=neutral, PublicKeyToken=c1db6ff4eaa06aeb, processorArchitecture=MSIL">
+      <HintPath>..\packages\AForge.2.2.5\lib\AForge.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AForge.Genetic, Version=2.2.4.0, Culture=neutral, PublicKeyToken=4336634eeb41b69b, processorArchitecture=MSIL">
+      <HintPath>..\packages\AForge.Genetic.2.2.5\lib\AForge.Genetic.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AForge.Math, Version=2.2.5.0, Culture=neutral, PublicKeyToken=abba2e25397ee8c9, processorArchitecture=MSIL">
+      <HintPath>..\packages\AForge.Math.2.2.5\lib\AForge.Math.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MonoGame.Extended, Version=0.6.568.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoGame.Extended.0.6.568\lib\portable-net45+win8+wpa81\MonoGame.Extended.dll</HintPath>
       <Private>True</Private>
