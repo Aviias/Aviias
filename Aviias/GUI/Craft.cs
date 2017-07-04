@@ -7,9 +7,9 @@ namespace Aviias
     [Serializable]
     public class Craft
     {
-        public _craft[] _cellCraft;
+        public List<_craft> _cellCraft;
 
-        public struct _craft
+        public class _craft
         {
             public string _name { get; set; }
             public bool IsCraftable { get; set; }
@@ -17,23 +17,12 @@ namespace Aviias
             public Vector2 _position { get; set; }
             public int _width { get; set; }
             public int _height { get; set; }
-            public Dictionary<int, string> _ressource { get; set; }
+            public Dictionary<string, int> _ressource { get; set; }
         }
 
         public Craft()
         {
-            _cellCraft = new _craft[40];
-            for (int i = 0; i < 40; i++)
-            {
-                _cellCraft[i] = new _craft();
-                _cellCraft[i]._name = "";
-                _cellCraft[i]._quantity = -1;
-                _cellCraft[i]._width = 70;
-                _cellCraft[i]._height = 69;
-                _cellCraft[i].IsCraftable = false;
-                _cellCraft[i]._ressource = new Dictionary<int, string>();
-
-            }
+            _cellCraft = new List<_craft>();
             AddCraft("oak_plank", 4, 1, "oak_wood");
             AddCraft("stick", 4, 2, "oak_plank");
             AddCraft("cobblestone", 1, 1, "stone");
@@ -72,31 +61,20 @@ namespace Aviias
 
         public void AddCraft(string name, int quantity, int number, string ressource)
         {
-            for (int i = 0; i < _cellCraft.Length; i++)
-            {
-                if (_cellCraft[i]._name == "")
-                {
-                    _cellCraft[i]._name = name;
-                    _cellCraft[i]._quantity = quantity;
-                    _cellCraft[i]._ressource.Add(number, ressource);
-                    break;
-                }
-            }
+            AddCraft(name, quantity, number, ressource, 0, null);
         }
 
         public void AddCraft(string name, int quantity, int number, string ressource, int number2, string ressource2)
         {
-            for (int i = 0; i < _cellCraft.Length; i++)
-            {
-                if (_cellCraft[i]._name == "")
-                {
-                    _cellCraft[i]._name = name;
-                    _cellCraft[i]._quantity = quantity;
-                    _cellCraft[i]._ressource.Add(number, ressource);
-                    _cellCraft[i]._ressource.Add(number2, ressource2);
-                    break;
-                }
-            }
+            _craft craft = new _craft();
+            craft._name = name;
+            craft._quantity = quantity;
+            craft._ressource = new Dictionary<string, int>();
+            craft._ressource.Add(ressource, number);
+            if (number2 > 0) craft._ressource.Add(ressource2, number2);
+            craft._width = 70;
+            craft._height = 69;
+            _cellCraft.Add(craft);
         }
 
 
@@ -107,31 +85,32 @@ namespace Aviias
 
         public void IsCraftable(Inventory._cell[] inventory)
         {
-            for (int i = 0; i < _cellCraft.Length; i++)
+            foreach (_craft craft in _cellCraft)
             {
-                if (_cellCraft[i]._name != "")
+                IsCraftable(inventory, craft);
+            }
+        }
+
+        void IsCraftable(Inventory._cell[] inventory, _craft craft)
+        {
+            int count = 0;
+            foreach (KeyValuePair<string, int> resource in craft._ressource)
+            {
+                foreach (Inventory._cell item in inventory)
                 {
-                    int count = 0;
-                    for (int j = 0; j < _cellCraft.Length; j++)
-                    {
-                        foreach (KeyValuePair<int, string> element in _cellCraft[i]._ressource)
-                        {
-                            if (inventory[j]._ressource.Name == element.Value && element.Key <= inventory[j]._quantity)
-                            {
-                                count++;
-                            }
-                        }
-                    }
-                    if (count == _cellCraft[i]._ressource.Count)
-                    {
-                        _cellCraft[i].IsCraftable = true;
-                    }
-                    else
-                    {
-                        _cellCraft[i].IsCraftable = false;
-                        _cellCraft[i]._position = new Vector2(100, 100);
-                    }
+                    if (item._name == resource.Key && item._quantity >= resource.Value) count++;
                 }
+
+            }
+
+            if (count == craft._ressource.Count)
+            {
+                craft.IsCraftable = true;
+            }
+            else
+            {
+                craft.IsCraftable = false;
+                craft._position = new Vector2(100, 100);
             }
         }
     }

@@ -239,19 +239,15 @@ namespace Aviias
 
         public void PositionCraft(int i, Camera2D camera, int count)
         {
-            if (count == 0 && _craft._cellCraft[i].IsCraftable)
+            Craft._craft craft = _craft._cellCraft[i];
+            if (craft.IsCraftable)
             {
-                _craft._cellCraft[i]._position = new Vector2(camera.Position.X + 1475, camera.Position.Y + 140);
-            }
-            else if (_craft._cellCraft[i].IsCraftable)
-            {
-                _craft._cellCraft[i]._position = new Vector2(_craft._cellCraft[i - 1]._position.X, _craft._cellCraft[i - 1]._position.Y + 75);
+                craft._position = new Vector2(camera.Position.X + 1475, camera.Position.Y + 140 + count * 75);
             }
         }
 
         internal void Draw(SpriteBatch spriteBatch, ContentManager content, Camera2D camera)
         {
-            _craft.IsCraftable(_cellArray);
             text = new Text(content);
             spriteBatch.Draw(content.Load<Texture2D>("Inventaire"), new Vector2(camera.Position.X + 576, camera.Position.Y + 140), null, Color.White, 0f, Vector2.Zero, 1f,
                 SpriteEffects.None, 0f);
@@ -270,9 +266,9 @@ namespace Aviias
                  //       SpriteEffects.None, 0f);
             }
             int count = 0;
-            for (int i = 0; i < _craft._cellCraft.Length; i++)
+            _craft.IsCraftable(_cellArray);
+            for (int i = 0; i < _craft._cellCraft.Count; i++)
             {
-                _craft.IsCraftable(_cellArray);
                 if (_craft._cellCraft[i].IsCraftable)
                 {
                     PositionCraft(i, camera, count);
