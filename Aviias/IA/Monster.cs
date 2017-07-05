@@ -497,6 +497,7 @@ namespace Aviias
             ActualizeEnergieRegeneration(gametime);
             if (Genetic.Meilleur.Value != null) proba = Genetic.Meilleur.Value;
             MoveOnPlayer(player, map, gametime);
+
             if (x == posX)
             {
                 Face.PlayAnim(gametime);

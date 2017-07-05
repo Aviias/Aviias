@@ -246,7 +246,7 @@ namespace Aviias
                     {    
                         /*                               
                         Vector2 monsterPosition = spawnMonster.SpawnOnSurface(map);
-                        drake = new Drake(Content, Content.Load<Texture2D>("drake"), monsterPosition);
+                        drake = new Drake(Content, Content.Load<Texture2D>("phenixface"), monsterPosition);
                         drake.LoadContent(Content, "phenixface", "phenixleft", "phenixright", 80f, 4);
                         monsters.Add(drake);
                         */
