@@ -12,6 +12,8 @@ using MonoGame.Extended;
 using MonoGame.Extended.ViewportAdapters;
 using Aviias.GUI;
 using Aviias.IA;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace Aviias
 {
@@ -59,8 +61,11 @@ namespace Aviias
         public bool flyMod;
         public bool IsInventoryOpen;
         Map _map;
+        [field: NonSerialized]
         Animation PMoveLeft;
+        [field: NonSerialized]
         Animation PMoveRight;
+        [field: NonSerialized]
         Animation CurrentAnim;
         Animation Blood;
         Animation currentBlood;
@@ -79,6 +84,9 @@ namespace Aviias
         Timer EatTimer = new Timer(1.1f);
         Timer BloodTimer = new Timer(1.8f);
         Timer MonsterBloodTimer = new Timer(1.5f);
+        Timer saveTimer = new Timer(3f);
+        [field: NonSerialized]
+        Texture2D saveTexture;
         int firsclick;
         bool IsFirstclick;
         bool _isGetDamage;
@@ -86,13 +94,27 @@ namespace Aviias
         //   MonoGame.Extended.Camera2D Camera;
         float _playerMoveSpeed;
         internal Inventory _inv;
-        private SpriteBatch spriteBatch;
+     //   private SpriteBatch spriteBatch;
         List<Soul> _souls = new List<Soul>(32);
         List<Animation> _soulsAnim = new List<Animation>(32);
         bool _isMonsterGetDamage;
         List<Animation> _monsterBlood = new List<Animation>();
         List<Monster> _monsterBloodPos = new List<Monster>();
         List<string> _tools = new List<string>();
+        [field: NonSerialized]
+        SoundEffect sPutBloc;
+        [field: NonSerialized]
+        SoundEffect sBreakBloc;
+        [field: NonSerialized]
+        SoundEffect blopDie;
+        [field: NonSerialized]
+        SoundEffect sPlayerAttack;
+        [field: NonSerialized]
+        Song sPlayerFoot;
+        [field: NonSerialized]
+        SoundEffect sPlayerDie;
+        [field: NonSerialized]
+        SoundEffect sWolfDie;
 
         public int Width
         {
@@ -138,6 +160,14 @@ namespace Aviias
             PMoveLeft = new Animation(content, "gauche", 50f,3,Position);
             PMoveRight = new Animation(content, "droite", 50f, 3, Position);
             Blood = new Animation(content, "blood", 50f, 1, Position);
+            sPutBloc = content.Load<SoundEffect>("Sounds/put_bloc");
+            sBreakBloc = content.Load<SoundEffect>("Sounds/break_bloc");
+            blopDie = content.Load<SoundEffect>("Sounds/blop_die");
+            sPlayerAttack = content.Load<SoundEffect>("Sounds/player_attack");
+            sPlayerFoot = content.Load<Song>("Sounds/foot");
+            sPlayerDie = content.Load<SoundEffect>("Sounds/player_die");
+            sWolfDie = content.Load<SoundEffect>("Sounds/wolf_die");
+            saveTexture = content.Load<Texture2D>("save");
         }
 
         public void Initialize(Texture2D texture, Vector2 position, ContentManager content, Map map)
@@ -218,6 +248,7 @@ namespace Aviias
             _inv.AddInventory(1000, "stonebrick");
             _inv.AddInventory(247, "oak_leaves");
             */
+
         }
 
         public Vector2 PlayerPosition
@@ -254,6 +285,7 @@ namespace Aviias
             if (newHealth <= 0)
             {
                 _isDie = true;
+                sPlayerDie.Play();
             }
             else
             {
@@ -277,7 +309,7 @@ namespace Aviias
                     bloc1 = new Bloc(blocs[i,j].GetPosBlock ,scale, "air", content);
                     _inv.AddInventory(1, blocs[i, j].Type);
                     blocs[i, j] = bloc1;
-                                       
+                    sBreakBloc.Play();
                 }
             }
             _map.ActualizeShadow((int)Position.X, (int)Position.Y);
@@ -291,6 +323,7 @@ namespace Aviias
                 bloc1 = new Bloc(blocs[i, j].GetPosBlock, scale, name, content);
                 _inv.DecreaseInventory(1, name);
                 blocs[i, j] = bloc1;
+                sPutBloc.Play();
                 map.ActualizeShadow((int)PlayerPosition.X,(int)PlayerPosition.Y);
             }
         }
@@ -373,6 +406,7 @@ namespace Aviias
             stopDamageTimer.Decrem(gameTime);
             TriTimer.Decrem(gameTime);
             EatTimer.Decrem(gameTime);
+            saveTimer.Decrem(gameTime);
             BloodTimer.Decrem(gameTime);
             MonsterBloodTimer.Decrem(gameTime);
             bool tmp = false;         
@@ -480,20 +514,31 @@ namespace Aviias
                     {
                         if (playerTimer.IsDown() && Vector2.Distance(player.PlayerPosition, position) <= 400 && monsters[i].IsStopDamage == false)
                         {
-                            monsters[i].GetDamage(player.Damage);
+                            if (monsters[i].IsStopDamage == false)
+                            {
+                                monsters[i].GetDamage(player.Damage);
                             _isMonsterGetDamage = true;
+                                sPlayerAttack.Play();
                             MonsterBlood = new Animation(Content, "blood", 50f, 1, monsters[i].MonsterPosition);
                             _monsterBlood.Add(MonsterBlood);
                             _monsterBloodPos.Add(monsters[i]);
-                            if (monsters[i].IsDie)
-                            {
-                                Soul soul = new Soul(monsters[i].MonsterPosition, Content, monsters[i].BaseDamage, monsters[i].BaseHealth);
-                                _souls.Add(soul);
+                                if (monsters[i].IsDie)
+                                {
+                                    if (monsters[i].Type() == "glouto") blopDie.Play();
+                                    else if (monsters[i].Type() == "wolf") sWolfDie.Play(); ;
+                                    Soul soul = new Soul(monsters[i].MonsterPosition, Content, monsters[i].BaseDamage, monsters[i].BaseHealth);
+                                    _souls.Add(soul);
                                 SoulAnim = new Animation(Content, "amesprite", 50f, 6, monsters[i].MonsterPosition);
                                 _soulsAnim.Add(SoulAnim);
-                                monsters.Remove(monsters[i]);
+                                    monsters.Remove(monsters[i]);
+                                }
+                                playerTimer.ReInit();
                             }
-                            playerTimer.ReInit();
+                            else
+                            {
+                                monsters[i]._points[2] += Damage * 2;
+                                playerTimer.ReInit();
+                            }
                         }
                             
                     }
@@ -659,7 +704,7 @@ namespace Aviias
             {
                 player.AddStr("a");
             }
-            if (currentKeyboardState.IsKeyDown(Keys.I))
+            if (currentKeyboardState.IsKeyDown(Keys.I) && !previousKeyboardState.IsKeyDown(Keys.I))
             {
                 foreach (NPC npc in _npc) if (map.GetDistance(player.PlayerPosition, npc.Position) < 400) npc.Interact(player);
             }
@@ -715,6 +760,7 @@ namespace Aviias
 
             if (currentKeyboardState.IsKeyDown(Keys.S))
             {
+                saveTimer.ReInit();
                 x = Position.X;
                 y = Position.Y;
                 save = new Save(map, this, Game1._npc);
@@ -722,6 +768,8 @@ namespace Aviias
                 save.SerializePlayer();
                 save.SerializeNpc();
             }
+
+            previousKeyboardState = currentKeyboardState;
         }
 
         internal void RegenerateHealth(int quantity)
@@ -906,6 +954,8 @@ namespace Aviias
             {
                 _monsterBlood[i].Draw(spriteBatch, _monsterBloodPos[i].MonsterPosition);
             }
+
+            if (!saveTimer.IsDown()) spriteBatch.Draw(saveTexture, new Vector2(camera.Position.X + 30, camera.Position.Y + 950)); 
 
             if (IsDie == true)
             {

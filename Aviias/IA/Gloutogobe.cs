@@ -48,6 +48,7 @@ namespace Aviias.IA
                 this.moveSpeed += 0.2f;
                 this.Texture = content.Load<Texture2D>(texture);
                 _stepEvolve += 1;
+                _points[3] += 10;
             }
             
         }
@@ -101,6 +102,11 @@ namespace Aviias.IA
                 this.MonsterPosition = new Vector2(this.MonsterPosition.X + move.X, this.MonsterPosition.Y + move.Y);
             }
             
+        }
+
+        override public string Type()
+        {
+            return "glouto";
         }
 
         Vector2 AngleToVector(float angle)

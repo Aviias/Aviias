@@ -13,7 +13,9 @@ namespace Aviias.IA
     [Serializable]
     public class Soul
     {
+        [field: NonSerialized]
         Vector2 _position;
+        [field: NonSerialized]
         Texture2D _texture;
         int _damages;
         int _health;

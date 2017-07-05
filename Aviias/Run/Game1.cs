@@ -1,7 +1,9 @@
 ﻿using Aviias.IA;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended;
 using MonoGame.Extended.ViewportAdapters;
 using System;
@@ -47,6 +49,8 @@ namespace Aviias
         Timer _nightDay = new Timer(150f);
         //Ressource _testRessource = new Ressource();
         Spawn spawnMonster;
+        internal Genetic genetic = new Genetic();
+        Song sAmbiant;
 
         public Game1()
         {
@@ -63,6 +67,8 @@ namespace Aviias
                 return _camera;
             }
         }
+
+        internal Genetic Genetic => genetic;
 
         protected override void Initialize()
         {
@@ -90,13 +96,14 @@ namespace Aviias
             _npc.Add(new NPC(Content, "Face2", spriteBatch, new Vector2(1400, 300), 3));
 
             spawnMonster = new Spawn(map);
-            int monsterneed = 1 - monsters.Count;
+            int monsterneed = 8 - monsters.Count;
             if (monsterneed != 0)
             {
                 for (int i = 0; i < monsterneed; i++)
                 {
                     monsterPosition = spawnMonster.SpawnOnSurface(map);
                     wolf = new Wolf(Content, Content.Load<Texture2D>("Wolfface"), monsterPosition);
+                    wolf = new Wolf(Content, Content.Load<Texture2D>("loup"), monsterPosition, new ushort[5] { 10, 10, 10, 10, 10});
                     monsters.Add(wolf);
                 }
             }
@@ -114,6 +121,9 @@ namespace Aviias
             graphics.ApplyChanges();
 
             _camera.LookAt(new Vector2(player.Position.X + 10, player.Position.Y + 15));
+            MediaPlayer.Play(sAmbiant);
+            
+            RunGeneration();
         }
 
         /// <summary>
@@ -142,9 +152,10 @@ namespace Aviias
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);         
 
-            font = Content.Load<SpriteFont>("font");
+            font = Content.Load<SpriteFont>("msg_font");
             player.LoadContent(Content);
             _gameover = Content.Load<Texture2D>("gameover3");
+            sAmbiant = Content.Load<Song>("Sounds/ambiant");
         }
 
         /// <summary>
@@ -226,12 +237,32 @@ namespace Aviias
                         drake.LoadContent(Content, "phenixface", "phenixleft", "phenixright", 80f, 4);
                         monsters.Add(drake);
                         */
-                        spawnTimer.ReInit();
+                        int monsterneed = 8 - monsters.Count;
+                        if (monsterneed != 0)
+                        {
+                            for (int i = 0; i < monsterneed; i++)
+                            {
+                                monsterPosition = spawnMonster.SpawnOnSurface(map);
+
+                                wolf = new Wolf(Content, Content.Load<Texture2D>("loup"), monsterPosition, new ushort[5] { 10, 10, 10, 10, 10 });
+                                //monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
+                                monsters.Add(wolf);
+                            }
+
+                            //monsters.Add(monster);
+                            //monsters.Add(drake);
+
+                            spawnTimer.ReInit();
+                        }
                     }
                 }
 
             }
+        }
 
+        public void RunGeneration()
+        {
+            genetic.RunGeneration();
         }
 
         /// <summary>

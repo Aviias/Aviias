@@ -16,5 +16,11 @@ namespace Aviias
         {
 
         }
+
+        override public string Type()
+        {
+            return "drake";
+        }
+
     }
 }

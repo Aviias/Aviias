@@ -33,20 +33,23 @@ namespace Aviias
         Timer _moving;
         int _direction;
         Timer _movingCooldown;
+<<<<<<< HEAD
         Animation MoveLeft1;
         Animation MoveRight1;
         Animation MoveLeft2;
         Animation MoveRight2;
-        [field: NonSerialized]
-        SoundEffect talkNpc;
-        [field: NonSerialized]
-        SoundEffect questReward;
         Animation CurrentAnim;
         Animation Face1;
         Animation Face2;
 
 
-        
+
+=======
+        [field: NonSerialized]
+        SoundEffect talkNpc;
+        [field: NonSerialized]
+        SoundEffect questReward;
+>>>>>>> origin/f_IA
 
         public NPC(ContentManager content, string texture, SpriteBatch spriteBatch, Vector2 position, int nbQuest)
             :base(false, 4, -10, position)
