@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Timers;
 using Aviias.IA;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Aviias
 {
@@ -47,10 +48,10 @@ namespace Aviias
         bool _isStopDamage;
         Timer _action = new Timer(2f);
         [field: NonSerialized]
-        Song _playerHit;
+        SoundEffect _playerHit;
         string _healthGraphic;
 
-        public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy)
+        public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy, ushort[] proba)
             : base(false,4,-10, pos)
         {
             _id = Game1.random.Next(0, int.MaxValue);
@@ -66,12 +67,12 @@ namespace Aviias
             _baseHealth = health;
             _baseEnergy = energy;
             _energy = energy;
-            proba = new ushort[6];
+            this.proba = proba;
             nextAction = 0;
             _points = new int[5] { 10, 10, 10, 10, 10 };
             _isStopDamage = false;
             Genetic.AddPoints(this);
-            _playerHit = content.Load<Song>("Sounds/player_hit");
+            _playerHit = content.Load<SoundEffect>("Sounds/player_hit");
         }
 
         public int BaseHealth => _baseHealth;
@@ -198,7 +199,7 @@ namespace Aviias
 
         public void ReactToLight()
         {
-            if (Game1.map._blocs[(int)MonsterPosition.X / 16, (int)MonsterPosition.Y / 16].Luminosity < 3) _reactToLight = true;
+            if ((int)MonsterPosition.X / 16 > 0 && (int)MonsterPosition.Y / 16 > 0 && Game1.map._blocs[(int)MonsterPosition.X / 16, (int)MonsterPosition.Y / 16].Luminosity < 3) _reactToLight = true;
             else
             {
                 if (_bonusLightGiven)
@@ -312,7 +313,7 @@ namespace Aviias
                 {
                     if (monsterTimer.IsDown() && player.IsStopDamage == false)
                     {
-                        MediaPlayer.Play(_playerHit);
+                        _playerHit.Play();
                         if (Energy < (Energy * (0.75)))
                         {
                             player.GetDamage(Damage);

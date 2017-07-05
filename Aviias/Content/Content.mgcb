@@ -172,6 +172,7 @@
 #begin msg_font.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:msg_font.spritefont
 
@@ -871,18 +872,6 @@
 /processorParam:TextureFormat=Color
 /build:Menu/Button/retour_rouge.png
 
-#begin Sounds/break_bloc.ogg
-/importer:OggImporter
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Sounds/break_bloc.ogg
-
-#begin Sounds/put_bloc.ogg
-/importer:OggImporter
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Sounds/put_bloc.ogg
-
 #begin Sounds/sucess_reward.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -913,12 +902,6 @@
 /processorParam:Quality=Best
 /build:Sounds/open_chest.ogg
 
-#begin Sounds/player_hit.ogg
-/importer:OggImporter
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Sounds/player_hit.ogg
-
 #begin Sounds/blop_die.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -937,18 +920,6 @@
 /processorParam:Quality=Best
 /build:Sounds/foot.ogg
 
-#begin Sounds/talk_npc.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Sounds/talk_npc.mp3
-
-#begin Sounds/wolf_die.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Sounds/wolf_die.mp3
-
 #begin Sounds/ambiant.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
@@ -966,4 +937,34 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:save.png
+
+#begin Sounds/wolf_die.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/wolf_die.wav
+
+#begin Sounds/talk_npc.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/talk_npc.wav
+
+#begin Sounds/break_bloc.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/break_bloc.wav
+
+#begin Sounds/put_bloc.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/put_bloc.wav
+
+#begin Sounds/player_hit.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/player_hit.wav
 

@@ -88,9 +88,9 @@ namespace Aviias
      //   private SpriteBatch spriteBatch;
         List<Soul> _souls = new List<Soul>(32);
         [field: NonSerialized]
-        Song sPutBloc;
+        SoundEffect sPutBloc;
         [field: NonSerialized]
-        Song sBreakBloc;
+        SoundEffect sBreakBloc;
         [field: NonSerialized]
         SoundEffect blopDie;
         [field: NonSerialized]
@@ -100,7 +100,7 @@ namespace Aviias
         [field: NonSerialized]
         SoundEffect sPlayerDie;
         [field: NonSerialized]
-        Song sWolfDie;
+        SoundEffect sWolfDie;
 
         public int Width
         {
@@ -145,13 +145,13 @@ namespace Aviias
         {
             PMoveLeft = new Animation(content, "gauche", 50f,3,Position);
             PMoveRight = new Animation(content, "droite", 50f, 3, Position);
-            sPutBloc = content.Load<Song>("Sounds/put_bloc");
-            sBreakBloc = content.Load<Song>("Sounds/break_bloc");
+            sPutBloc = content.Load<SoundEffect>("Sounds/put_bloc");
+            sBreakBloc = content.Load<SoundEffect>("Sounds/break_bloc");
             blopDie = content.Load<SoundEffect>("Sounds/blop_die");
             sPlayerAttack = content.Load<SoundEffect>("Sounds/player_attack");
             sPlayerFoot = content.Load<Song>("Sounds/foot");
             sPlayerDie = content.Load<SoundEffect>("Sounds/player_die");
-            sWolfDie = content.Load<Song>("Sounds/wolf_die");
+            sWolfDie = content.Load<SoundEffect>("Sounds/wolf_die");
             saveTexture = content.Load<Texture2D>("save");
         }
 
@@ -177,7 +177,7 @@ namespace Aviias
             y = position.Y;
             _texture = texture.Name;
             _stopDamage = false;
-
+            
             CraftNotPutable.Add("stick");
             CraftNotPutable.Add("wood_shovel");
             CraftNotPutable.Add("heal_potion");
@@ -253,7 +253,7 @@ namespace Aviias
                     bloc1 = new Bloc(blocs[i,j].GetPosBlock ,scale, "air", content);
                     _inv.AddInventory(1, blocs[i, j].Type);
                     blocs[i, j] = bloc1;
-                    MediaPlayer.Play(sBreakBloc);
+                    sBreakBloc.Play();
                 }
             }
             _map.ActualizeShadow((int)Position.X, (int)Position.Y);
@@ -267,7 +267,7 @@ namespace Aviias
                 bloc1 = new Bloc(blocs[i, j].GetPosBlock, scale, name, content);
                 _inv.DecreaseInventory(1, name);
                 blocs[i, j] = bloc1;
-                MediaPlayer.Play(sPutBloc);
+                sPutBloc.Play();
                 map.ActualizeShadow((int)PlayerPosition.X,(int)PlayerPosition.Y);
             }
         }
@@ -453,7 +453,7 @@ namespace Aviias
                                 if (monsters[i].IsDie)
                                 {
                                     if (monsters[i].Type() == "glouto") blopDie.Play();
-                                    else if (monsters[i].Type() == "wolf") MediaPlayer.Play(sWolfDie);
+                                    else if (monsters[i].Type() == "wolf") sWolfDie.Play(); ;
                                     Soul soul = new Soul(monsters[i].MonsterPosition, Content, monsters[i].BaseDamage, monsters[i].BaseHealth);
                                     _souls.Add(soul);
                                     monsters.Remove(monsters[i]);

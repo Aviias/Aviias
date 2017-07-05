@@ -33,7 +33,7 @@ namespace Aviias
         int _direction;
         Timer _movingCooldown;
         [field: NonSerialized]
-        Song talkNpc;
+        SoundEffect talkNpc;
         [field: NonSerialized]
         SoundEffect questReward;
 
@@ -55,7 +55,7 @@ namespace Aviias
             _isQuestActive = false;
             _isTalking = false;
             _movingCooldown = new Timer(0f);
-            talkNpc = content.Load<Song>("Sounds/talk_npc");
+            talkNpc = content.Load<SoundEffect>("Sounds/talk_npc");
             questReward = content.Load<SoundEffect>("Sounds/quest_reward");
         }
 
@@ -99,7 +99,7 @@ namespace Aviias
             {
                 GiveQuest(player);
                 _isTalking = true;
-                MediaPlayer.Play(talkNpc);
+                talkNpc.Play();
             }
         }
 

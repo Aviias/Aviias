@@ -105,7 +105,7 @@ namespace Aviias
                 {
                     monsterPosition = spawnMonster.SpawnOnSurface(map);
 
-                    wolf = new Wolf(Content, Content.Load<Texture2D>("loup"), monsterPosition);
+                    wolf = new Wolf(Content, Content.Load<Texture2D>("loup"), monsterPosition, new ushort[5] { 10, 10, 10, 10, 10});
                     //monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
                     monsters.Add(wolf);
                 }
@@ -120,7 +120,6 @@ namespace Aviias
 
             _camera.LookAt(new Vector2(player.Position.X + 10, player.Position.Y + 15));
             MediaPlayer.Play(sAmbiant);
-            MediaPlayer.IsRepeating = true;
             
             RunGeneration();
         }
@@ -230,7 +229,7 @@ namespace Aviias
                             {
                                 monsterPosition = spawnMonster.SpawnOnSurface(map);
 
-                                wolf = new Wolf(Content, Content.Load<Texture2D>("loup"), monsterPosition);
+                                wolf = new Wolf(Content, Content.Load<Texture2D>("loup"), monsterPosition, new ushort[5] { 10, 10, 10, 10, 10 });
                                 //monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
                                 monsters.Add(wolf);
                             }
