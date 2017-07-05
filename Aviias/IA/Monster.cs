@@ -485,6 +485,7 @@ namespace Aviias
 
         internal void Update(Player player, GameTime gametime, Map map)
         {
+            float x = posX;
             EngeryDamageTimer.Decrem(gametime);
             stopDamageCDTimer.Decrem(gametime);
             stopDamageTimer.Decrem(gametime);
@@ -495,6 +496,25 @@ namespace Aviias
             ActualizeHealthRegeneration(gametime);
             ActualizeEnergieRegeneration(gametime);
             if (Genetic.Meilleur.Value != null) proba = Genetic.Meilleur.Value;
+            MoveOnPlayer(player, map, gametime);
+            if (x == posX)
+            {
+                Face.PlayAnim(gametime);
+                CurrentAnim = Face;
+            }
+            else if (x < posX)
+            {
+                Right.PlayAnim(gametime);
+                CurrentAnim = Right;
+            }
+            else
+            {
+                Left.PlayAnim(gametime);
+                CurrentAnim = Left;
+            }
+
+            
+
             _healthGraphic = GetHealthGraphic();
         }
 
@@ -518,7 +538,7 @@ namespace Aviias
             if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, _pos);
             text.DisplayText((_healthGraphic), new Vector2(_pos.X + 20, _pos.Y - 10), spriteBatch, Color.Red);
             //text.DisplayText(nextAction.ToString(), new Vector2(_pos.X + 30, _pos.Y - 50), spriteBatch, Color.Black);
-            //for (int i = 0; i < _points.Length; i++) text.DisplayText(_points[i].ToString(), new Vector2(_pos.X + 30 * i, _pos.Y - 50), spriteBatch, Color.Black);
+            for (int i = 0; i < _points.Length; i++) text.DisplayText(_points[i].ToString(), new Vector2(_pos.X + 30 * i, _pos.Y - 50), spriteBatch, Color.Black);
             if (_isStopDamage) text.DisplayText(("Block"), new Vector2(_pos.X + 60, _pos.Y - 90), spriteBatch, Color.Red);
         }
     }

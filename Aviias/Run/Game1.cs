@@ -258,7 +258,8 @@ namespace Aviias
                                 Vector2 monsterPosition = new Vector2();
                                 monsterPosition = spawnMonster.SpawnOnSurface(map);
 
-                                wolf = new Wolf(Content, Content.Load<Texture2D>("loup"), monsterPosition, new ushort[5] { 10, 10, 10, 10, 10 });
+                                wolf = new Wolf(Content, Content.Load<Texture2D>("Wolfface"), monsterPosition, new ushort[5] { 10, 10, 10, 10, 10 });
+                                wolf.LoadContent(Content, "Wolfface", "Wolfleft", "Wolfright", 50f, 5);
                                 //monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
                                 monsters.Add(wolf);
                             }
