@@ -215,11 +215,11 @@ namespace Aviias
 
                     if (spawnTimer.IsDown())
 
-                    {     
-                        /*                  
+                    {    
+                        /*                               
                         Vector2 monsterPosition = spawnMonster.SpawnOnSurface(map);
                         drake = new Drake(Content, Content.Load<Texture2D>("drake"), monsterPosition);
-                        drake.LoadContent(Content, "phenixface", "phenixleft", "phenixright", 50f, 4);
+                        drake.LoadContent(Content, "phenixface", "phenixleft", "phenixright", 80f, 4);
                         monsters.Add(drake);
                         */
                         spawnTimer.ReInit();
