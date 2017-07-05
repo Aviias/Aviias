@@ -823,6 +823,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:apple_golden.png
+
 #begin Sounds/sucess_reward.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -846,6 +847,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:coal.png
+
 #begin Sounds/player_die.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -869,6 +871,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:diamond.png
+
 #begin Sounds/open_chest.ogg
 /importer:OggImporter
 /processor:SongProcessor
@@ -892,6 +895,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:diamond_axe.png
+
 #begin Sounds/player_attack.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -927,6 +931,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:diamond_chestplate.png
+
 #begin Sounds/ambiant.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
@@ -962,6 +967,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:diamond_helmet.png
+
 #begin Sounds/talk_npc.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -985,6 +991,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:diamond_leggings.png
+
 #begin Sounds/put_bloc.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -1644,30 +1651,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:wolface.png
-
-#begin ../../../../../../../Pictures/PI S3/Sprite/Final_sprite/wolfleft.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../../../../Pictures/PI S3/Sprite/Final_sprite/wolfleft.png
-
-#begin ../../../../../../../Pictures/PI S3/Sprite/Final_sprite/wolfright.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../../../../Pictures/PI S3/Sprite/Final_sprite/wolfright.png
 
 #begin boeuface.png
 /importer:TextureImporter
