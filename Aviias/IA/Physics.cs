@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace Aviias.IA
 {
+    [Serializable]
     class Physics 
     {
+        [field: NonSerialized]
         public Vector2 _pos;
         int _yVelocity;
         bool _collisions;

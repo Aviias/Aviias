@@ -61,12 +61,6 @@
 /processorParam:TextureFormat=Color
 /build:grass.jpg
 
-#begin font.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:TextureFormat=Compressed
-/build:font.spritefont
-
 #begin dirt.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -889,12 +883,6 @@
 /processorParam:Quality=Best
 /build:Sounds/put_bloc.ogg
 
-#begin Sounds/talk_npc.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:Sounds/talk_npc.wav
-
 #begin Sounds/sucess_reward.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -924,4 +912,58 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:Sounds/open_chest.ogg
+
+#begin Sounds/player_hit.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/player_hit.ogg
+
+#begin Sounds/blop_die.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/blop_die.wav
+
+#begin Sounds/player_attack.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/player_attack.wav
+
+#begin Sounds/foot.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/foot.ogg
+
+#begin Sounds/talk_npc.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/talk_npc.mp3
+
+#begin Sounds/wolf_die.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/wolf_die.mp3
+
+#begin Sounds/ambiant.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/ambiant.mp3
+
+#begin save.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:save.png
 

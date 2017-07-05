@@ -12,9 +12,15 @@ namespace Aviias
     class Wolf : Monster
     {
         public Wolf(ContentManager content, Texture2D texture, Vector2 pos)
-            : base(100, 1.5f, 0.10, 0, 5, content, texture, pos, 150)
+            : base(100, 1.5f, 0.10, 10, 5, content, texture, pos, 150)
         {
 
         }
+
+        override public string Type()
+        {
+            return "wolf";
+        }
+
     }
 }

@@ -104,6 +104,11 @@ namespace Aviias.IA
             
         }
 
+        override public string Type()
+        {
+            return "glouto";
+        }
+
         Vector2 AngleToVector(float angle)
         {
             return new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));

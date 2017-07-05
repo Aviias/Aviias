@@ -1,7 +1,9 @@
 ﻿using Aviias.IA;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended;
 using MonoGame.Extended.ViewportAdapters;
 using System;
@@ -48,6 +50,7 @@ namespace Aviias
         //Ressource _testRessource = new Ressource();
         Spawn spawnMonster;
         internal Genetic genetic = new Genetic();
+        Song sAmbiant;
 
         public Game1()
         {
@@ -95,7 +98,7 @@ namespace Aviias
             _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(1400, 300), 3));
 
             spawnMonster = new Spawn(map);
-            int monsterneed = 1 - monsters.Count;
+            int monsterneed = 8 - monsters.Count;
             if (monsterneed != 0)
             {
                 for (int i = 0; i < monsterneed; i++)
@@ -116,6 +119,10 @@ namespace Aviias
             graphics.ApplyChanges();
 
             _camera.LookAt(new Vector2(player.Position.X + 10, player.Position.Y + 15));
+            MediaPlayer.Play(sAmbiant);
+            MediaPlayer.IsRepeating = true;
+            
+            RunGeneration();
         }
 
         /// <summary>
@@ -136,9 +143,10 @@ namespace Aviias
             spriteBatch = new SpriteBatch(GraphicsDevice);
            
 
-            font = Content.Load<SpriteFont>("font");
+            font = Content.Load<SpriteFont>("msg_font");
             player.LoadContent(Content);
             _gameover = Content.Load<Texture2D>("gameover3");
+            sAmbiant = Content.Load<Song>("Sounds/ambiant");
         }
 
         /// <summary>
@@ -212,14 +220,26 @@ namespace Aviias
                     if (spawnTimer.IsDown())
 
                     {
-                       
+
                         Vector2 monsterPosition = spawnMonster.SpawnOnSurface(map);
                         //drake = new Drake(Content, Content.Load<Texture2D>("drake"), monsterPosition);
-                        
-                         //monsters.Add(monster);
-                         //monsters.Add(drake);
-                        
-                        spawnTimer.ReInit();
+                        int monsterneed = 8 - monsters.Count;
+                        if (monsterneed != 0)
+                        {
+                            for (int i = 0; i < monsterneed; i++)
+                            {
+                                monsterPosition = spawnMonster.SpawnOnSurface(map);
+
+                                wolf = new Wolf(Content, Content.Load<Texture2D>("loup"), monsterPosition);
+                                //monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
+                                monsters.Add(wolf);
+                            }
+
+                            //monsters.Add(monster);
+                            //monsters.Add(drake);
+
+                            spawnTimer.ReInit();
+                        }
                     }
                 }
 

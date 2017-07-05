@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace Aviias.IA
 {
+    [Serializable]
     class Spawn
     {
+        [field: NonSerialized]
         Vector2 pos;
         Random _rnd;
         int _worldHeight;
@@ -24,7 +26,7 @@ namespace Aviias.IA
         public Vector2 SpawnOnSurface(Map map)
         {
             Vector2 spawn;
-            int x = _rnd.Next(0, _worldWidth);
+            int x = _rnd.Next(0, _worldWidth) * 16;
             spawn = new Vector2(x, FindYPos(map, x));
             return spawn;
         }
@@ -34,7 +36,7 @@ namespace Aviias.IA
             int spawnok = 0;
             for(int y = 1; y < _worldHeight; y++)
             {
-                if(map._blocs[x,y].Type == "air")
+                if(map._blocs[x/16,y].Type == "air")
                 {
                     spawnok = y;
                 }

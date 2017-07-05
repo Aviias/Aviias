@@ -62,8 +62,11 @@ namespace Aviias
         public bool flyMod;
         public bool IsInventoryOpen;
         Map _map;
+        [field: NonSerialized]
         Animation PMoveLeft;
+        [field: NonSerialized]
         Animation PMoveRight;
+        [field: NonSerialized]
         Animation CurrentAnim;
         Timer playerTimer = new Timer(1.2f);
         Timer invenTimer = new Timer(1.3f);
@@ -75,15 +78,29 @@ namespace Aviias
         Timer stopDamageTimer = new Timer(12f);
         Timer stopDamageCDTimer = new Timer(5f);
         Timer TriTimer = new Timer(1.1f);
-
+        Timer saveTimer = new Timer(3f);
+        [field: NonSerialized]
+        Texture2D saveTexture;
         List<string> CraftNotPutable = new List<string>();
         //   MonoGame.Extended.Camera2D Camera;
         float _playerMoveSpeed;
         internal Inventory _inv;
-        private SpriteBatch spriteBatch;
+     //   private SpriteBatch spriteBatch;
         List<Soul> _souls = new List<Soul>(32);
+        [field: NonSerialized]
         Song sPutBloc;
+        [field: NonSerialized]
         Song sBreakBloc;
+        [field: NonSerialized]
+        SoundEffect blopDie;
+        [field: NonSerialized]
+        SoundEffect sPlayerAttack;
+        [field: NonSerialized]
+        Song sPlayerFoot;
+        [field: NonSerialized]
+        SoundEffect sPlayerDie;
+        [field: NonSerialized]
+        Song sWolfDie;
 
         public int Width
         {
@@ -130,6 +147,12 @@ namespace Aviias
             PMoveRight = new Animation(content, "droite", 50f, 3, Position);
             sPutBloc = content.Load<Song>("Sounds/put_bloc");
             sBreakBloc = content.Load<Song>("Sounds/break_bloc");
+            blopDie = content.Load<SoundEffect>("Sounds/blop_die");
+            sPlayerAttack = content.Load<SoundEffect>("Sounds/player_attack");
+            sPlayerFoot = content.Load<Song>("Sounds/foot");
+            sPlayerDie = content.Load<SoundEffect>("Sounds/player_die");
+            sWolfDie = content.Load<Song>("Sounds/wolf_die");
+            saveTexture = content.Load<Texture2D>("save");
         }
 
         public void Initialize(Texture2D texture, Vector2 position, ContentManager content, Map map)
@@ -211,6 +234,7 @@ namespace Aviias
             if (newHealth <= 0)
             {
                 _isDie = true;
+                sPlayerDie.Play();
             }
             else
             {
@@ -325,6 +349,7 @@ namespace Aviias
             stopDamageCDTimer.Decrem(gameTime);
             stopDamageTimer.Decrem(gameTime);
             TriTimer.Decrem(gameTime);
+            saveTimer.Decrem(gameTime);
             bool tmp = false;
 
             foreach (Soul soul in _souls)
@@ -424,16 +449,22 @@ namespace Aviias
                             if (monsters[i].IsStopDamage == false)
                             {
                                 monsters[i].GetDamage(player.Damage);
+                                sPlayerAttack.Play();
                                 if (monsters[i].IsDie)
                                 {
+                                    if (monsters[i].Type() == "glouto") blopDie.Play();
+                                    else if (monsters[i].Type() == "wolf") MediaPlayer.Play(sWolfDie);
                                     Soul soul = new Soul(monsters[i].MonsterPosition, Content, monsters[i].BaseDamage, monsters[i].BaseHealth);
                                     _souls.Add(soul);
-                                    
                                     monsters.Remove(monsters[i]);
                                 }
                                 playerTimer.ReInit();
                             }
-                            else monsters[i]._points[2] += Damage / 2;
+                            else
+                            {
+                                monsters[i]._points[2] += Damage * 2;
+                                playerTimer.ReInit();
+                            }
                         }
                             
                     }
@@ -593,6 +624,7 @@ namespace Aviias
 
             if (currentKeyboardState.IsKeyDown(Keys.S))
             {
+                saveTimer.ReInit();
                 x = Position.X;
                 y = Position.Y;
                 save = new Save(map, this, Game1._npc);
@@ -779,6 +811,8 @@ namespace Aviias
             {
                 soul.Draw(spriteBatch);
             }
+
+            if (!saveTimer.IsDown()) spriteBatch.Draw(saveTexture, new Vector2(camera.Position.X + 30, camera.Position.Y + 950)); 
 
             if (IsDie == true)
             {

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,9 @@ namespace Aviias
         Timer _moving;
         int _direction;
         Timer _movingCooldown;
-        SoundEffect talkNpc;
+        [field: NonSerialized]
+        Song talkNpc;
+        [field: NonSerialized]
         SoundEffect questReward;
 
         public NPC(ContentManager content, string texture, SpriteBatch spriteBatch, Vector2 position, int nbQuest)
@@ -52,7 +55,7 @@ namespace Aviias
             _isQuestActive = false;
             _isTalking = false;
             _movingCooldown = new Timer(0f);
-            talkNpc = content.Load<SoundEffect>("Sounds/talk_npc");
+            talkNpc = content.Load<Song>("Sounds/talk_npc");
             questReward = content.Load<SoundEffect>("Sounds/quest_reward");
         }
 
@@ -96,7 +99,7 @@ namespace Aviias
             {
                 GiveQuest(player);
                 _isTalking = true;
-                talkNpc.Play();
+                MediaPlayer.Play(talkNpc);
             }
         }
 

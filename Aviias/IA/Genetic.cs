@@ -11,7 +11,7 @@ namespace Aviias.IA
     {
         static int chromosomeLength = 5;             //[%action1, %action2,...]
         public static IChromosome chronos = new ShortArrayChromosome(chromosomeLength);
-        Population Population = new Population(10, chronos, new FitnessRepartitionActions(), new RouletteEliteSelection());
+        Population Population = new Population(10, chronos, new FitnessRepartitionActions(), new EliteSelection());
         public static ShortArrayChromosome Meilleur = null;
         static internal int[] _points = new int[5];
 
