@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Aviias
 {
+    /*
     class Drake : Monster
     {
         public Drake(ContentManager content, Texture2D texture, Vector2 pos)
@@ -23,4 +24,5 @@ namespace Aviias
         }
 
     }
+    */
 }

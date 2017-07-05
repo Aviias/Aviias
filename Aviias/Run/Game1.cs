@@ -23,8 +23,8 @@ namespace Aviias
         public static Player player;
         Monster monster;
         Wolf wolf;
-        Drake drake;
-        Gloutogobe glouto;
+        //Drake drake;
+        //Gloutogobe glouto;
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
         // Texture2D texture;

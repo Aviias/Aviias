@@ -9,10 +9,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Aviias.IA
 {
+    /*
      class Gloutogobe : Monster
     {
         int _stepEvolve;
-
+        /*
         public Gloutogobe(ContentManager content, Texture2D texture, Vector2 pos)
             : base(100, 1.5f, 0.10, 20, 5, content, texture, pos, 100, "glouto")
         {
@@ -131,5 +132,7 @@ namespace Aviias.IA
                 base.Update(player, gametime, map);
             }
         }
+        
     }
+    */
 }
