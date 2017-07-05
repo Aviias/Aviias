@@ -42,9 +42,6 @@ namespace Aviias
         float _yVelocity;
         Timer EngeryDamageTimer = new Timer(1f);
         Timer JumpTimer = new Timer(50f);
-        Timer stopDamageTimer = new Timer(4f);
-        Timer stopDamageCDTimer = new Timer(5f);
-        bool _isStopDamage;
         double _score;
         string _type;
         Animation Left, Right, Face, CurrentAnim;
@@ -58,7 +55,7 @@ namespace Aviias
         SoundEffect _playerHit;
         string _healthGraphic;
         
-        public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy, ushort[] proba)
+        public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy, ushort[] proba, string type)
         : base(false,4,-10, pos)
         {
             _id = Game1.random.Next(0, int.MaxValue);
@@ -108,11 +105,6 @@ namespace Aviias
             set { text = value; }
         }
 
-        public string Type
-        {
-            get { return _type; }
-        }
-
         public double Score
         {
             get { return _score; }
@@ -134,12 +126,6 @@ namespace Aviias
         {
             get { return _texture; }
             set { _texture = value; }
-        }
-
-        public bool IsStopDamage
-        {
-            get { return _isStopDamage; }
-            set { _isStopDamage = value; }
         }
 
         public float moveSpeed
@@ -436,14 +422,6 @@ namespace Aviias
         public void Dodge()
         {
             if (stopDamageCDTimer.IsDown())
-            stopDamageCDTimer.Decrem(gametime);
-            stopDamageTimer.Decrem(gametime);
-
-            if (stopDamageTimer.IsDown())
-            {
-                IsStopDamage = false;
-                stopDamageTimer.ReInit();
-            }
             {
                 IsStopDamage = true;
                 stopDamageCDTimer.ReInit();
@@ -503,20 +481,10 @@ namespace Aviias
             // 4
         }
 
-            if ( x == posX)
-            {
-
-            } else if (x < posX)
-            {
-                Right.PlayAnim(gametime);
-                CurrentAnim = Right;
-            } else
-            {
-                Left.PlayAnim(gametime);
-                CurrentAnim = Left;
-            }
 
 
+        internal void Update(Player player, GameTime gametime, Map map)
+        {
             EngeryDamageTimer.Decrem(gametime);
             stopDamageCDTimer.Decrem(gametime);
             stopDamageTimer.Decrem(gametime);

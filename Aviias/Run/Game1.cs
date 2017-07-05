@@ -102,8 +102,8 @@ namespace Aviias
                 for (int i = 0; i < monsterneed; i++)
                 {
                     monsterPosition = spawnMonster.SpawnOnSurface(map);
-                    wolf = new Wolf(Content, Content.Load<Texture2D>("Wolfface"), monsterPosition);
-                    wolf = new Wolf(Content, Content.Load<Texture2D>("loup"), monsterPosition, new ushort[5] { 10, 10, 10, 10, 10});
+                    wolf = new Wolf(Content, Content.Load<Texture2D>("Wolfface"), monsterPosition, new ushort[5] { 10, 10, 10, 10, 10 });
+                  //  wolf = new Wolf(Content, Content.Load<Texture2D>("loup"), monsterPosition, new ushort[5] { 10, 10, 10, 10, 10});
                     monsters.Add(wolf);
                 }
             }
@@ -144,7 +144,7 @@ namespace Aviias
 
             for (int i = 0; i < monsters.Count; i++)
             {
-                if (monsters[i].Type == "wolf")
+                if (monsters[i].Type() == "wolf")
                 {
                     monsters[i].LoadContent(Content, "Wolfface", "Wolfleft", "Wolfright", 50f, 5);
                 }
@@ -242,6 +242,7 @@ namespace Aviias
                         {
                             for (int i = 0; i < monsterneed; i++)
                             {
+                                Vector2 monsterPosition = new Vector2();
                                 monsterPosition = spawnMonster.SpawnOnSurface(map);
 
                                 wolf = new Wolf(Content, Content.Load<Texture2D>("loup"), monsterPosition, new ushort[5] { 10, 10, 10, 10, 10 });
