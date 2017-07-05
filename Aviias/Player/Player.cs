@@ -92,6 +92,7 @@ namespace Aviias
         bool _isMonsterGetDamage;
         List<Animation> _monsterBlood = new List<Animation>();
         List<Monster> _monsterBloodPos = new List<Monster>();
+        List<string> _tools = new List<string>();
 
         public int Width
         {
@@ -169,6 +170,7 @@ namespace Aviias
             CraftNotPutable.Add("wood_shovel");
             CraftNotPutable.Add("heal_potion");
             CraftNotPutable.Add("apple");
+            CraftNotPutable.Add("apple_golden");
             CraftNotPutable.Add("coal");
             CraftNotPutable.Add("iron_ingot");
             CraftNotPutable.Add("gold_ingot");
@@ -193,6 +195,7 @@ namespace Aviias
             CraftNotPutable.Add("diamond_axe");
             CraftNotPutable.Add("diamond_pickaxe");
             CraftNotPutable.Add("diamond_sword");
+            
             _inv.AddInventory(2, "oak_wood");
             _inv.AddInventory(2, "dirt");
             _inv.AddInventory(8, "oak_plank");
