@@ -71,15 +71,7 @@ namespace Aviias
 
         public Vector2 PositionCellToolBar(Camera2D camera)
         {
-            float DifX = 77;
-            if (_actualCell == 0)
-            {
-                return new Vector2(camera.Position.X + 575, camera.Position.Y + 1012);
-            }
-            else
-            {
-                return new Vector2(camera.Position.X + DifX * _actualCell, camera.Position.Y + 474);
-            }
+            return new Vector2(camera.Position.X + 575  + _actualCell * 77 , camera.Position.Y + 1012);
         }
 
         public _cell[] Array

@@ -14,15 +14,20 @@ namespace Aviias
     {
         Button _jouer;
         Button _quitter;
+        Button _commandes;
         MenuPlay _menuPlay;
+        MenuCommande _menuCommande;
         public bool _close { get; set; }
+        public static bool SwapCommande;
         public static bool Swap;
 
         public void Initialize()
         {
             _menuPlay = new MenuPlay();
+            _menuCommande = new MenuCommande();
             _jouer = new Button(new Vector2(305, 655), 600, 100);
             _quitter = new Button(new Vector2(684, 800), 600, 100);
+            _commandes = new Button(new Vector2(1044, 655), 600, 100);
         }
 
         internal void Update(GameTime gameTime, ContentManager Content)
@@ -42,6 +47,10 @@ namespace Aviias
             {
                 _menuPlay.Update(gameTime, Content);
             }
+            if(SwapCommande)
+            {
+                _menuCommande.Update(gameTime, Content);
+            }
             else
             {
                 if (_quitter.IsPressed(mouseState) && mouseState.Position.X >= _quitter._position.X && mouseState.Position.Y >= _quitter._position.Y && mouseState.Position.X <= _quitter._position.X + _quitter._width && mouseState.Position.Y <= _quitter._position.Y + _quitter._height)
@@ -53,6 +62,15 @@ namespace Aviias
                 {
                     _quitter._texture = ".\\Menu\\Button\\quitter_gris";
                 }
+                if (_commandes.IsPressed(mouseState) && mouseState.Position.X >= _commandes._position.X && mouseState.Position.Y >= _commandes._position.Y && mouseState.Position.X <= _commandes._position.X + _commandes._width && mouseState.Position.Y <= _commandes._position.Y + _commandes._height)
+                {
+                    _commandes._texture = ".\\Menu\\Button\\commandes";
+                    SwapCommande = true;
+                }
+                else
+                {
+                    _commandes._texture = ".\\Menu\\Button\\commandes";
+                }
             }
         }
 
@@ -63,9 +81,13 @@ namespace Aviias
 
         internal void Draw(SpriteBatch spriteBatch, ContentManager content)
         {
-            if (Swap == true)
+            if (Swap)
             {
                 _menuPlay.Draw(spriteBatch, content);
+            }
+            else if(SwapCommande)
+            {
+                _menuCommande.Draw(spriteBatch, content);
             }
             else
             {
@@ -73,6 +95,7 @@ namespace Aviias
                     SpriteEffects.None, 0f);
                 _jouer.Draw(spriteBatch, content, new Vector2(_jouer._position.X, _jouer._position.Y + 20));
                 _quitter.Draw(spriteBatch, content, new Vector2(_quitter._position.X, _quitter._position.Y + 20));
+                _commandes.Draw(spriteBatch, content, new Vector2(_commandes._position.X, _commandes._position.Y + 20));
             }
         }
     }
