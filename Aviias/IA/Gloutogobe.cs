@@ -56,15 +56,15 @@ namespace Aviias.IA
         {
             if(x == 2)
             {
-                return "Blopmulti";
+                return "boeuface";
             }
             else if (x == 3)
             {
-                return "glouto";
+                return "larveface";
             }
             else
             {
-                return "Blopred";
+                return "wolfface";
             }
         }
 
@@ -122,8 +122,7 @@ namespace Aviias.IA
             else
             {
                 //UpdatePhysics(Game1.map, this.Texture);
-                MoveOnPlayer(player, map, gametime);
-                Fight(player, gametime);
+                base.Update(player, gametime, map);
             }
         }
     }

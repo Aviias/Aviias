@@ -77,6 +77,7 @@ namespace Aviias
             Face = new Animation(content, assertface, speed, 1, MonsterPosition);
             Left = new Animation(content, assertleft, speed, numOfFrames, MonsterPosition);
             Right = new Animation(content, assertright, speed, numOfFrames, MonsterPosition);
+            
         }
 
         public int BaseHealth => _baseHealth;

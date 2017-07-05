@@ -100,9 +100,12 @@ namespace Aviias
                     monsters.Add(wolf);
                 }
             }
-            //Vector2 gloutoPos = spawnMonster.SpawnOnSurface(map);
-            //glouto = new Gloutogobe(Content, Content.Load<Texture2D>("Blopred"), gloutoPos);
-            //monsters.Add(glouto);
+            /*
+            Vector2 gloutoPos = spawnMonster.SpawnOnSurface(map);
+            glouto = new Gloutogobe(Content, Content.Load<Texture2D>("wolfface"), gloutoPos);
+            glouto.LoadContent(Content, "wolface", "wolfleft", "wolfright", 50f, 3);
+            monsters.Add(glouto);
+            */
             base.Initialize();
 
             graphics.IsFullScreen = false;
@@ -197,6 +200,7 @@ namespace Aviias
 
                         Camera.Move(new Vector2(-player.PlayerMoveSpeed, 0));
                     }
+
                     //glouto.Update(monsters, player, Content, gameTime, map);
 
                     player.Update(player, Camera, _npc, gameTime, Content, log, map, monsters);
