@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Aviias.GUI;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -12,19 +13,23 @@ namespace Aviias.IA
     [Serializable]
     public class Soul
     {
+        [field: NonSerialized]
         Vector2 _position;
+        [field: NonSerialized]
         Texture2D _texture;
         int _damages;
         int _health;
         Timer _lifeTime = new Timer(3f);
+        Animation SoulAnim;
 
         public Soul(Vector2 position, ContentManager content, int damages, int health)
         {
             _damages = damages;
             _health = health;
             _position = position;
-            _texture = content.Load<Texture2D>("soul");
+            //_texture = content.Load<Texture2D>("soul");
         }
+
 
         public Vector2 Position => _position;
         public Texture2D Texture => _texture;

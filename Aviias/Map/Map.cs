@@ -218,8 +218,8 @@ namespace Aviias
                     }
                 }
 
-                _blocs[0, 0] = new Bloc(new Vector2(0, 0), _scale, "bedrock", content);
-                _blocs[20, 20] = new Bloc(new Vector2(20*16, 20*16), _scale, "bedrock", content);
+                //_blocs[0, 0] = new Bloc(new Vector2(0, 0), _scale, "bedrock", content);
+                //_blocs[20, 20] = new Bloc(new Vector2(20*16, 20*16), _scale, "bedrock", content);
                 // Cave generation
                 for (int o = 130; o < _worldHeight; o++)
                 {

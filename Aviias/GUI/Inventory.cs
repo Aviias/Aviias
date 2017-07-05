@@ -12,8 +12,10 @@ namespace Aviias
     {
         int _actualCell;
         Player _player;
+        [field: NonSerialized]
         public _cell[]  _cellArray;
         private Text text;
+        [field: NonSerialized]
         public Craft _craft;
         public Button _buttonCraft;
         

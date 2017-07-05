@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,14 @@ namespace Aviias
     {
         Random random = new Random();
         _cell[] _content;
+        Song openChest;
+        Song closeChest;
 
         public Chest(Vector2 position, float scale, string type, ContentManager content) : base (position, scale, type, content)
         {
             _content = new _cell[20];
+            openChest = content.Load<Song>("open_chest");
+            closeChest = content.Load<Song>("close_chest");
             Fill();
         }
 
@@ -58,6 +63,16 @@ namespace Aviias
             {
                 if (!_content[i].IsFull && _content[i]._name != name) { _content[i]._name = name; _content[i]._quantity = quantity; _content[i].IsFull = true; _content[i]._ressource = new Ressource(name); break; }
             }
+        }
+
+        public void OpenChest()
+        {
+            MediaPlayer.Play(openChest);
+        }
+
+        public void ClosChest()
+        {
+            MediaPlayer.Play(closeChest);
         }
     }
 }

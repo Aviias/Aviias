@@ -8,6 +8,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Timers;
 using Aviias.IA;
+using Aviias.GUI;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Aviias
 {
@@ -16,10 +19,9 @@ namespace Aviias
     {
         Text text;
         int _id;
+        int nextAction;
         int _health;
         float _speed;
-   /*     [field: NonSerialized]
-        Vector2 _pos;*/
         bool _isDie;
         double _regenerationRate;
         int _damageDealing;
@@ -36,36 +38,57 @@ namespace Aviias
         public Timer _healthRegenerationTimer = new Timer(4f);
         Timer _energyRegenTimer = new Timer(2f);
         float _energy;
-        Random rnd = new Random();
         bool _collisions;
         float _yVelocity;
         Timer EngeryDamageTimer = new Timer(1f);
         Timer JumpTimer = new Timer(50f);
-
-        Timer stopDamageTimer = new Timer(4f);
-        Timer stopDamageCDTimer = new Timer(5f);
-        bool _isStopDamage;
         double _score;
-
-        public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy)
-            : base(false,4,-10, pos)
+        string _type;
+        Animation Left, Right, Face, CurrentAnim;
+        public ushort[] proba;
+        public int[] _points;
+        Timer stopDamageTimer = new Timer(4f);
+        Timer stopDamageCDTimer = new Timer(20f);
+        bool _isStopDamage;
+        Timer _action = new Timer(2f);
+        [field: NonSerialized]
+        SoundEffect _playerHit;
+        string _healthGraphic;
+        
+        public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy, ushort[] proba, string type)
+        : base(false,4,-10, pos)
         {
-            _id = rnd.Next(0, int.MaxValue);
+            _id = Game1.random.Next(0, int.MaxValue);
             _health = health;
             _speed = speed;
             _isDie = false;
             _regenerationRate = regenerationRate;
             _damageDealing = damageDealing;
             _resistance = resistance;
-            text = new Aviias.Text(content);
-         //   _pos = pos;
+            text = new Text(content);
+             _pos = pos;
             _texture = texture;
             _baseDamageDealing = damageDealing;
             _baseHealth = health;
             _baseEnergy = energy;
             _energy = energy;
+            this.proba = proba;
+            nextAction = 0;
+            _points = new int[5] { 10, 10, 10, 10, 10 };
+            _isStopDamage = false;
+            Genetic.AddPoints(this);
+            _playerHit = content.Load<SoundEffect>("Sounds/player_hit");
             _score = 0;
             _isStopDamage = false;
+            _type = type;
+        }
+
+        public void LoadContent(ContentManager content, string assertface, string assertleft,string assertright, float speed, int numOfFrames)
+        {
+            Face = new Animation(content, assertface, speed, 1, MonsterPosition);
+            Left = new Animation(content, assertleft, speed, numOfFrames, MonsterPosition);
+            Right = new Animation(content, assertright, speed, numOfFrames, MonsterPosition);
+            
         }
 
         public int BaseHealth => _baseHealth;
@@ -190,9 +213,14 @@ namespace Aviias
             set { _energy = value; }
         }
 
+        virtual public string Type()
+        {
+            return "base";
+        }
+
         public void ReactToLight()
         {
-            if (Game1.map._blocs[(int)MonsterPosition.X / 16, (int)MonsterPosition.Y / 16].Luminosity < 3) _reactToLight = true;
+            if ((int)MonsterPosition.X / 16 > 0 && (int)MonsterPosition.Y / 16 > 0 && Game1.map._blocs[(int)MonsterPosition.X / 16, (int)MonsterPosition.Y / 16].Luminosity < 3) _reactToLight = true;
             else
             {
                 if (_bonusLightGiven)
@@ -225,12 +253,13 @@ namespace Aviias
         {
             foreach (Soul soul in souls)
             {
-                Rectangle soulRect = new Rectangle((int)soul.Position.X, (int)soul.Position.Y, soul.Texture.Width, soul.Texture.Height);
+                Rectangle soulRect = new Rectangle((int)soul.Position.X - 10, (int)soul.Position.Y - 10, soul.Texture.Width + 10, soul.Texture.Height + 10);
                 Rectangle monsterRect = new Rectangle((int)MonsterPosition.X, (int)MonsterPosition.Y, Texture.Width, Texture.Height);
                 if (soulRect.Intersects(monsterRect))
                 {
                     _health += soul.Health;
                     _damageDealing += soul.Damages;
+                    _points[3] += 10;
                     return true;
                 }
                     //return eaten soul
@@ -305,9 +334,11 @@ namespace Aviias
                 {
                     if (monsterTimer.IsDown() && player.IsStopDamage == false)
                     {
+                        _playerHit.Play();
                         if (Energy < (Energy * (0.75)))
                         {
                             player.GetDamage(Damage);
+                            _points[1] += (ushort)Damage * 1000;
                             monsterTimer.ReInit();
                             Energy = Energy - 0.8f;
                         }
@@ -315,6 +346,7 @@ namespace Aviias
                         {
                             player.GetDamage(Damage + (Damage/2));
                             monsterTimer.ReInit();
+                            _points[1] += (ushort)Damage * 1000;
                             Energy = Energy - 15f;
                         }
                         
@@ -387,48 +419,93 @@ namespace Aviias
             return _blocs;
         }
 
+        public void Dodge()
+        {
+            if (stopDamageCDTimer.IsDown())
+            {
+                IsStopDamage = true;
+                stopDamageCDTimer.ReInit();
+            }
+            else IsStopDamage = false;
+        }
+
+        internal void ChooseAction()
+        {
+            if (_action.IsDown())
+            {
+                int prob = Game1.random.Next(1, (proba[0] + proba[1] + proba[2] + proba[3] + proba[4]));
+                if (prob <= proba[0]) nextAction = 0;           //Move on player
+                else if (prob <= proba[1] + proba[0]) nextAction = 1;      //Flight
+                else if (prob <= proba[2] + proba[1] + proba[0]) nextAction = 2;      //Fight
+                else if (prob <= proba[3] + proba[2] + proba[1] + proba[0]) nextAction = 3;      //Block
+                else if (prob <= proba[4] + proba[3] + proba[2] + proba[1] + proba[0]) nextAction = 4;      //GetOrb / EatMonster
+                else nextAction = 5;                            //Do nothing
+            }
+            
+        }
+            
+        internal void DoSomething(Player player, Map map, GameTime gametime)
+        {
+            switch(nextAction)
+            {
+                case 0:
+                    MoveOnPlayer(player, map, gametime);
+                    break;
+                case 1:
+                    Flight(player, map, gametime);
+                    break;
+                case 2:
+                    Fight(player, gametime);
+                    break;
+                case 3:
+                    Dodge();
+                    break;
+                case 4:
+                    EatSoul(_souls);
+                    break;
+                case 5:
+                   // MoveOnPlayer(player, map, gametime);
+                    break;
+            }
+        }
+
+        internal void UpdatePoints()
+        {
+            // 0 distance
+            if (Math.Abs((Math.Abs((int)MonsterPosition.X - (int)Game1.player.Position.X) - Math.Abs((int)MonsterPosition.Y - (int)Game1.player.Position.Y))) < 40) _points[0] += 2;
+            else if (Math.Abs((Math.Abs((int)MonsterPosition.X - (int)Game1.player.Position.X) - Math.Abs((int)MonsterPosition.Y - (int)Game1.player.Position.Y))) < 100) _points[0] += 1;
+
+            // 1 dommages infligés
+            // 2 dommages bloqués
+            // 3 orbes ou monstres gobés
+            // 4
+        }
+
+
+
         internal void Update(Player player, GameTime gametime, Map map)
         {
             EngeryDamageTimer.Decrem(gametime);
             stopDamageCDTimer.Decrem(gametime);
             stopDamageTimer.Decrem(gametime);
 
-            if (stopDamageTimer.IsDown())
-            {
-                IsStopDamage = false;
-                stopDamageTimer.ReInit();
-            }
-
-            if (_health >= 50)
-            {
-                MoveOnPlayer(player, map, gametime);
-                Energy = Energy - 0.2f;
-            }
-            else
-            {
-              Flight(player, map, gametime);
-              Energy = Energy - 0.2f;
-                if (stopDamageCDTimer.IsDown())
-                {
-                    IsStopDamage = true;
-                    stopDamageCDTimer.ReInit();
-                } 
-
-            }
-            
-            Fight(player, gametime);
-
-            if (Energy < 0f && EngeryDamageTimer.IsDown())
-            {
-                this.GetDamage(1);
-                EngeryDamageTimer.ReInit();
-            }
-
             UpdatePhysics(map, Texture);
-                
+            _action.Decrem(gametime);
             ReactToLight();
             ActualizeHealthRegeneration(gametime);
-            ActualizeEnergieRegeneration(gametime);                       
+            ActualizeEnergieRegeneration(gametime);
+            if (Genetic.Meilleur.Value != null) proba = Genetic.Meilleur.Value;
+            _healthGraphic = GetHealthGraphic();
+        }
+
+        string GetHealthGraphic()
+        {
+            string str = "";
+            for(int i = 0; i < _health; i += 5)
+            {
+                str += ".";
+            }
+            return str;
         }
 
         Vector2 AngleToVector(float angle)
@@ -438,8 +515,11 @@ namespace Aviias
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _pos, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-            text.DisplayText(("Life : " + _health), new Vector2(_pos.X + 60, _pos.Y - 30), spriteBatch, Color.Orange);
+            if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, _pos);
+            text.DisplayText((_healthGraphic), new Vector2(_pos.X + 20, _pos.Y - 10), spriteBatch, Color.Red);
+            //text.DisplayText(nextAction.ToString(), new Vector2(_pos.X + 30, _pos.Y - 50), spriteBatch, Color.Black);
+            for (int i = 0; i < _points.Length; i++) text.DisplayText(_points[i].ToString(), new Vector2(_pos.X + 30 * i, _pos.Y - 50), spriteBatch, Color.Black);
+            if (_isStopDamage) text.DisplayText(("Block"), new Vector2(_pos.X + 60, _pos.Y - 90), spriteBatch, Color.Red);
         }
     }
 }

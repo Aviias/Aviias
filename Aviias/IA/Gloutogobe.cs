@@ -9,12 +9,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Aviias.IA
 {
+    /*
      class Gloutogobe : Monster
     {
         int _stepEvolve;
-
+        /*
         public Gloutogobe(ContentManager content, Texture2D texture, Vector2 pos)
-            : base(100, 1.5f, 0.10, 20, 5, content, texture, pos, 100)
+            : base(100, 1.5f, 0.10, 20, 5, content, texture, pos, 100, "glouto")
         {
             _stepEvolve = 1;
         }
@@ -48,6 +49,7 @@ namespace Aviias.IA
                 this.moveSpeed += 0.2f;
                 this.Texture = content.Load<Texture2D>(texture);
                 _stepEvolve += 1;
+                _points[3] += 10;
             }
             
         }
@@ -56,15 +58,15 @@ namespace Aviias.IA
         {
             if(x == 2)
             {
-                return "Blopmulti";
+                return "boeuface";
             }
             else if (x == 3)
             {
-                return "glouto";
+                return "larveface";
             }
             else
             {
-                return "Blopred";
+                return "wolfface";
             }
         }
 
@@ -103,6 +105,11 @@ namespace Aviias.IA
             
         }
 
+        override public string Type()
+        {
+            return "glouto";
+        }
+
         Vector2 AngleToVector(float angle)
         {
             return new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
@@ -121,10 +128,11 @@ namespace Aviias.IA
             }
             else
             {
-                //UpdatePhysics(Game1.map, this);
-                MoveOnPlayer(player, map, gametime);
-                Fight(player, gametime);
+                //UpdatePhysics(Game1.map, this.Texture);
+                base.Update(player, gametime, map);
             }
         }
+        
     }
+    */
 }

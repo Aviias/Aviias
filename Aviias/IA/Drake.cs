@@ -9,12 +9,20 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Aviias
 {
+    /*
     class Drake : Monster
     {
         public Drake(ContentManager content, Texture2D texture, Vector2 pos)
-            : base(300, 1.6f, 0.10, 0, 2, content, texture, pos, 100)
+            : base(300, 1.6f, 0.10, 0, 2, content, texture, pos, 100, "drake")
         {
 
         }
+
+        override public string Type()
+        {
+            return "drake";
+        }
+
     }
+    */
 }
