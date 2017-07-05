@@ -62,7 +62,7 @@ namespace Aviias
         Timer playerTimer = new Timer(1.2f);
         Timer invenTimer = new Timer(1.3f);
         Timer jumpTimer = new Timer(1.5f);
-        Timer craftTimer = new Timer(1.5f);
+        Timer craftTimer = new Timer(1.3f);
         Timer blocBreakTimer = new Timer(1.5f);
         Timer blockDurationTimer = new Timer(1.5f);
         Timer setBlocTimer = new Timer(1.2f);
@@ -166,6 +166,7 @@ namespace Aviias
             _inv.AddInventory(10, "gold_ore");
             _inv.AddInventory(10, "diamond");
             _inv.AddInventory(2, "coal_ore");
+            _inv.AddInventory(1, "apple");
             /*
             _inv.AddInventory(4, "oak_plank");
             _inv.AddInventory(500, "dirt");

@@ -56,7 +56,8 @@ namespace Aviias
             AddCraft("diamond_axe", 1, 2, "stick", 3, "diamond");
             AddCraft("diamond_pickaxe", 1, 2, "stick", 3, "diamond");
             AddCraft("diamond_sword", 1, 1, "stick", 2, "diamond");
-            //AddCraft("torche", 1, 1, "stick", 1, "coal_ore");
+            AddCraft("torche", 1, 1, "stick", 1, "coal_ore");
+            AddCraft("apple_golden", 1, 8, "gold_ingot");
         }
 
         public void AddCraft(string name, int quantity, int number, string ressource)

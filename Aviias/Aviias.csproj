@@ -41,6 +41,7 @@
     <ApplicationManifest>Run\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GUI\Armor.cs" />
     <Compile Include="GUI\Animation.cs" />
     <Compile Include="IA\Drake.cs" />
     <Compile Include="GUI\Button.cs" />
@@ -72,7 +73,7 @@
     <Compile Include="IA\Wolf.cs" />
     <Compile Include="IA\Text.cs" />
     <Compile Include="Run\Timer.cs" />
-    <Compile Include="Success.cs" />
+    <Compile Include="GUI\Success.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="AForge, Version=2.2.5.0, Culture=neutral, PublicKeyToken=c1db6ff4eaa06aeb, processorArchitecture=MSIL">

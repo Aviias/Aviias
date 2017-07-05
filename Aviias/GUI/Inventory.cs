@@ -240,7 +240,11 @@ namespace Aviias
         public void PositionCraft(int i, Camera2D camera, int count)
         {
             Craft._craft craft = _craft._cellCraft[i];
-            if (craft.IsCraftable)
+            if((count % 10) == 0 && count != 0)
+            {
+                craft._position = new Vector2(camera.Position.X + 1475 + count * 75, camera.Position.Y + 140 + count * 75);
+            }
+            else if (craft.IsCraftable)
             {
                 craft._position = new Vector2(camera.Position.X + 1475, camera.Position.Y + 140 + count * 75);
             }
@@ -260,7 +264,7 @@ namespace Aviias
                 {
                     spriteBatch.Draw(content.Load<Texture2D>(_cellArray[i]._name), _cellArray[i].Position, null, Color.White, 0f, Vector2.Zero, 0.8f,
                         SpriteEffects.None, 0f);
-                    text.DisplayText("" + _cellArray[i]._quantity, new Vector2(_cellArray[i].Position.X, _cellArray[i].Position.Y + 100), spriteBatch, Color.Black);
+                    text.DisplayText("" + _cellArray[i]._quantity, new Vector2(_cellArray[i].Position.X, _cellArray[i].Position.Y + 100), spriteBatch, Color.Chartreuse, 1.5f);
                 }
                // spriteBatch.Draw(content.Load<Texture2D>("bedrock"), _cellArray[i].Position, null, Color.White, 0f, Vector2.Zero, 1f,
                  //       SpriteEffects.None, 0f);

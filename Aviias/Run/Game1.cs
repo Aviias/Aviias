@@ -21,6 +21,8 @@ namespace Aviias
         Monster monster;
         Wolf wolf;
         Drake drake;
+        MouseState mouseState = Mouse.GetState();
+        Button _die;
         Gloutogobe glouto;
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
@@ -85,7 +87,6 @@ namespace Aviias
             map.ActualizeShadow((int)player.Position.X, (int)player.Position.Y);
             IsMouseVisible = true;
 
-
             _npc = new List<NPC>(8);
             _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(500, 250), 5));
             _npc.Add(new NPC(Content, "pnj", spriteBatch, new Vector2(1400, 300), 3));
@@ -106,7 +107,7 @@ namespace Aviias
 
             base.Initialize();
 
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
             graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
             graphics.ApplyChanges();
@@ -134,7 +135,7 @@ namespace Aviias
 
             font = Content.Load<SpriteFont>("font");
             player.LoadContent(Content);
-            _gameover = Content.Load<Texture2D>("gameover3");
+            _gameover = Content.Load<Texture2D>("gameover");
         }
 
         /// <summary>
@@ -153,6 +154,11 @@ namespace Aviias
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            mouseState = Mouse.GetState();
+            _die = new Button(new Vector2(Camera.Position.X + 838, Camera.Position.Y + 883), 600, 100, "v", "v");
+            Vector2 position = new Vector2(mouseState.X, mouseState.Y);
+            position = Camera.ScreenToWorld(position);
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) || _menu._close)
             {
                 Exit();
@@ -164,6 +170,14 @@ namespace Aviias
             }
             else
             {
+                if (mouseState.LeftButton == ButtonState.Pressed && player.IsDie)
+                {
+                    if (position.X >= _die._position.X && position.Y >= _die._position.Y && position.X <= _die._position.X + _die._width && position.Y <= _die._position.Y + _die._height)
+                    {
+                        player.IsDie = false;
+                        player.Health = 100;
+                    }
+                }
                 if (player.IsDie == false)
                 {
                    // Camera.Position = new Vector2(player.Position.X - WindowWidth / 2, player.Position.Y - WindowHeight / 2);
@@ -241,7 +255,7 @@ namespace Aviias
             }
             else
             {
-                GraphicsDevice.Clear(Color.Red);
+                GraphicsDevice.Clear(Color.Silver);
 
                 spriteBatch.Begin(transformMatrix: _camera.GetViewMatrix());
                 map.Draw(spriteBatch, (int)player.Position.X, (int)player.Position.Y);
@@ -260,6 +274,7 @@ namespace Aviias
                 {
                     _camera.LookAt(new Vector2(player.Position.X, player.Position.Y));
                     spriteBatch.Draw(_gameover, new Rectangle((int)player.Position.X - 962, (int)player.Position.Y - 544, WindowWidth, WindowHeight), Color.White);
+                    _die.Draw(spriteBatch, Content, new Vector2(_die._position.X, _die._position.Y));
                 }
 
                 spriteBatch.End();
