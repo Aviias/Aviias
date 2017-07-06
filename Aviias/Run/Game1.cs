@@ -22,7 +22,7 @@ namespace Aviias
         public static Player player;
         Monster monster;
         Wolf wolf;
-        //Drake drake;
+        Drake drake;
         MouseState mouseState = Mouse.GetState();
         //Gloutogobe glouto;
         Button _die;
@@ -43,6 +43,7 @@ namespace Aviias
         StreamWriter log; // Debug file
         Random rnd = new Random();
         Timer spawnTimer = new Timer(10f);
+        Timer phenixTimer = new Timer(90f);
         Menu _menu;
         MenuPlay _menuPlay;
         List<int> list = new List<int>(16);
@@ -175,6 +176,7 @@ namespace Aviias
         
         protected override void Update(GameTime gameTime)
         {
+            phenixTimer.Decrem(gameTime);
             mouseState = Mouse.GetState();
             _die = new Button(new Vector2(Camera.Position.X + 838, Camera.Position.Y + 883), 600, 100, "v", "v");
             Vector2 position = new Vector2(mouseState.X, mouseState.Y);
@@ -240,32 +242,30 @@ namespace Aviias
                         _nightDay.ReInit();
                         map.ActualizeShadow((int)player.Position.X, (int)player.Position.Y);
                     }
+                    if (phenixTimer.IsDown())
+                    {
+                        Vector2 monsterPosition = spawnMonster.SpawnOnSurface(map);
+                        drake = new Drake(Content, Content.Load<Texture2D>("phenixface"), monsterPosition, new ushort[5] { 10, 10, 10, 10, 10 });
+                        drake.LoadContent(Content, "phenixface", "phenixleft", "phenixright", 80f, 4);
+                        monsters.Add(drake);
+                        phenixTimer.ReInit();
+                    }
 
                     if (spawnTimer.IsDown())
 
-                    {    
-                        /*                               
-                        Vector2 monsterPosition = spawnMonster.SpawnOnSurface(map);
-                        drake = new Drake(Content, Content.Load<Texture2D>("phenixface"), monsterPosition);
-                        drake.LoadContent(Content, "phenixface", "phenixleft", "phenixright", 80f, 4);
-                        monsters.Add(drake);
-                        */
+                    {                                                   
+                                               
                         int monsterneed = 8 - monsters.Count;
                         if (monsterneed != 0)
                         {
                             for (int i = 0; i < monsterneed; i++)
-                            {
-                                Vector2 monsterPosition = new Vector2();
-                                monsterPosition = spawnMonster.SpawnOnSurface(map);
+                            {                              
+                                Vector2 monsterPosition = spawnMonster.SpawnOnSurface(map);
 
                                 wolf = new Wolf(Content, Content.Load<Texture2D>("Wolfface"), monsterPosition, new ushort[5] { 10, 10, 10, 10, 10 });
                                 wolf.LoadContent(Content, "Wolfface", "Wolfleft", "Wolfright", 50f, 5);
-                                //monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
                                 monsters.Add(wolf);
                             }
-
-                            //monsters.Add(monster);
-                            //monsters.Add(drake);
 
                             spawnTimer.ReInit();
                         }

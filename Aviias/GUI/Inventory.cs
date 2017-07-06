@@ -233,15 +233,11 @@ namespace Aviias
 
         public void PositionCraft(int i, Camera2D camera, int count)
         {
-            Craft._craft craft = _craft._cellCraft[i];
-            if((count % 10) == 0 && count != 0)
-            {
-                craft._position = new Vector2(camera.Position.X + 1475 + count * 75, camera.Position.Y + 140 + count * 75);
-            }
-            else if (craft.IsCraftable)
-            {
-                craft._position = new Vector2(camera.Position.X + 1475, camera.Position.Y + 140 + count * 75);
-            }
+            float x, y;
+            Craft._craft craft = _craft._cellCraft[i];           
+            x = camera.Position.X + 1475 + (count /10) * 75;
+            y = camera.Position.Y + 140 + (count % 10) * 75;
+            craft._position = new Vector2(x, y);          
         }
 
         internal void Draw(SpriteBatch spriteBatch, ContentManager content, Camera2D camera)
