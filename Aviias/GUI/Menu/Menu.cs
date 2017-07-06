@@ -26,7 +26,7 @@ namespace Aviias
             _menuPlay = new MenuPlay();
             _menuCommande = new MenuCommande();
             _jouer = new Button(new Vector2(305, 655), 600, 100);
-            _quitter = new Button(new Vector2(684, 800), 600, 100);
+            _quitter = new Button(new Vector2(683, 800), 600, 100);
             _commandes = new Button(new Vector2(1044, 655), 600, 100);
         }
 

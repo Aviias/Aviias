@@ -35,19 +35,29 @@ namespace Aviias
                 SpriteEffects.None, 0f);
             //Ligne Bas 5 
             _text.DisplayText(("" + _jump + "/" + "1000"), new Vector2(camera.Position.X + 1245, camera.Position.Y + 845), spriteBatch, Color.White, 1.5f);
+            if (_jump != 1000) spriteBatch.Draw(content.Load<Texture2D>("approved"), new Vector2(camera.Position.X + 1270, camera.Position.Y + 780), null, Color.White, 0f, Vector2.Zero, 0.2f, SpriteEffects.None, 0f);
             _text.DisplayText(("" + _craft + "/" + "20"), new Vector2(camera.Position.X + 950, camera.Position.Y + 845), spriteBatch, Color.White, 1.5f);
+            if (_craft != 20) spriteBatch.Draw(content.Load<Texture2D>("approved"), new Vector2(camera.Position.X + 620, camera.Position.Y + 780), null, Color.White, 0f, Vector2.Zero, 0.2f, SpriteEffects.None, 0f);
             //Ligne 4
             _text.DisplayText(("" + _goldenApple + "/" + "100"), new Vector2(camera.Position.X + 1245, camera.Position.Y + 730), spriteBatch, Color.White, 1.5f);
+            if (_goldenApple != 100) spriteBatch.Draw(content.Load<Texture2D>("approved"), new Vector2(camera.Position.X + 1270, camera.Position.Y + 670), null, Color.White, 0f, Vector2.Zero, 0.2f, SpriteEffects.None, 0f);
             _text.DisplayText(("" + _quest + "/" + "5"), new Vector2(camera.Position.X + 950, camera.Position.Y + 730), spriteBatch, Color.White, 1.5f);
+            if (_quest != 5) spriteBatch.Draw(content.Load<Texture2D>("approved"), new Vector2(camera.Position.X + 620, camera.Position.Y + 670), null, Color.White, 0f, Vector2.Zero, 0.2f, SpriteEffects.None, 0f);
             //Ligne 3
             _text.DisplayText(("" + _pickaxeDiamond + "/" + "1"), new Vector2(camera.Position.X + 1245, camera.Position.Y + 620), spriteBatch, Color.White, 1.5f);
+            if (_pickaxeDiamond != 1) spriteBatch.Draw(content.Load<Texture2D>("approved"), new Vector2(camera.Position.X + 1270, camera.Position.Y + 560), null, Color.White, 0f, Vector2.Zero, 0.2f, SpriteEffects.None, 0f);
             _text.DisplayText(("" + _pickaxeIron + "/" + "1"), new Vector2(camera.Position.X + 950, camera.Position.Y + 620), spriteBatch, Color.White, 1.5f);
+            if (_pickaxeIron != 1) spriteBatch.Draw(content.Load<Texture2D>("approved"), new Vector2(camera.Position.X + 620, camera.Position.Y + 560), null, Color.White, 0f, Vector2.Zero, 0.2f, SpriteEffects.None, 0f);
             //Ligne 2
             _text.DisplayText(("" + _breakblock1 + "/" + "200"), new Vector2(camera.Position.X + 950, camera.Position.Y + 520), spriteBatch, Color.White, 1.5f);
+            if (_breakblock1 != 200) spriteBatch.Draw(content.Load<Texture2D>("approved"), new Vector2(camera.Position.X + 1270, camera.Position.Y + 450), null, Color.White, 0f, Vector2.Zero, 0.2f, SpriteEffects.None, 0f);
             _text.DisplayText(("" + _breakblock2 + "/" + "1000"), new Vector2(camera.Position.X + 1245, camera.Position.Y + 520), spriteBatch, Color.White, 1.5f);
+            if (_breakblock2 != 1000) spriteBatch.Draw(content.Load<Texture2D>("approved"), new Vector2(camera.Position.X + 620, camera.Position.Y + 450), null, Color.White, 0f, Vector2.Zero, 0.2f, SpriteEffects.None, 0f);
             //Ligne 1
             _text.DisplayText(("" + _monster1 + "/" + "50"), new Vector2(camera.Position.X + 950, camera.Position.Y + 400), spriteBatch, Color.White, 1.5f);
+            if (_monster1 != 50) spriteBatch.Draw(content.Load<Texture2D>("approved"), new Vector2(camera.Position.X + 1270, camera.Position.Y + 340), null, Color.White, 0f, Vector2.Zero, 0.2f, SpriteEffects.None, 0f);
             _text.DisplayText(("" + _monster2 + "/" + "500"), new Vector2(camera.Position.X + 1245, camera.Position.Y + 400), spriteBatch, Color.White, 1.5f);
+            if (_monster2 != 500) spriteBatch.Draw(content.Load<Texture2D>("approved"), new Vector2(camera.Position.X + 620, camera.Position.Y + 340), null, Color.White, 0f, Vector2.Zero, 0.2f, SpriteEffects.None, 0f);
         }
     }
 }
