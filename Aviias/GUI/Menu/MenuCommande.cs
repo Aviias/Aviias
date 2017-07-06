@@ -27,7 +27,7 @@ namespace Aviias
             IsTrue = false;
             if (_back.IsPressed(mouseState) && mouseState.Position.X >= _back._position.X && mouseState.Position.Y >= _back._position.Y && mouseState.Position.X <= _back._position.X + _back._width && mouseState.Position.Y <= _back._position.Y + _back._height)
             {
-                Menu.Swap = false;
+                Menu.SwapCommande = false;
                 IsTrue = false;
             }
         }
