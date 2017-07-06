@@ -9,12 +9,14 @@ namespace Aviias
     {
         public List<_craft> _cellCraft;
 
+        [Serializable]
         public class _craft
         {
             public string _name { get; set; }
             public bool IsCraftable { get; set; }
             public int _quantity { get; set; }
-            public Vector2 _position { get; set; }
+            [field: NonSerialized]
+            public Vector2 _position; //{ get; set; }
             public int _width { get; set; }
             public int _height { get; set; }
             public Dictionary<string, int> _ressource { get; set; }

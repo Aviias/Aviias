@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,13 +52,15 @@ namespace Aviias
                 _load._texture = ".\\Menu\\Button\\reprendre_rouge";
                 IsTrue = true;
                 ButtonLoad.ReInit();
-
+                //   Game1.map = new Map(200, 200);
+                save = Game1.player.save;
                 Game1.map = save.DeserializeMap();
                 Game1.map.Reload(Content);
                 Game1.player = save.DeserializePlayer();
                 Game1.player.ReloadPlayer(Content);
                 Game1.player.text.Reload(Content);
                 Game1._npc = save.DeserializeNpc();
+                Game1.sAmbiant = Content.Load<Song>("Sounds/ambiant"); ;
                 foreach (NPC npc in Game1._npc) npc.Reload(Content);
         }
             else

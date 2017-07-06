@@ -12,10 +12,9 @@ namespace Aviias
     {
         int _actualCell;
         Player _player;
-        [field: NonSerialized]
         public _cell[]  _cellArray;
-        private Text text;
         [field: NonSerialized]
+        private Text text;
         public Craft _craft;
         public Button _buttonCraft;
         
@@ -42,7 +41,14 @@ namespace Aviias
             int _difY = 80;
             float x = camera.Position.X + 650 + (i % 10) * _difX;
             float y = camera.Position.Y + 590 + (i / 10) * _difY;
+            _cellArray[i].X = x;
+            _cellArray[i].Y = y;
             _cellArray[i].Position = new Vector2(x, y);
+        }
+
+        public void Reload()
+        {
+            for (int i = 0; i < _cellArray.Length; i++) _cellArray[i].Position = new Vector2(_cellArray[i].X, _cellArray[i].Y);
         }
 
         public _cell PositionToolBar(int i, Camera2D camera)
@@ -97,6 +103,8 @@ namespace Aviias
         {
             [field: NonSerialized]
             public Vector2 Position;
+            internal float X;
+            internal float Y;
             public bool IsFull { get; set; }
             public string _name { get; set; }
             public int _quantity { get; set; }

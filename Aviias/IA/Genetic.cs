@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Aviias.IA
 {
+    [Serializable]
     class Genetic
     {
         static int chromosomeLength = 5;             //[%action1, %action2,...]

@@ -37,9 +37,11 @@ namespace Aviias
         bool Active;
         float _moveSpeed;
         bool _stopDamage;
+        string _saveTextureStr;
         List<int> list = new List<int>(16);
       //  [field: NonSerialized]
-        Save save;
+        internal Save save;
+        [field: NonSerialized]
         KeyboardState currentKeyboardState;
         [field: NonSerialized]
         KeyboardState previousKeyboardState;
@@ -57,11 +59,8 @@ namespace Aviias
         public bool IsInventoryOpen;
         public bool IsSuccessOpen;
         Map _map;
-        [field: NonSerialized]
         Animation PMoveLeft;
-        [field: NonSerialized]
         Animation PMoveRight;
-        [field: NonSerialized]
         Animation CurrentAnim;
         internal Success _success;
         Animation Blood;
@@ -196,6 +195,8 @@ namespace Aviias
             IsFirstclick = true;
             _isGetDamage = false;
             _isMonsterGetDamage = false;
+            _saveTextureStr = texture.Name;
+            saveTimer.ToZero();
             CraftNotPutable.Add("stick");
             CraftNotPutable.Add("wood_shovel");
             CraftNotPutable.Add("heal_potion");
@@ -318,6 +319,7 @@ namespace Aviias
             {
                 bloc1 = new Bloc(blocs[i, j].GetPosBlock, scale, name, content);
                 _inv.DecreaseInventory(1, name);
+                bloc1._isSolid = true;
                 blocs[i, j] = bloc1;
                 sPutBloc.Play();
                 map.ActualizeShadow((int)PlayerPosition.X,(int)PlayerPosition.Y);
@@ -768,13 +770,7 @@ namespace Aviias
 
             if (currentKeyboardState.IsKeyDown(Keys.S))
             {
-                saveTimer.ReInit();
-                x = Position.X;
-                y = Position.Y;
-                save = new Save(map, this, Game1._npc);
-                save.SerializeMap();
-                save.SerializePlayer();
-                save.SerializeNpc();
+                Save(map);
             }
 
             previousKeyboardState = currentKeyboardState;
@@ -838,7 +834,7 @@ namespace Aviias
             {
                 for (int b = (int)(Position.X / 16); b < (Position.X) / 16 + 8; b++)
                 {
-                    if (a >= 0 && b >= 0 && a < map._worldHeight && b < map._worldWidth && map._blocs[b, a] != null && map._blocs[b, a].Type != "air")
+                    if (a >= 0 && b >= 0 && a < map._worldHeight && b < map._worldWidth && map._blocs[b, a] != null && map._blocs[b, a].Type != "air" && map._blocs[b, a]._isSolid)
                     {
                         _blocs.Add(map._blocs[b, a]);
                         _nbBlocs++;
@@ -862,7 +858,7 @@ namespace Aviias
 
             for (int i = 0; i < _blocs.Count; i++)
             {
-                if (_blocs[i] != null)
+                if (_blocs[i] != null && _blocs[i]._isSolid)
                 {
                     Rectangle blocRect;
                     blocRect = new Rectangle((int)_blocs[i].posX, (int)_blocs[i].posY, _blocs[i].Width, _blocs[i].Height);
@@ -923,10 +919,10 @@ namespace Aviias
 
         internal void Draw(SpriteBatch spriteBatch, ContentManager content, Camera2D camera)
         {
-            if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, Position);
+            if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, Position, content);
             else spriteBatch.Draw(PlayerTexture, Position, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
-            if (currentBlood != null) Blood.Draw(spriteBatch, Position);
+            if (currentBlood != null) Blood.Draw(spriteBatch, Position, content);
 
             spriteBatch.Draw(content.Load<Texture2D>(ImageHealth(_health)), new Vector2(camera.Position.X + 30, camera.Position.Y + 50), null, Color.White, 0f, Vector2.Zero, 1.1f,
                SpriteEffects.None, 0f);
@@ -960,12 +956,12 @@ namespace Aviias
 
             for(int i = 0; i < _souls.Count && i < _soulsAnim.Count; i++)
             {
-                _soulsAnim[i].Draw(spriteBatch, _souls[i].Position);
+                _soulsAnim[i].Draw(spriteBatch, _souls[i].Position, content);
             }
 
             for(int i = 0; i < _monsterBlood.Count && i < _monsterBloodPos.Count; i++)
             {
-                _monsterBlood[i].Draw(spriteBatch, _monsterBloodPos[i].MonsterPosition);
+                _monsterBlood[i].Draw(spriteBatch, _monsterBloodPos[i].MonsterPosition, content);
             }
 
             if (!saveTimer.IsDown()) spriteBatch.Draw(saveTexture, new Vector2(camera.Position.X + 30, camera.Position.Y + 950)); 
@@ -989,6 +985,26 @@ namespace Aviias
         {
             Position = new Vector2(x, y);
             PlayerTexture = content.Load<Texture2D>(_texture);
+            saveTexture = content.Load<Texture2D>(_saveTextureStr);
+            _inv.Reload();
+            sPutBloc = content.Load<SoundEffect>("Sounds/put_bloc");
+            sBreakBloc = content.Load<SoundEffect>("Sounds/break_bloc");
+            blopDie = content.Load<SoundEffect>("Sounds/blop_die");
+            sPlayerAttack = content.Load<SoundEffect>("Sounds/player_attack");
+            sPlayerFoot = content.Load<Song>("Sounds/foot");
+            sPlayerDie = content.Load<SoundEffect>("Sounds/player_die");
+            sWolfDie = content.Load<SoundEffect>("Sounds/wolf_die");
+        }
+
+        public void Save(Map map)
+        {
+            saveTimer.ReInit();
+            x = Position.X;
+            y = Position.Y;
+            save = new Save(map, this, Game1._npc);
+            save.SerializeMap();
+            save.SerializePlayer();
+            save.SerializeNpc();
         }
     }
 }

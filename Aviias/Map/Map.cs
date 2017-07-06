@@ -39,6 +39,7 @@ namespace Aviias
         int _mtest;
         bool _isNight;
         public int skyLuminosity;
+        [field:NonSerialized]
         List<Vector2> _AllCave = new List<Vector2>();
 
         public int WorldWidth
@@ -190,12 +191,8 @@ namespace Aviias
                             int rand = NextInt(1, 8500);
                             if (rand == 1)
                             {
-                                rand = NextInt(1, 3);
-                                if (rand == 1)
-                                {
                                     _structureModel = structures.structures["houseA"];
-                                }
-                                else _structureModel = structures.structures["mobTowerA"];
+
                                 AddHouse(k, l, _structureModel, content);
                                 k += _structureModel.Length * 2;
                                 l += _structureModel.Length * 2;
@@ -309,7 +306,11 @@ namespace Aviias
             {
                 for (int j = 0; j < lengthX; j++)
                 {
-                    if (x - lengthY >= 0 && y - lengthX >= 0 && treeModel[j, i] != null && treeModel[j, i] != "air" && _blocs[x - lengthY + i, y - lengthX + j] != null) _blocs[x - lengthY + i, y - lengthX + j].ChangeBloc(treeModel[j, i], content);
+                    if (x - lengthY >= 0 && y - lengthX >= 0 && treeModel[j, i] != null && treeModel[j, i] != "air" && _blocs[x - lengthY + i, y - lengthX + j] != null)
+                    {
+                        _blocs[x - lengthY + i, y - lengthX + j].ChangeBloc(treeModel[j, i], content);
+                        _blocs[x - lengthY + i, y - lengthX + j]._isSolid = false;
+                    }
                 }
             }
         }
@@ -335,7 +336,11 @@ namespace Aviias
             {
                 for (int j = 0; j < lengthX; j++)
                 {
-                    if (x - lengthY >= 0 && y - lengthX >= 0 && houseModel[j, i] != null && houseModel[j, i] != "air" && _blocs[x - lengthY + i, y - lengthX + j] != null) _blocs[x - lengthY + i, y - lengthX + j].ChangeBloc(houseModel[j, i], content);
+                    if (x - lengthY >= 0 && y - lengthX >= 0 && houseModel[j, i] != null && houseModel[j, i] != "air" && _blocs[x - lengthY + i, y - lengthX + j] != null)
+                    {
+                        _blocs[x - lengthY + i, y - lengthX + j].ChangeBloc(houseModel[j, i], content);
+                        _blocs[x - lengthY + i, y - lengthX + j]._isSolid = false;
+                    }
                 }
             }
         }

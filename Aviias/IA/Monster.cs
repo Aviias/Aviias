@@ -541,9 +541,9 @@ namespace Aviias
             return new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, ContentManager content)
         {
-            if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, _pos, _luminosity);
+            if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, _pos, _luminosity * 18, content);
             text.DisplayText((_healthGraphic), new Vector2(_pos.X + 20, _pos.Y - 10), spriteBatch, Color.Red);
             //text.DisplayText(nextAction.ToString(), new Vector2(_pos.X + 30, _pos.Y - 50), spriteBatch, Color.Black);
             for (int i = 0; i < _points.Length; i++) text.DisplayText(_points[i].ToString(), new Vector2(_pos.X + 30 * i, _pos.Y - 50), spriteBatch, Color.Black);
