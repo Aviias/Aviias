@@ -55,7 +55,7 @@ namespace Aviias.IA
             {
                 for (int b = (int)(_pos.X / 16); b < (_pos.X) / 16 + 8; b++)
                 {
-                    if (a >= 0 && b >= 0 && a < map._worldHeight && b < map._worldWidth && map._blocs[b, a] != null && map._blocs[b, a].Type != "air" && map._blocs[b, a].Type != "ladder")
+                    if (a >= 0 && b >= 0 && a < map._worldHeight && b < map._worldWidth && map._blocs[b, a] != null && map._blocs[b, a].Type != "air" && map._blocs[b, a].Type != "ladder" && map._blocs[b, a]._isSolid)
                     {
                         _blocs.Add(map._blocs[b, a]);
                         _nbBlocs++;
@@ -117,7 +117,7 @@ namespace Aviias.IA
 
             for (int i = 0; i < _blocs.Count; i++)
             {
-                if (_blocs[i] != null)
+                if (_blocs[i] != null && _blocs[i]._isSolid)
                 {
                     Rectangle blocRect;
                     blocRect = new Rectangle((int)_blocs[i].posX, (int)_blocs[i].posY, _blocs[i].Width, _blocs[i].Height);

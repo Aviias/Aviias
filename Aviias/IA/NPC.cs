@@ -227,6 +227,7 @@ namespace Aviias
             _texture = content.Load<Texture2D>(_textureName);
             talkNpc = content.Load<SoundEffect>("Sounds/talk_npc");
             questReward = content.Load<SoundEffect>("Sounds/quest_reward");
+            _text.Reload(content);
         }
 
         public void RandomMove(GameTime gametime)

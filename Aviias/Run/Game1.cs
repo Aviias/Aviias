@@ -80,7 +80,7 @@ namespace Aviias
             player = new Player();
             player.PlayerMoveSpeed = 8.0f;
             Vector2 monsterPosition;
-            map = new Map(200, 200);
+            map = new Map(200, 500);
             _menu = new Menu();
             _menu.Initialize();
            
@@ -183,6 +183,7 @@ namespace Aviias
             _die = new Button(new Vector2(Camera.Position.X + 838, Camera.Position.Y + 883), 600, 100, "v", "v");
             Vector2 position = new Vector2(mouseState.X, mouseState.Y);
             position = Camera.ScreenToWorld(position);
+            map.Update(gameTime);
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) || _menu._close)
             {

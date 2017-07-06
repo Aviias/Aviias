@@ -41,6 +41,7 @@ namespace Aviias
         public int skyLuminosity;
         [field:NonSerialized]
         List<Vector2> _AllCave = new List<Vector2>();
+        Timer dayCycle = new Timer(100f);
 
         public int WorldWidth
         {
@@ -186,7 +187,7 @@ namespace Aviias
                 {
                     for (int k = 5; k < _worldHeight - 5; k++)
                     {
-                        if (k > 6 && l > 6 && l < 200 && _blocs[k - 3, l] != null && _blocs[k - 3, l].Type == "grass_side")
+                        if (k > 6 && l > 6 && l < WorldHeight && _blocs[k - 3, l] != null && _blocs[k - 3, l].Type == "grass_side")
                         {
                             int rand = NextInt(1, 8500);
                             if (rand == 1)
@@ -199,7 +200,7 @@ namespace Aviias
                             }
                         }
 
-                        if (k > 6 && l > 6 && l < 200 && _blocs[k - 3, l] != null && _blocs[k - 3, l].Type == "grass_side")
+                        if (k > 6 && k < WorldWidth && l > 6 && l < WorldHeight && _blocs[k - 3, l] != null && _blocs[k - 3, l].Type == "grass_side")
                         {
                             _treeGeneration = NextInt(1, 2300);
                             if (_treeGeneration <= _treeRate)
@@ -382,7 +383,7 @@ namespace Aviias
         {
             int xx = x / 16;
             int yy = y / 16;
-            for (int i = yy - 60; i < yy + 60; i++)
+            for (int i = yy - 200; i < yy + 80; i++)
             {
                 for (int j = xx - 80; j < xx + 80; j++)
                 {
@@ -399,7 +400,10 @@ namespace Aviias
                 }
             }
 
-            for (int i = yy - 60; i < yy + 60; i++)
+            xx = x / 16;
+            yy = y / 16;
+
+            for (int i = yy - 200; i < yy + 60; i++)
             {
                 for (int j = xx - 80; j < xx + 80; j++)
                 {
@@ -490,6 +494,17 @@ namespace Aviias
             {
                 bloc.Reload(content);
             }
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            if (dayCycle.IsDown())
+            {
+                TimeForward();
+                dayCycle.ReInit();
+                ActualizeShadow((int)Game1.player.Position.X, (int)Game1.player.Position.Y);
+            }
+            dayCycle.Decrem(gameTime);
         }
 
         int GetBiggestNumber(int a, int b, int c, int d)

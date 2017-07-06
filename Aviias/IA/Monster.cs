@@ -223,7 +223,7 @@ namespace Aviias
 
         public void ReactToLight()
         {
-            if ((int)MonsterPosition.X / 16 > 0 && (int)MonsterPosition.Y / 16 > 0 && Game1.map._blocs[(int)MonsterPosition.X / 16, (int)MonsterPosition.Y / 16].Luminosity < 3) _reactToLight = true;
+            if ((int)MonsterPosition.X / 16 > 0 && (int)MonsterPosition.Y / 16 > 0 && (int)MonsterPosition.X / 16 < Game1.map.WorldWidth && (int)MonsterPosition.Y / 16 < Game1.map.WorldHeight && Game1.map._blocs[(int)MonsterPosition.X / 16, (int)MonsterPosition.Y / 16].Luminosity < 3) _reactToLight = true;
             else
             {
                 if (_bonusLightGiven)
@@ -342,7 +342,7 @@ namespace Aviias
             }else
             {
                 move = new Vector2(direction.X * _speed,0);
-                _pos = new Vector2(posX + move.X, posY);
+                if (posX + move.X > 0 && posX + move.X < Game1.map.WorldWidth) _pos = new Vector2(posX + move.X, posY);
             }
             
 
@@ -542,7 +542,7 @@ namespace Aviias
             ChooseAction();
             DoSomething(player, map, gametime);
             UpdatePoints();
-            _luminosity = map._blocs[(int)MonsterPosition.X / 16, (int)MonsterPosition.Y / 16].Luminosity;
+            if (MonsterPosition.X / 16 > 0 && MonsterPosition.X / 16 < map.WorldWidth && MonsterPosition.Y > 0 && MonsterPosition.Y < map.WorldHeight) _luminosity = map._blocs[(int)MonsterPosition.X / 16, (int)MonsterPosition.Y / 16].Luminosity;
             float x = posX;
 
             Genetic.AddPoints(this);
@@ -606,8 +606,8 @@ namespace Aviias
             if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, _pos, _luminosity * 18, content);
             text.DisplayText((_healthGraphic), new Vector2(_pos.X + 20, _pos.Y - 10), spriteBatch, Color.Red);
             //text.DisplayText(nextAction.ToString(), new Vector2(_pos.X + 30, _pos.Y - 50), spriteBatch, Color.Black);
-            for (int i = 0; i < _points.Length; i++) text.DisplayText(_points[i].ToString(), new Vector2(_pos.X + 30 * i, _pos.Y - 50), spriteBatch, Color.Black);
-            if (_isStopDamage) text.DisplayText(("Block"), new Vector2(_pos.X + 60, _pos.Y - 90), spriteBatch, Color.Red);
+         //   for (int i = 0; i < _points.Length; i++) text.DisplayText(_points[i].ToString(), new Vector2(_pos.X + 30 * i, _pos.Y - 50), spriteBatch, Color.Black);
+         //   if (_isStopDamage) text.DisplayText(("Block"), new Vector2(_pos.X + 60, _pos.Y - 90), spriteBatch, Color.Red);
         }
     }
 }
