@@ -122,13 +122,13 @@ namespace Aviias
 
         public int Luminosity
         {
-            get { return _luminosity / 36; }
+            get { return _luminosity / 18; }
         }
 
         public void ChangeLuminosity(int luminosity)
         {
             if (luminosity < 0) luminosity = 0;
-            _luminosity = luminosity * 36;
+            _luminosity = luminosity * 18;
         }
 
     }

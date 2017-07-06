@@ -19,6 +19,7 @@ namespace Aviias
         public int _goldenApple { get; set; }
         public int _craft { get; set; }
 
+
         public Success()
         {
         }

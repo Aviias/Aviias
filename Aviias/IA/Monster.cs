@@ -54,6 +54,7 @@ namespace Aviias
         [field: NonSerialized]
         SoundEffect _playerHit;
         string _healthGraphic;
+        public int _luminosity;
         
         public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy, ushort[] proba, string type)
         : base(false,4,-10, pos)
@@ -81,6 +82,7 @@ namespace Aviias
             _score = 0;
             _isStopDamage = false;
             _type = type;
+            _luminosity = 12;
         }
 
         public void LoadContent(ContentManager content, string assertface, string assertleft,string assertright, float speed, int numOfFrames)
@@ -300,8 +302,8 @@ namespace Aviias
 
             move = new Vector2(direction.X * _speed * (-1), /*direction.Y * _speed*/0);
             
-            
-            _pos = new Vector2(posX + move.X, posY /*+ move.Y*/);
+            Vector2 newPos = new Vector2(posX + move.X, posY /*+ move.Y*/);
+            if (newPos.X > 0 && newPos.X < 200 * 16) _pos = newPos;
         }
 
         public void MoveOnPlayer(Player player, Map map, GameTime gametime)
@@ -316,8 +318,8 @@ namespace Aviias
                 JumpTimer.ReInit();
             }
             move = new Vector2(direction.X * _speed, /*direction.Y * _speed*/0);
-
-            _pos = new Vector2(posX + move.X, posY /*+ move.Y*/);
+            Vector2 newPos = new Vector2(posX + move.X, posY /*+ move.Y*/);
+            if (newPos.X > 0 && newPos.X < 200 * 16) _pos = newPos;
         }
 
         public void Fight(Player player, GameTime gametime)
@@ -485,6 +487,11 @@ namespace Aviias
 
         internal void Update(Player player, GameTime gametime, Map map)
         {
+            Genetic.AddPoints(this);
+            ChooseAction();
+            DoSomething(player, map, gametime);
+            UpdatePoints();
+            _luminosity = map._blocs[(int)MonsterPosition.X / 16, (int)MonsterPosition.Y / 16].Luminosity;
             float x = posX;
             EngeryDamageTimer.Decrem(gametime);
             stopDamageCDTimer.Decrem(gametime);
@@ -496,7 +503,7 @@ namespace Aviias
             ActualizeHealthRegeneration(gametime);
             ActualizeEnergieRegeneration(gametime);
             if (Genetic.Meilleur.Value != null) proba = Genetic.Meilleur.Value;
-            MoveOnPlayer(player, map, gametime);
+         //   MoveOnPlayer(player, map, gametime);
 
             if (x == posX)
             {
@@ -536,7 +543,7 @@ namespace Aviias
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, _pos);
+            if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, _pos, _luminosity);
             text.DisplayText((_healthGraphic), new Vector2(_pos.X + 20, _pos.Y - 10), spriteBatch, Color.Red);
             //text.DisplayText(nextAction.ToString(), new Vector2(_pos.X + 30, _pos.Y - 50), spriteBatch, Color.Black);
             for (int i = 0; i < _points.Length; i++) text.DisplayText(_points[i].ToString(), new Vector2(_pos.X + 30 * i, _pos.Y - 50), spriteBatch, Color.Black);

@@ -226,17 +226,10 @@ namespace Aviias
             CraftNotPutable.Add("diamond_pickaxe");
             CraftNotPutable.Add("diamond_sword");
             
-            _inv.AddInventory(2, "oak_wood");
-            _inv.AddInventory(2, "dirt");
-            _inv.AddInventory(8, "oak_plank");
-            _inv.AddInventory(2, "bedrock");
-            _inv.AddInventory(2, "glass");
-            _inv.AddInventory(2, "door_wood");
-            _inv.AddInventory(10, "iron_ore");
-            _inv.AddInventory(10, "gold_ore");
-            _inv.AddInventory(10, "diamond");
-            _inv.AddInventory(2, "coal_ore");
-            _inv.AddInventory(1, "apple");
+            _inv.AddInventory(4, "stick");
+            _inv.AddInventory(4, "coal_ore");
+            _inv.AddInventory(10, "torche");
+
             /*
             _inv.AddInventory(4, "oak_plank");
             _inv.AddInventory(500, "dirt");
@@ -464,7 +457,7 @@ namespace Aviias
                 stopDamageTimer.ReInit();
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.Left))
+            if (currentKeyboardState.IsKeyDown(Keys.Q))
             {
                 if (!list.Contains(2))
                 {
@@ -475,7 +468,7 @@ namespace Aviias
                 
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.Right))
+            if (currentKeyboardState.IsKeyDown(Keys.D))
             {
                 if (!list.Contains(1))
                 {
@@ -501,7 +494,7 @@ namespace Aviias
                 invenTimer.ReInit();
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.H) && successTimer.IsDown() && !IsInventoryOpen)
+            if (currentKeyboardState.IsKeyDown(Keys.G) && successTimer.IsDown() && !IsInventoryOpen)
             {
                 IsSuccessOpen = !IsSuccessOpen;
                 successTimer.ReInit();
@@ -718,11 +711,8 @@ namespace Aviias
                 if (player._displayPos) player._displayPos = false;
                 else player._displayPos = true;
             }
-            if (currentKeyboardState.IsKeyDown(Keys.A))
-            {
-                player.AddStr("a");
-            }
-            if (currentKeyboardState.IsKeyDown(Keys.I) && !previousKeyboardState.IsKeyDown(Keys.I))
+
+            if (currentKeyboardState.IsKeyDown(Keys.W) && !previousKeyboardState.IsKeyDown(Keys.W))
             {
                 foreach (NPC npc in _npc) if (map.GetDistance(player.PlayerPosition, npc.Position) < 400) npc.Interact(player);
             }
@@ -742,13 +732,13 @@ namespace Aviias
                 }              
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.W))
+            if (currentKeyboardState.IsKeyDown(Keys.T))
             {
                 map.TimeForward();
                 map.ActualizeShadow((int)Position.X, (int)Position.Y);
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.F) && stopDamageCDTimer.IsDown())
+            if (currentKeyboardState.IsKeyDown(Keys.A) && stopDamageCDTimer.IsDown())
             {
                 IsStopDamage = true;
                 stopDamageCDTimer.ReInit();

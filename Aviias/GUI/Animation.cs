@@ -56,6 +56,12 @@ namespace Aviias.GUI
         public void Draw(SpriteBatch spriteBatch, Vector2 pos)
         {
             spriteBatch.Draw(_animation, pos, _sourceRect, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
+
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Vector2 pos, int luminosity)
+        {
+            spriteBatch.Draw(_animation, pos, _sourceRect, new Color(luminosity, luminosity, luminosity, 255), 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
             
         }
     }

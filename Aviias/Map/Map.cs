@@ -57,7 +57,7 @@ namespace Aviias
             _worldWidth = worldWidth;
             columnHeight = worldHeight / 2;
             _caveWallRate = 2;
-            skyLuminosity = 6;
+            skyLuminosity = 10;
         }
 
         string id;
@@ -449,13 +449,13 @@ namespace Aviias
         
         public int TorchUpdate(int x, int y)
         {
-             int xx = x - 6;
-             int yy = y - 6;
-             int shortest = 7;
+             int xx = x - 12;
+             int yy = y - 12;
+             int shortest = 14;
 
-             for (int i = xx; i < x + 6; i++)
+             for (int i = xx; i < x + 12; i++)
              {
-                 for (int j = yy; j < y + 6; j++)
+                 for (int j = yy; j < y + 12; j++)
                  {
                      if (i > 0 && j > 0 && i < _worldWidth && j < _worldHeight && _blocs[i, j] != null && _blocs[i, j].Type == "torche")
                      {
@@ -463,7 +463,7 @@ namespace Aviias
                      } 
                  }
              }
-                  return Math.Abs(shortest - 7);
+                  return Math.Abs(shortest - 14);
         }
         
         public void TimeForward()
@@ -476,7 +476,7 @@ namespace Aviias
             {
                 skyLuminosity--;
             }
-            if (skyLuminosity == 1 || skyLuminosity == 7) _isNight = !_isNight;
+            if (skyLuminosity == 1 || skyLuminosity == 14) _isNight = !_isNight;
         }
 
         public void Reload(ContentManager content)

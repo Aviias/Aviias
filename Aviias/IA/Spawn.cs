@@ -26,7 +26,7 @@ namespace Aviias.IA
         public Vector2 SpawnOnSurface(Map map)
         {
             Vector2 spawn;
-            int x = _rnd.Next(0, _worldWidth) * 16;
+            int x = _rnd.Next(5, _worldWidth) * 16;
             spawn = new Vector2(x, FindYPosSurface(map, x));
             return spawn;
         }

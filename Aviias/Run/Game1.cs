@@ -122,6 +122,7 @@ namespace Aviias
 
             _camera.LookAt(new Vector2(player.Position.X + 10, player.Position.Y + 15));
             MediaPlayer.Play(sAmbiant);
+            MediaPlayer.IsRepeating = true;
             
             RunGeneration();
         }
@@ -253,12 +254,20 @@ namespace Aviias
                         int monsterneed = 8 - monsters.Count;
                         if (monsterneed != 0)
                         {
+                            RunGeneration();
                             for (int i = 0; i < monsterneed; i++)
                             {
                                 Vector2 monsterPosition = new Vector2();
                                 monsterPosition = spawnMonster.SpawnOnSurface(map);
-
-                                wolf = new Wolf(Content, Content.Load<Texture2D>("Wolfface"), monsterPosition, new ushort[5] { 10, 10, 10, 10, 10 });
+                                ushort[] test = new ushort[5];
+                                string[] strTest = new string[5];
+                                string strTestt;
+                                strTestt = (genetic.Population.BestChromosome.ToString());
+                                strTest = strTestt.Split(' ');
+                                for (int j = 0; j < test.Length; j++) test[j] = Convert.ToUInt16(strTest[j]);
+                              //  test = (Array)genetic.Population.BestChromosome;
+                                // wolf = new Wolf(Content, Content.Load<Texture2D>("Wolfface"), monsterPosition, new ushort[5] { 10, 10, 10, 10, 10 });
+                                wolf = new Wolf(Content, Content.Load<Texture2D>("Wolfface"), monsterPosition, test);
                                 wolf.LoadContent(Content, "Wolfface", "Wolfleft", "Wolfright", 50f, 5);
                                 //monster = new Monster(100, 1.0f, 0.05, 1, 5, Content, Content.Load<Texture2D>("alienmonster"), monsterPosition);
                                 monsters.Add(wolf);
