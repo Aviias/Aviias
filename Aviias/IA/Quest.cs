@@ -66,10 +66,10 @@ namespace Aviias
                 string goal = "Salut toi ! ";
                 goal += "Ramene moi ces ressources ";
                 goal += "et ne demande pas pourquoi.\n";
-                /*foreach (KeyValuePair<string, int> entry in _goal)
+                foreach (KeyValuePair<string, int> entry in _goal)
                 {
                     goal += entry.Key + " x " + entry.Value + "\n";
-                }*/
+                }
                 _spitch = goal;
             }
             else

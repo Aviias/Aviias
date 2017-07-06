@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Aviias
 {
+    [Serializable]
     class Wolf : Monster
     {
         public Wolf(ContentManager content, Texture2D texture, Vector2 pos, ushort[] proba)

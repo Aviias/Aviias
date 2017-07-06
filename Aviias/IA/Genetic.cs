@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace Aviias.IA
 {
+    [Serializable]
     class Genetic
     {
         static int chromosomeLength = 5;             //[%action1, %action2,...]
         public static IChromosome chronos = new ShortArrayChromosome(chromosomeLength);
-        Population Population = new Population(8, chronos, new FitnessRepartitionActions(), new EliteSelection());
+        internal Population Population = new Population(8, chronos, new FitnessRepartitionActions(), new EliteSelection());
         public static ShortArrayChromosome Meilleur = null;
         static internal int[] _points = new int[5];
 

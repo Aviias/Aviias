@@ -194,9 +194,9 @@ namespace Aviias
  
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, ContentManager content)
         {
-            if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, _pos);
+            if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, _pos, content);
             //spriteBatch.Draw(_texture, _pos, null, Color.White, 0f, Vector2.Zero, 1f,
             //   SpriteEffects.None, 0f);
             GraphicUpdate(spriteBatch);
@@ -225,6 +225,8 @@ namespace Aviias
         {
             _pos = new Vector2(x, y);
             _texture = content.Load<Texture2D>(_textureName);
+            talkNpc = content.Load<SoundEffect>("Sounds/talk_npc");
+            questReward = content.Load<SoundEffect>("Sounds/quest_reward");
         }
 
         public void RandomMove(GameTime gametime)

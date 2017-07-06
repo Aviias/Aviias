@@ -1,6 +1,7 @@
 ﻿using Aviias.IA;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
@@ -20,7 +21,7 @@ namespace Aviias
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         public static Player player;
-        Monster monster;
+   //     Monster monster;
         Wolf wolf;
         Drake drake;
         MouseState mouseState = Mouse.GetState();
@@ -52,7 +53,7 @@ namespace Aviias
         //Ressource _testRessource = new Ressource();
         Spawn spawnMonster;
         internal Genetic genetic = new Genetic();
-        Song sAmbiant;
+        static internal Song sAmbiant;
 
         public Game1()
         {
@@ -123,6 +124,7 @@ namespace Aviias
 
             _camera.LookAt(new Vector2(player.Position.X + 10, player.Position.Y + 15));
             MediaPlayer.Play(sAmbiant);
+            MediaPlayer.IsRepeating = true;
             
             RunGeneration();
         }
@@ -184,6 +186,7 @@ namespace Aviias
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) || _menu._close)
             {
+                player.Save(map);
                 Exit();
             }
 
@@ -258,11 +261,19 @@ namespace Aviias
                         int monsterneed = 8 - monsters.Count;
                         if (monsterneed != 0)
                         {
+                            RunGeneration();
                             for (int i = 0; i < monsterneed; i++)
                             {                              
                                 Vector2 monsterPosition = spawnMonster.SpawnOnSurface(map);
-
-                                wolf = new Wolf(Content, Content.Load<Texture2D>("Wolfface"), monsterPosition, new ushort[5] { 10, 10, 10, 10, 10 });
+                                ushort[] test = new ushort[5];
+                                string[] strTest = new string[5];
+                                string strTestt;
+                                strTestt = (genetic.Population.BestChromosome.ToString());
+                                strTest = strTestt.Split(' ');
+                                for (int j = 0; j < test.Length; j++) test[j] = Convert.ToUInt16(strTest[j]);
+                              //  test = (Array)genetic.Population.BestChromosome;
+                                // wolf = new Wolf(Content, Content.Load<Texture2D>("Wolfface"), monsterPosition, new ushort[5] { 10, 10, 10, 10, 10 });
+                                wolf = new Wolf(Content, Content.Load<Texture2D>("Wolfface"), monsterPosition, test);
                                 wolf.LoadContent(Content, "Wolfface", "Wolfleft", "Wolfright", 50f, 5);
                                 monsters.Add(wolf);
                             }
@@ -278,6 +289,11 @@ namespace Aviias
         public void RunGeneration()
         {
             genetic.RunGeneration();
+        }
+
+        public void Reload()
+        {
+            sAmbiant = Content.Load<Song>("Sounds/ambiant");
         }
 
         /// <summary>
@@ -304,14 +320,14 @@ namespace Aviias
                 map.Draw(spriteBatch, (int)player.Position.X, (int)player.Position.Y);
                 for (int i = 0; i < monsters.Count; i++)
                 {
-                    if (monsters[i] != null) monsters[i].Draw(spriteBatch);
+                    if (monsters[i] != null) monsters[i].Draw(spriteBatch, Content);
                 }
 
                 //glouto.Draw(spriteBatch);
                 //   foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
                 foreach (NPC npc in _npc)
                 {
-                    npc.Draw(spriteBatch);
+                    npc.Draw(spriteBatch, Content);
                 }
                 if(player.IsDie)
                 {

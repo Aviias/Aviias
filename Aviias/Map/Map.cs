@@ -39,6 +39,7 @@ namespace Aviias
         int _mtest;
         bool _isNight;
         public int skyLuminosity;
+        [field:NonSerialized]
         List<Vector2> _AllCave = new List<Vector2>();
 
         public int WorldWidth
@@ -57,7 +58,7 @@ namespace Aviias
             _worldWidth = worldWidth;
             columnHeight = worldHeight / 2;
             _caveWallRate = 2;
-            skyLuminosity = 6;
+            skyLuminosity = 10;
         }
 
         string id;
@@ -190,12 +191,8 @@ namespace Aviias
                             int rand = NextInt(1, 8500);
                             if (rand == 1)
                             {
-                                rand = NextInt(1, 3);
-                                if (rand == 1)
-                                {
                                     _structureModel = structures.structures["houseA"];
-                                }
-                                else _structureModel = structures.structures["mobTowerA"];
+
                                 AddHouse(k, l, _structureModel, content);
                                 k += _structureModel.Length * 2;
                                 l += _structureModel.Length * 2;
@@ -309,7 +306,11 @@ namespace Aviias
             {
                 for (int j = 0; j < lengthX; j++)
                 {
-                    if (x - lengthY >= 0 && y - lengthX >= 0 && treeModel[j, i] != null && treeModel[j, i] != "air" && _blocs[x - lengthY + i, y - lengthX + j] != null) _blocs[x - lengthY + i, y - lengthX + j].ChangeBloc(treeModel[j, i], content);
+                    if (x - lengthY >= 0 && y - lengthX >= 0 && treeModel[j, i] != null && treeModel[j, i] != "air" && _blocs[x - lengthY + i, y - lengthX + j] != null)
+                    {
+                        _blocs[x - lengthY + i, y - lengthX + j].ChangeBloc(treeModel[j, i], content);
+                        _blocs[x - lengthY + i, y - lengthX + j]._isSolid = false;
+                    }
                 }
             }
         }
@@ -335,7 +336,11 @@ namespace Aviias
             {
                 for (int j = 0; j < lengthX; j++)
                 {
-                    if (x - lengthY >= 0 && y - lengthX >= 0 && houseModel[j, i] != null && houseModel[j, i] != "air" && _blocs[x - lengthY + i, y - lengthX + j] != null) _blocs[x - lengthY + i, y - lengthX + j].ChangeBloc(houseModel[j, i], content);
+                    if (x - lengthY >= 0 && y - lengthX >= 0 && houseModel[j, i] != null && houseModel[j, i] != "air" && _blocs[x - lengthY + i, y - lengthX + j] != null)
+                    {
+                        _blocs[x - lengthY + i, y - lengthX + j].ChangeBloc(houseModel[j, i], content);
+                        _blocs[x - lengthY + i, y - lengthX + j]._isSolid = false;
+                    }
                 }
             }
         }
@@ -449,13 +454,13 @@ namespace Aviias
         
         public int TorchUpdate(int x, int y)
         {
-             int xx = x - 6;
-             int yy = y - 6;
-             int shortest = 7;
+             int xx = x - 12;
+             int yy = y - 12;
+             int shortest = 14;
 
-             for (int i = xx; i < x + 6; i++)
+             for (int i = xx; i < x + 12; i++)
              {
-                 for (int j = yy; j < y + 6; j++)
+                 for (int j = yy; j < y + 12; j++)
                  {
                      if (i > 0 && j > 0 && i < _worldWidth && j < _worldHeight && _blocs[i, j] != null && _blocs[i, j].Type == "torche")
                      {
@@ -463,7 +468,7 @@ namespace Aviias
                      } 
                  }
              }
-                  return Math.Abs(shortest - 7);
+                  return Math.Abs(shortest - 14);
         }
         
         public void TimeForward()
@@ -476,7 +481,7 @@ namespace Aviias
             {
                 skyLuminosity--;
             }
-            if (skyLuminosity == 1 || skyLuminosity == 7) _isNight = !_isNight;
+            if (skyLuminosity == 1 || skyLuminosity == 14) _isNight = !_isNight;
         }
 
         public void Reload(ContentManager content)

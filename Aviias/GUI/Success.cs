@@ -2,9 +2,11 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using System;
 
 namespace Aviias
 {
+    [Serializable]
     internal class Success
     {
         public Text _text;
@@ -18,6 +20,7 @@ namespace Aviias
         public int _quest { get; set; }
         public int _goldenApple { get; set; }
         public int _craft { get; set; }
+
 
         public Success()
         {

@@ -26,6 +26,7 @@ namespace Aviias
         int _luminosity;
         public bool _isInContactWithTheSky;
         bool _isSetable;
+        internal bool _isSolid;
 
         public Bloc(Vector2 position, float scale, string type, ContentManager content)
         {
@@ -36,6 +37,7 @@ namespace Aviias
             x = (int)position.X;
             y = (int)position.Y;
             //_luminosity = 6;
+            _isSolid = true;
             if (type != "air")
             {
                 _isBreakable = true;
@@ -122,13 +124,13 @@ namespace Aviias
 
         public int Luminosity
         {
-            get { return _luminosity / 36; }
+            get { return _luminosity / 18; }
         }
 
         public void ChangeLuminosity(int luminosity)
         {
             if (luminosity < 0) luminosity = 0;
-            _luminosity = luminosity * 36;
+            _luminosity = luminosity * 18;
         }
 
     }

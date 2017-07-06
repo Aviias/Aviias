@@ -8,12 +8,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Timers;
 using Aviias.IA;
-<<<<<<< HEAD
 using Aviias.GUI;
-=======
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Audio;
->>>>>>> origin/f_IA
 
 namespace Aviias
 {
@@ -25,11 +22,6 @@ namespace Aviias
         int nextAction;
         int _health;
         float _speed;
-<<<<<<< HEAD
-   /*   [field: NonSerialized]
-        Vector2 _pos;*/
-=======
->>>>>>> origin/f_IA
         bool _isDie;
         double _regenerationRate;
         int _damageDealing;
@@ -50,30 +42,23 @@ namespace Aviias
         float _yVelocity;
         Timer EngeryDamageTimer = new Timer(1f);
         Timer JumpTimer = new Timer(50f);
-<<<<<<< HEAD
-        Timer stopDamageTimer = new Timer(4f);
-        Timer stopDamageCDTimer = new Timer(5f);
-        bool _isStopDamage;
         double _score;
         string _type;
         Animation Left, Right, Face, CurrentAnim;
-
-
-        public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy, string type)
-=======
         public ushort[] proba;
         public int[] _points;
         Timer stopDamageTimer = new Timer(4f);
         Timer stopDamageCDTimer = new Timer(20f);
+        Timer drakeTimer = new Timer(2f);
         bool _isStopDamage;
         Timer _action = new Timer(2f);
         [field: NonSerialized]
         SoundEffect _playerHit;
         string _healthGraphic;
-
-        public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy, ushort[] proba)
->>>>>>> origin/f_IA
-            : base(false,4,-10, pos)
+        public int _luminosity;
+        
+        public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy, ushort[] proba, string type)
+        : base(false,4,-10, pos)
         {
             _id = Game1.random.Next(0, int.MaxValue);
             _health = health;
@@ -82,21 +67,23 @@ namespace Aviias
             _regenerationRate = regenerationRate;
             _damageDealing = damageDealing;
             _resistance = resistance;
-<<<<<<< HEAD
-            text = new Aviias.Text(content);
-             _pos = pos;
-=======
             text = new Text(content);
->>>>>>> origin/f_IA
+             _pos = pos;
             _texture = texture;
             _baseDamageDealing = damageDealing;
             _baseHealth = health;
             _baseEnergy = energy;
             _energy = energy;
-<<<<<<< HEAD
+            this.proba = proba;
+            nextAction = 0;
+            _points = new int[5] { 10, 10, 10, 10, 10 };
+            _isStopDamage = false;
+            Genetic.AddPoints(this);
+            _playerHit = content.Load<SoundEffect>("Sounds/player_hit");
             _score = 0;
             _isStopDamage = false;
             _type = type;
+            _luminosity = 12;
         }
 
         public void LoadContent(ContentManager content, string assertface, string assertleft,string assertright, float speed, int numOfFrames)
@@ -105,14 +92,6 @@ namespace Aviias
             Left = new Animation(content, assertleft, speed, numOfFrames, MonsterPosition);
             Right = new Animation(content, assertright, speed, numOfFrames, MonsterPosition);
             
-=======
-            this.proba = proba;
-            nextAction = 0;
-            _points = new int[5] { 10, 10, 10, 10, 10 };
-            _isStopDamage = false;
-            Genetic.AddPoints(this);
-            _playerHit = content.Load<SoundEffect>("Sounds/player_hit");
->>>>>>> origin/f_IA
         }
 
         public int BaseHealth => _baseHealth;
@@ -127,11 +106,6 @@ namespace Aviias
         {
             get { return text; }
             set { text = value; }
-        }
-
-        public string Type
-        {
-            get { return _type; }
         }
 
         public double Score
@@ -155,12 +129,6 @@ namespace Aviias
         {
             get { return _texture; }
             set { _texture = value; }
-        }
-
-        public bool IsStopDamage
-        {
-            get { return _isStopDamage; }
-            set { _isStopDamage = value; }
         }
 
         public float moveSpeed
@@ -332,11 +300,24 @@ namespace Aviias
                 Jump(map, this.Texture);
                 JumpTimer.ReInit();
             }
-
-            move = new Vector2(direction.X * _speed * (-1), /*direction.Y * _speed*/0);
+            if (this._type == "drake" && Vector2.Distance(MonsterPosition, player.PlayerPosition) < 300)
+            {
+                move = new Vector2(direction.X * _speed * (-1), direction.Y * _speed * (-1));
+                _pos = new Vector2(posX + move.X, posY + move.Y);
+            }
+            else
+            {
+                move = new Vector2(direction.X * _speed * (-1), 0);
+                _pos = new Vector2(posX + move.X, posY);
+            }
             
             
-            _pos = new Vector2(posX + move.X, posY /*+ move.Y*/);
+<<<<<<< HEAD
+            
+=======
+            Vector2 newPos = new Vector2(posX + move.X, posY /*+ move.Y*/);
+            if (newPos.X > 0 && newPos.X < 200 * 16) _pos = newPos;
+>>>>>>> bug
         }
 
         public void MoveOnPlayer(Player player, Map map, GameTime gametime)
@@ -350,9 +331,32 @@ namespace Aviias
                 Jump(map,this.Texture);
                 JumpTimer.ReInit();
             }
-            move = new Vector2(direction.X * _speed, /*direction.Y * _speed*/0);
+<<<<<<< HEAD
+            if (this._type == "drake")
+            {
+                if (Vector2.Distance(MonsterPosition, player.PlayerPosition) > 300)
+                {
+                    move = new Vector2(direction.X * _speed, direction.Y * _speed);
+                    _pos = new Vector2(posX + move.X, posY + move.Y);
+                }
+                else 
+                {
+                    move = new Vector2(direction.X * _speed, 0);
+                    _pos = new Vector2(posX + move.X, posY);
+                } 
+            }else
+            {
+                move = new Vector2(direction.X * _speed,0);
+                _pos = new Vector2(posX + move.X, posY);
+            }
+            
 
-            _pos = new Vector2(posX + move.X, posY /*+ move.Y*/);
+            
+=======
+            move = new Vector2(direction.X * _speed, /*direction.Y * _speed*/0);
+            Vector2 newPos = new Vector2(posX + move.X, posY /*+ move.Y*/);
+            if (newPos.X > 0 && newPos.X < 200 * 16) _pos = newPos;
+>>>>>>> bug
         }
 
         public void Fight(Player player, GameTime gametime)
@@ -363,7 +367,32 @@ namespace Aviias
 
             playerRect = new Rectangle((int)player.X, (int)player.Y, player.Width, player.Height);
             monsterRect = new Rectangle((int)posX, (int)posY, Width, Height);
-            if (playerRect.Intersects(monsterRect))
+            if (this._type == "drake")
+            {
+                drakeTimer.Decrem(gametime);
+                if (Vector2.Distance(this.MonsterPosition, player.PlayerPosition) <= 300)
+                {
+                    if (drakeTimer.IsDown() && player.IsStopDamage == false)
+                    {
+                        _playerHit.Play();
+                        if (Energy < (Energy * (0.75)))
+                        {
+                            player.GetDamage(Damage);
+                            _points[1] += (ushort)Damage * 1000;
+                            drakeTimer.ReInit();
+                            Energy = Energy - 0.8f;
+                        }
+                        else
+                        {
+                            player.GetDamage(Damage + (Damage / 2));
+                            drakeTimer.ReInit();
+                            _points[1] += (ushort)Damage * 1000;
+                            Energy = Energy - 15f;
+                        }
+                    }
+                }
+            }
+            else if (playerRect.Intersects(monsterRect))
             {
                 if (monsterRect.Left <= playerRect.Right || monsterRect.Right == playerRect.Left || monsterRect.Top <= playerRect.Bottom || monsterRect.Bottom == playerRect.Top)
                 {
@@ -388,6 +417,8 @@ namespace Aviias
                     }
                 }
             }
+
+
         }
 
         public List<int> GetCollisionSide(List<Bloc> _blocs)
@@ -456,22 +487,7 @@ namespace Aviias
 
         public void Dodge()
         {
-<<<<<<< HEAD
-            float x = posX;
-            EngeryDamageTimer.Decrem(gametime);
-            stopDamageCDTimer.Decrem(gametime);
-            stopDamageTimer.Decrem(gametime);
-
-            if (stopDamageTimer.IsDown())
-            {
-                IsStopDamage = false;
-                stopDamageTimer.ReInit();
-            }
-
-            if (_health >= 50)
-=======
             if (stopDamageCDTimer.IsDown())
->>>>>>> origin/f_IA
             {
                 IsStopDamage = true;
                 stopDamageCDTimer.ReInit();
@@ -483,21 +499,6 @@ namespace Aviias
         {
             if (_action.IsDown())
             {
-<<<<<<< HEAD
-              Flight(player, map, gametime);
-              Energy = Energy - 0.2f;
-                if (stopDamageCDTimer.IsDown())
-                {
-                    IsStopDamage = true;
-                    stopDamageCDTimer.ReInit();
-                } 
-
-            }
-            
-            Fight(player, gametime);
-
-            if (Energy < 0f && EngeryDamageTimer.IsDown())
-=======
                 int prob = Game1.random.Next(1, (proba[0] + proba[1] + proba[2] + proba[3] + proba[4]));
                 if (prob <= proba[0]) nextAction = 0;           //Move on player
                 else if (prob <= proba[1] + proba[0]) nextAction = 1;      //Flight
@@ -508,11 +509,10 @@ namespace Aviias
             }
             
         }
-
+            
         internal void DoSomething(Player player, Map map, GameTime gametime)
         {
             switch(nextAction)
->>>>>>> origin/f_IA
             {
                 case 0:
                     MoveOnPlayer(player, map, gametime);
@@ -549,7 +549,13 @@ namespace Aviias
 
         internal void Update(Player player, GameTime gametime, Map map)
         {
-            
+            Genetic.AddPoints(this);
+            ChooseAction();
+            DoSomething(player, map, gametime);
+            UpdatePoints();
+            _luminosity = map._blocs[(int)MonsterPosition.X / 16, (int)MonsterPosition.Y / 16].Luminosity;
+            float x = posX;
+
             Genetic.AddPoints(this);
             ChooseAction();
             DoSomething(player, map, gametime);
@@ -558,26 +564,36 @@ namespace Aviias
             EngeryDamageTimer.Decrem(gametime);
             stopDamageCDTimer.Decrem(gametime);
             stopDamageTimer.Decrem(gametime);
-
-            if ( x == posX)
+            if (this._type != "drake")
             {
-
-            } else if (x < posX)
-            {
-                Right.PlayAnim(gametime);
-                CurrentAnim = Right;
-            } else
-            {
-                Left.PlayAnim(gametime);
-                CurrentAnim = Left;
+                UpdatePhysics(map, Texture);
             }
-
-            UpdatePhysics(map, Texture);
+            
             _action.Decrem(gametime);
             ReactToLight();
             ActualizeHealthRegeneration(gametime);
             ActualizeEnergieRegeneration(gametime);
             if (Genetic.Meilleur.Value != null) proba = Genetic.Meilleur.Value;
+         //   MoveOnPlayer(player, map, gametime);
+
+            if (x == posX)
+            {
+                Face.PlayAnim(gametime);
+                CurrentAnim = Face;
+            }
+            else if (x < posX)
+            {
+                Right.PlayAnim(gametime);
+                CurrentAnim = Right;
+            }
+            else
+            {
+                Left.PlayAnim(gametime);
+                CurrentAnim = Left;
+            }
+
+            
+
             _healthGraphic = GetHealthGraphic();
         }
 
@@ -596,20 +612,13 @@ namespace Aviias
             return new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, ContentManager content)
         {
-<<<<<<< HEAD
-            if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, _pos);
-            //spriteBatch.Draw(_texture, _pos, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-            text.DisplayText(("Life : " + _health), new Vector2(_pos.X + 60, _pos.Y - 30), spriteBatch, Color.Orange);
-=======
-            spriteBatch.Draw(_texture, _pos, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-            //text.DisplayText(("Life : " + _health), new Vector2(_pos.X + 60, _pos.Y - 30), spriteBatch, Color.Orange);
+            if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, _pos, _luminosity * 18, content);
             text.DisplayText((_healthGraphic), new Vector2(_pos.X + 20, _pos.Y - 10), spriteBatch, Color.Red);
             //text.DisplayText(nextAction.ToString(), new Vector2(_pos.X + 30, _pos.Y - 50), spriteBatch, Color.Black);
             for (int i = 0; i < _points.Length; i++) text.DisplayText(_points[i].ToString(), new Vector2(_pos.X + 30 * i, _pos.Y - 50), spriteBatch, Color.Black);
             if (_isStopDamage) text.DisplayText(("Block"), new Vector2(_pos.X + 60, _pos.Y - 90), spriteBatch, Color.Red);
->>>>>>> origin/f_IA
         }
     }
 }

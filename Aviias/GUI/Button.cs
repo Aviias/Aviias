@@ -10,12 +10,15 @@ using System.Threading.Tasks;
 
 namespace Aviias
 {
+    [Serializable]
     public class Button
     {
-        public Vector2 _position { get; set; }
+        [field: NonSerialized]
+        public Vector2 _position;// { get; set; }
         public int _width { get; set; }
         public int _height { get; set; }
         public string _texture;
+        [field: NonSerialized]
         MouseState mouseState = Mouse.GetState();
         public bool IsTrue { get; set; }
         public string _name { get; set; }

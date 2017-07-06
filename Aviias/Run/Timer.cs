@@ -32,5 +32,10 @@ namespace Aviias
             _timeTo = _timeTOReinit;
         }
 
+        public void ToZero()
+        {
+            _timeTo = 0;
+        }
+
     }
 }
