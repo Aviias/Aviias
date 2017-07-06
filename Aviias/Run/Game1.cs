@@ -24,7 +24,7 @@ namespace Aviias
         Wolf wolf;
         Drake drake;
         MouseState mouseState = Mouse.GetState();
-        //Gloutogobe glouto;
+        Gloutogobe glouto;
         Button _die;
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
@@ -104,16 +104,15 @@ namespace Aviias
                 {
                     monsterPosition = spawnMonster.SpawnOnSurface(map);
                     wolf = new Wolf(Content, Content.Load<Texture2D>("Wolfface"), monsterPosition, new ushort[5] { 10, 10, 10, 10, 10 });
-                  //  wolf = new Wolf(Content, Content.Load<Texture2D>("loup"), monsterPosition, new ushort[5] { 10, 10, 10, 10, 10});
                     monsters.Add(wolf);
                 }
             }
-            /*
+            
             Vector2 gloutoPos = spawnMonster.SpawnOnSurface(map);
-            glouto = new Gloutogobe(Content, Content.Load<Texture2D>("wolfface"), gloutoPos);
+            glouto = new Gloutogobe(Content, Content.Load<Texture2D>("wolfface"), gloutoPos, new ushort[5] { 10, 10, 10, 10, 10 });
             glouto.LoadContent(Content, "wolface", "wolfleft", "wolfright", 50f, 3);
             monsters.Add(glouto);
-            */
+            
             base.Initialize();
 
             graphics.IsFullScreen = false;
@@ -217,7 +216,7 @@ namespace Aviias
 
                     for (int i = 0; i < monsters.Count; i++)
                     {
-                        if (monsters[i] != null && monsters[i].IsDie == false)
+                        if (monsters[i] != null && monsters[i].IsDie == false && monsters[i].Type() != "glouto")
                         {
                           monsters[i].Update(player, gameTime, map);
                         }
@@ -227,7 +226,20 @@ namespace Aviias
                         Camera.Move(new Vector2(-player.PlayerMoveSpeed, 0));
                     }
 
-                    //glouto.Update(monsters, player, Content, gameTime, map);
+                    
+                    if (glouto.StepEvolve == 1)
+                    {
+                        glouto.LoadContent(Content, "wolface", "wolfleft", "wolfright", 50f, 3); ;
+                    }
+                    if (glouto.StepEvolve == 2)
+                    {
+                        glouto.LoadContent(Content, "boeuface", "boeufleft", "boeufright", 50f, 3);
+                    }
+                    if (glouto.StepEvolve == 3)
+                    {
+                        glouto.LoadContent(Content, "larveface", "larveleft", "larveright", 50f, 3);
+                    }
+                    glouto.Update(monsters, player, Content, gameTime, map);
 
                     player.Update(player, Camera, _npc, gameTime, Content, log, map, monsters);
                     player.UpdatePlayerCollision(gameTime, player, monsters);
@@ -248,11 +260,16 @@ namespace Aviias
                         drake = new Drake(Content, Content.Load<Texture2D>("phenixface"), monsterPosition, new ushort[5] { 10, 10, 10, 10, 10 });
                         drake.LoadContent(Content, "phenixface", "phenixleft", "phenixright", 80f, 4);
                         monsters.Add(drake);
+
+                        Vector2 gloutoPos = spawnMonster.SpawnOnSurface(map);
+                        glouto = new Gloutogobe(Content, Content.Load<Texture2D>("wolfface"), gloutoPos, new ushort[5] { 10, 10, 10, 10, 10 });
+                        glouto.LoadContent(Content, "wolface", "wolfleft", "wolfright", 50f, 3);
+                        monsters.Add(glouto);
+
                         phenixTimer.ReInit();
                     }
 
                     if (spawnTimer.IsDown())
-
                     {                                                   
                                                
                         int monsterneed = 8 - monsters.Count;
@@ -304,10 +321,14 @@ namespace Aviias
                 map.Draw(spriteBatch, (int)player.Position.X, (int)player.Position.Y);
                 for (int i = 0; i < monsters.Count; i++)
                 {
-                    if (monsters[i] != null) monsters[i].Draw(spriteBatch);
+                    if (monsters[i] != null && monsters[i].Type() != "glouto") monsters[i].Draw(spriteBatch);
                 }
 
-                //glouto.Draw(spriteBatch);
+                glouto.Draw(spriteBatch);
+                if (glouto.StepEvolve == 1)
+                {
+
+                }
                 //   foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
                 foreach (NPC npc in _npc)
                 {
