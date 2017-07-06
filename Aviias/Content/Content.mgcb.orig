@@ -548,30 +548,6 @@
 /processorParam:TextureFormat=Color
 /build:Menu/Background/menuv2.png
 
-#begin Menu/Button/jouer_gris.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Menu/Button/jouer_gris.png
-
-#begin Menu/Button/jouer_rouge.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Menu/Button/jouer_rouge.png
-
 #begin Roullette.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -704,30 +680,6 @@
 /processorParam:TextureFormat=Color
 /build:gold_ore.png
 
-#begin Menu/Button/quitter_gris.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Menu/Button/quitter_gris.png
-
-#begin Menu/Button/quitter_rouge.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Menu/Button/quitter_rouge.png
-
 #begin Menu/Background/menu_partie.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -739,54 +691,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Menu/Background/menu_partie.png
-
-#begin Menu/Button/nouvelle_gris.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Menu/Button/nouvelle_gris.png
-
-#begin Menu/Button/nouvelle_rouge.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Menu/Button/nouvelle_rouge.png
-
-#begin Menu/Button/reprendre_gris.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Menu/Button/reprendre_gris.png
-
-#begin Menu/Button/reprendre_rouge.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Menu/Button/reprendre_rouge.png
 
 #begin Menu/Button/retour_gris.png
 /importer:TextureImporter
@@ -823,6 +727,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:apple_golden.png
+
 #begin Sounds/sucess_reward.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -846,6 +751,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:coal.png
+
 #begin Sounds/player_die.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -869,6 +775,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:diamond.png
+
 #begin Sounds/open_chest.ogg
 /importer:OggImporter
 /processor:SongProcessor
@@ -892,6 +799,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:diamond_axe.png
+
 #begin Sounds/player_attack.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -927,6 +835,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:diamond_chestplate.png
+
 #begin Sounds/ambiant.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
@@ -962,6 +871,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:diamond_helmet.png
+
 #begin Sounds/talk_npc.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -985,6 +895,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:diamond_leggings.png
+
 #begin Sounds/put_bloc.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -1369,11 +1280,7 @@
 /processorParam:TextureFormat=Color
 /build:apple.png
 
-<<<<<<< HEAD
 #begin Craft.png
-=======
-#begin amesprite.png
->>>>>>> origin/f_IA&Anim
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1383,15 +1290,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-<<<<<<< HEAD
 /build:Craft.png
 
 #begin Inventaire.png
-=======
-/build:amesprite.png
-
-#begin red_attackeffect.png
->>>>>>> origin/f_IA&Anim
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1401,15 +1302,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-<<<<<<< HEAD
 /build:Inventaire.png
 
 #begin Success.png
-=======
-/build:red_attackeffect.png
-
-#begin blood.png
->>>>>>> origin/f_IA&Anim
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1419,15 +1314,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-<<<<<<< HEAD
 /build:Success.png
 
 #begin gameover.png
-=======
-/build:blood.png
-
-#begin Face1.png
->>>>>>> origin/f_IA&Anim
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1437,15 +1326,69 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-<<<<<<< HEAD
 /build:gameover.png
 
 #begin v.png
-=======
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:v.png
+
+#begin amesprite.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:amesprite.png
+
+#begin red_attackeffect.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:red_attackeffect.png
+
+#begin blood.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:blood.png
+
+#begin Face1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
 /build:Face1.png
 
 #begin Face2.png
->>>>>>> origin/f_IA&Anim
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1455,15 +1398,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-<<<<<<< HEAD
-/build:v.png
-
-#begin Menu/Button/commandes.png
-=======
 /build:Face2.png
 
 #begin Left1.png
->>>>>>> origin/f_IA&Anim
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1473,15 +1410,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-<<<<<<< HEAD
-/build:Menu/Button/commandes.png
-
-#begin Menu/Background/menu_commandes.png
-=======
 /build:Left1.png
 
 #begin Left2.png
->>>>>>> origin/f_IA&Anim
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1491,9 +1422,6 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-<<<<<<< HEAD
-/build:Menu/Background/menu_commandes.png
-=======
 /build:Left2.png
 
 #begin Right1.png
@@ -1604,30 +1532,6 @@
 /processorParam:TextureFormat=Color
 /build:wolface.png
 
-#begin ../../../../../../../Pictures/PI S3/Sprite/Final_sprite/wolfleft.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../../../../Pictures/PI S3/Sprite/Final_sprite/wolfleft.png
-
-#begin ../../../../../../../Pictures/PI S3/Sprite/Final_sprite/wolfright.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../../../../Pictures/PI S3/Sprite/Final_sprite/wolfright.png
-
 #begin boeuface.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1699,5 +1603,150 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:larveright.png
->>>>>>> origin/f_IA&Anim
+
+<<<<<<< HEAD
+#begin Menu/Background/menu_commandes.png
+=======
+#begin ../../../../../../../Pictures/PI S3/Sprite/Final_sprite/wolfleft.png
+>>>>>>> origin/f_glouto
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+<<<<<<< HEAD
+/build:Menu/Background/menu_commandes.png
+
+#begin Menu/Button/commandes.png
+=======
+/build:../../../../../../../Pictures/PI S3/Sprite/Final_sprite/wolfleft.png
+
+#begin ../../../../../../../Pictures/PI S3/Sprite/Final_sprite/wolfright.png
+>>>>>>> origin/f_glouto
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+<<<<<<< HEAD
+/build:Menu/Button/commandes.png
+
+#begin Menu/Button/jouer_gris.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Menu/Button/jouer_gris.png
+
+#begin Menu/Button/jouer_rouge.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Menu/Button/jouer_rouge.png
+
+#begin Menu/Button/nouvelle_gris.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Menu/Button/nouvelle_gris.png
+
+#begin Menu/Button/nouvelle_rouge.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Menu/Button/nouvelle_rouge.png
+
+#begin Menu/Button/quitter_gris.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Menu/Button/quitter_gris.png
+
+#begin Menu/Button/quitter_rouge.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Menu/Button/quitter_rouge.png
+
+#begin Menu/Button/reprendre_gris.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Menu/Button/reprendre_gris.png
+
+#begin Menu/Button/reprendre_rouge.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Menu/Button/reprendre_rouge.png
+
+#begin approved.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:approved.png
+=======
+/build:../../../../../../../Pictures/PI S3/Sprite/Final_sprite/wolfright.png
+>>>>>>> origin/f_glouto
 

@@ -9,13 +9,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Aviias.IA
 {
-    /*
+    
      class Gloutogobe : Monster
     {
         int _stepEvolve;
-        /*
-        public Gloutogobe(ContentManager content, Texture2D texture, Vector2 pos)
-            : base(100, 1.5f, 0.10, 20, 5, content, texture, pos, 100, "glouto")
+        Timer GobMonsterTimer = new Timer(15f);
+        
+        public Gloutogobe(ContentManager content, Texture2D texture, Vector2 pos, ushort[] proba)
+            : base(100, 1.5f, 0.10, 20, 5, content, texture, pos, 100,proba ,"glouto")
         {
             _stepEvolve = 1;
         }
@@ -26,11 +27,13 @@ namespace Aviias.IA
             set { _stepEvolve = value; }
         }
 
-        public bool GobMonster(List<Monster> monsters,int i)
+        public bool GobMonster(List<Monster> monsters,int i, GameTime gametime)
         {
-            if( Vector2.Distance(this.MonsterPosition, monsters[i].MonsterPosition) <= 400 && _stepEvolve <= 3)
+            GobMonsterTimer.Decrem(gametime);
+            if( Vector2.Distance(this.MonsterPosition, monsters[i].MonsterPosition) <= 400 && _stepEvolve <= 3 && GobMonsterTimer.IsDown())
             {
                 monsters.Remove(monsters[i]);
+                GobMonsterTimer.ReInit();
                 return true;
             }
             else
@@ -117,22 +120,23 @@ namespace Aviias.IA
 
         public void Update(List<Monster> monsters, Player player, ContentManager content, GameTime gametime, Map map)
         {
+            GobMonsterTimer.Decrem(gametime);
             if(_stepEvolve <= 3 && ClosestPlayer(player) == false)
             {
                 int i = ClosestMonster(this.MonsterPosition, monsters);
                 MoveOnClosestMonster(monsters[i].MonsterPosition);
-                if (GobMonster(monsters,i))
+                if (GobMonsterTimer.IsDown() && GobMonster(monsters,i,gametime))
                 {
-                    GloutoEvolve(content, GetTexture(_stepEvolve));
+                    GloutoEvolve(content, GetTexture(_stepEvolve - 1));
+                    GobMonsterTimer.ReInit();
                 }
             }
             else
             {
-                //UpdatePhysics(Game1.map, this.Texture);
                 base.Update(player, gametime, map);
             }
         }
         
     }
-    */
+    
 }
