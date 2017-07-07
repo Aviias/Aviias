@@ -216,6 +216,7 @@ namespace Aviias
                             }
                         }
                     }
+                 //   GenerateShadow();
                 }
 
                 //_blocs[0, 0] = new Bloc(new Vector2(0, 0), _scale, "bedrock", content);
@@ -381,13 +382,83 @@ namespace Aviias
             return Game1.random.Next(min, max);
         }
         
+        public void GenerateShadow()
+        {
+            for (int i = 0; i < WorldWidth; i++)
+            {
+                for (int j = 0; j < WorldHeight; j++)
+                {
+                    if (i > 0 && j > 0 && j < _worldHeight && i < _worldWidth)
+                    {
+                        if (_blocs[i, j] != null && _blocs[i, j - 1] != null && _blocs[i, j].Type == "air")
+                        {
+                            if (_blocs[i, j - 1].Type == "air" && _blocs[i, j - 1]._isInContactWithTheSky)
+                            {
+                                _blocs[i, j]._isInContactWithTheSky = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (int i = 0; i < WorldWidth; i++)
+            {
+                for (int j = 0; j < WorldHeight; j++)
+                {
+                    if (i > 2 && j > 2 && j < _worldHeight - 2 && i < _worldWidth - 2 && _blocs[i, j - 1] != null && _blocs[i, j] != null)
+                    {
+                        if (_blocs[i, j]._isInContactWithTheSky)
+                        {
+                            _blocs[i, j].ChangeLuminosity(skyLuminosity);
+                        }
+
+                        if (_blocs[i, j].Type == "air")
+                        {
+                            if (_blocs[i, j - 1].Type == "air" && _blocs[i, j - 1]._isInContactWithTheSky)
+                            {
+                                _blocs[i, j]._isInContactWithTheSky = true;
+                            }
+
+                            if (!_blocs[i, j]._isInContactWithTheSky)
+                            {
+
+                                _blocs[i, j].ChangeLuminosity(GetBiggestNumber(_blocs[i - 1, j].Luminosity, _blocs[i + 1, j].Luminosity, _blocs[i, j - 1].Luminosity, _blocs[i, j + 1].Luminosity) - 1);
+                            }
+
+                            /*  if (!_blocs[i, j]._isInContactWithTheSky)
+                              {
+                                  _blocs[i, j].ChangeLuminosity(_blocs[i, j - 1].Luminosity - 1);
+                              }
+                              */
+                        }
+                        else
+                        {
+                            if (_blocs[i, j - 1].Type == "air" && _blocs[i, j - 1]._isInContactWithTheSky)
+                            {
+                                _blocs[i, j]._isInContactWithTheSky = true;
+                            }
+
+                            if (!_blocs[i, j]._isInContactWithTheSky)
+                            {
+                                if (_blocs[i - 1, j] != null && _blocs[i + 1, j] != null && _blocs[i, j - 1] != null && _blocs[i, j + 1] != null)
+                                _blocs[i, j].ChangeLuminosity(GetBiggestNumber(_blocs[i - 1, j].Luminosity, _blocs[i + 1, j].Luminosity, _blocs[i, j - 1].Luminosity, _blocs[i, j + 1].Luminosity) - 2);
+                            }
+                        }
+                        if (_blocs[i, j]._isInContactWithTheSky) _blocs[i, j].ChangeLuminosity(skyLuminosity);
+                        if (TorchUpdate(i, j) > _blocs[i, j].Luminosity) _blocs[i, j].ChangeLuminosity(TorchUpdate(i, j));
+                    }
+
+                }
+                }
+        }
+
         public void ActualizeShadow(int x, int y)
         {
             int xx = x / 16;
             int yy = y / 16;
-            for (int i = yy - 100; i < yy + 100; i++)
+            for (int i = yy - 150; i < yy + 150; i++)
             {
-                for (int j = xx - 100; j < xx + 100; j++)
+                for (int j = xx - 150; j < xx + 150; j++)
                 {
                     if (i > 0 && j > 0 && j < _worldHeight && i < _worldWidth)
                     {
@@ -405,9 +476,9 @@ namespace Aviias
             xx = x / 16;
             yy = y / 16;
 
-            for (int i = yy - 100; i < yy + 100; i++)
+            for (int i = yy - 150; i < yy + 150; i++)
             {
-                for (int j = xx - 100; j < xx + 100; j++)
+                for (int j = xx - 150; j < xx + 150; j++)
                 {
                     if (i > 2 && j > 2 && j < _worldHeight - 2 && i < _worldWidth - 2 && _blocs[i, j-1] != null && _blocs[i, j] != null)
                     {

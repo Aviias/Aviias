@@ -78,7 +78,7 @@ namespace Aviias
             // TODO: Add your initialization logic here
 
             player = new Player();
-            player.PlayerMoveSpeed = 8.0f;
+            player.PlayerMoveSpeed = 5.0f;
             Vector2 monsterPosition;
             map = new Map(200, 1000);
             _menu = new Menu();
