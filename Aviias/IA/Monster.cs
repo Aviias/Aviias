@@ -51,11 +51,12 @@ namespace Aviias
         Timer stopDamageCDTimer = new Timer(20f);
         Timer drakeTimer = new Timer(2f);
         bool _isStopDamage;
-        Timer _action = new Timer(2f);
+        Timer _action = new Timer(1f);
         [field: NonSerialized]
         SoundEffect _playerHit;
         string _healthGraphic;
         public int _luminosity;
+        internal bool _ic;
         
         public Monster(int health, float speed, double regenerationRate, int damageDealing, int resistance, ContentManager content, Texture2D texture, Vector2 pos, float energy, ushort[] proba, string type)
         : base(false,4,-10, pos)
@@ -84,6 +85,7 @@ namespace Aviias
             _isStopDamage = false;
             _type = type;
             _luminosity = 12;
+            _ic = false;
         }
 
         public void LoadContent(ContentManager content, string assertface, string assertleft,string assertright, float speed, int numOfFrames)
@@ -488,39 +490,68 @@ namespace Aviias
         {
             if (_action.IsDown())
             {
-                int prob = Game1.random.Next(1, (proba[0] + proba[1] + proba[2] + proba[3] + proba[4]));
+                int prob;
+                if (!_ic) prob = Game1.random.Next(1, (proba[0] + proba[1] + proba[2] + proba[3] + proba[4]));
+                else prob = Game1.random.Next(1, (proba[0] * 10 + proba[1] + proba[2] + proba[3] + proba[4]));
                 if (prob <= proba[0]) nextAction = 0;           //Move on player
                 else if (prob <= proba[1] + proba[0]) nextAction = 1;      //Flight
                 else if (prob <= proba[2] + proba[1] + proba[0]) nextAction = 2;      //Fight
                 else if (prob <= proba[3] + proba[2] + proba[1] + proba[0]) nextAction = 3;      //Block
                 else if (prob <= proba[4] + proba[3] + proba[2] + proba[1] + proba[0]) nextAction = 4;      //GetOrb / EatMonster
                 else nextAction = 5;                            //Do nothing
+                _action.ReInit();
             }
-            
         }
             
         internal void DoSomething(Player player, Map map, GameTime gametime)
         {
-            switch(nextAction)
+            if (_ic)
             {
-                case 0:
-                    MoveOnPlayer(player, map, gametime);
-                    break;
-                case 1:
-                    Flight(player, map, gametime);
-                    break;
-                case 2:
-                    Fight(player, gametime);
-                    break;
-                case 3:
-                    Dodge();
-                    break;
-                case 4:
-                    EatSoul(_souls);
-                    break;
-                case 5:
-                   // MoveOnPlayer(player, map, gametime);
-                    break;
+                switch (nextAction)
+                {
+                    case 0:
+                        MoveOnPlayer(player, map, gametime);
+                        break;
+                    case 1:
+                        MoveOnPlayer(player, map, gametime);
+                        break;
+                    case 2:
+                        Fight(player, gametime);
+                        break;
+                    case 3:
+                        MoveOnPlayer(player, map, gametime);
+                        break;
+                    case 4:
+                        MoveOnPlayer(player, map, gametime);
+                        break;
+                    case 5:
+                        MoveOnPlayer(player, map, gametime);
+                        break;
+                }
+            }
+            else
+            {
+                switch (nextAction)
+                {
+                    case 0:
+                        MoveOnPlayer(player, map, gametime);
+                        break;
+                    case 1:
+                        Flight(player, map, gametime);
+                        break;
+                    case 2:
+                        Fight(player, gametime);
+                        break;
+                    case 3:
+                        Dodge();
+                        break;
+                    case 4:
+                        EatSoul(_souls);
+                        break;
+                    case 5:
+                        MoveOnPlayer(player, map, gametime);
+                        break;
+                }
             }
         }
 
@@ -538,18 +569,13 @@ namespace Aviias
 
         internal void Update(Player player, GameTime gametime, Map map)
         {
-            CurrentAnim = Face;
+           // CurrentAnim = Face;
             Genetic.AddPoints(this);
             ChooseAction();
             DoSomething(player, map, gametime);
             UpdatePoints();
             if (MonsterPosition.X / 16 > 0 && MonsterPosition.Y > 0 && MonsterPosition.X / 16 < Game1.map.WorldWidth && MonsterPosition.Y / 16 < Game1.map.WorldHeight) _luminosity = map._blocs[(int)MonsterPosition.X / 16, (int)MonsterPosition.Y / 16].Luminosity;
             float x = posX;
-
-            Genetic.AddPoints(this);
-            ChooseAction();
-            DoSomething(player, map, gametime);
-            UpdatePoints();
 
             EngeryDamageTimer.Decrem(gametime);
             stopDamageCDTimer.Decrem(gametime);
@@ -564,7 +590,7 @@ namespace Aviias
             ActualizeHealthRegeneration(gametime);
             ActualizeEnergieRegeneration(gametime);
             if (Genetic.Meilleur.Value != null) proba = Genetic.Meilleur.Value;
-            MoveOnPlayer(player, map, gametime);
+         //   MoveOnPlayer(player, map, gametime);
 
             if (x == posX)
             {

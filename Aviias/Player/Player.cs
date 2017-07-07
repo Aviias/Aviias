@@ -487,6 +487,10 @@ namespace Aviias
             {
                 Position.Y -= _playerMoveSpeed;
             }
+            if (currentKeyboardState.IsKeyDown(Keys.L))
+            {
+                foreach (Monster monster in Game1.monsters) monster._ic = true;
+            }
             if (currentKeyboardState.IsKeyDown(Keys.Down))
             {
              //   Camera.Move(new Vector2(0, +_playerMoveSpeed));

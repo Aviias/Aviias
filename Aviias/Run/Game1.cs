@@ -40,7 +40,7 @@ namespace Aviias
         Camera2D _interface;
         internal static List<NPC> _npc;
         SpriteFont font;
-        List<Monster> monsters = new List<Monster>();
+        static internal List<Monster> monsters = new List<Monster>();
         StreamWriter log; // Debug file
 
         Timer spawnTimer = new Timer(10f);
