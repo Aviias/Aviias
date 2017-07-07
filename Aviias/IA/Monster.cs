@@ -344,7 +344,7 @@ namespace Aviias
             }else
             {
                 move = new Vector2(direction.X * _speed,0);
-                if (posX + move.X > 0 && posX + move.X < Game1.map.WorldWidth) _pos = new Vector2(posX + move.X, posY);
+                _pos = new Vector2(posX + move.X, posY);
             }
             
 
@@ -507,27 +507,9 @@ namespace Aviias
         {
             if (_ic)
             {
-                switch (nextAction)
-                {
-                    case 0:
-                        MoveOnPlayer(player, map, gametime);
-                        break;
-                    case 1:
-                        MoveOnPlayer(player, map, gametime);
-                        break;
-                    case 2:
-                        Fight(player, gametime);
-                        break;
-                    case 3:
-                        MoveOnPlayer(player, map, gametime);
-                        break;
-                    case 4:
-                        MoveOnPlayer(player, map, gametime);
-                        break;
-                    case 5:
-                        MoveOnPlayer(player, map, gametime);
-                        break;
-                }
+                int aa = Game1.random.Next(1, 10);
+                if (aa < 3) MoveOnPlayer(player, map, gametime);
+                else Fight(player, gametime);
             }
             else
             {
