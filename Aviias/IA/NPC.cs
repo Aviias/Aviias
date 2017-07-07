@@ -44,6 +44,7 @@ namespace Aviias
         Animation CurrentAnim;
         Animation Face1;
         Animation Face2;
+        int _luminosity;
 
 
         
@@ -124,8 +125,9 @@ namespace Aviias
             }
         }
 
-        public void Update(GameTime gametime, SpriteBatch spriteBatch)
+        public void Update(GameTime gametime, SpriteBatch spriteBatch, Map map)
         {
+            _luminosity = map._blocs[(int)_pos.X / 16, (int)_pos.Y / 16].Luminosity;
             float x = _pos.X;
             UpdatePhysics(Game1.map, _texture);
             RandomMove(gametime);
@@ -196,7 +198,7 @@ namespace Aviias
 
         public void Draw(SpriteBatch spriteBatch, ContentManager content)
         {
-            if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, _pos, content);
+            if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, _pos, _luminosity * 18, content);
             //spriteBatch.Draw(_texture, _pos, null, Color.White, 0f, Vector2.Zero, 1f,
             //   SpriteEffects.None, 0f);
             GraphicUpdate(spriteBatch);

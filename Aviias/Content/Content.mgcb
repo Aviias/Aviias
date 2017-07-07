@@ -1460,30 +1460,6 @@
 /processorParam:TextureFormat=Color
 /build:Wolfface.png
 
-#begin Wolfleft.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Wolfleft.png
-
-#begin Wolfright.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Wolfright.png
-
 #begin phenixface.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1736,7 +1712,7 @@
 /processorParam:TextureFormat=Color
 /build:approved.png
 
-#begin ../../../../../../../Pictures/PI S3/Sprite/Final_sprite/wolfleft.png
+#begin wolfleft.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1746,9 +1722,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../../../Pictures/PI S3/Sprite/Final_sprite/wolfleft.png
+/build:wolfleft.png
 
-#begin ../../../../../../../Pictures/PI S3/Sprite/Final_sprite/wolfright.png
+#begin Wolfright.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1758,5 +1734,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../../../Pictures/PI S3/Sprite/Final_sprite/wolfright.png
+/build:Wolfright.png
 

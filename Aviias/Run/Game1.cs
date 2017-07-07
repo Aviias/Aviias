@@ -42,7 +42,7 @@ namespace Aviias
         SpriteFont font;
         List<Monster> monsters = new List<Monster>();
         StreamWriter log; // Debug file
-        Random rnd = new Random();
+
         Timer spawnTimer = new Timer(10f);
         Timer phenixTimer = new Timer(90f);
         Menu _menu;
@@ -80,7 +80,7 @@ namespace Aviias
             player = new Player();
             player.PlayerMoveSpeed = 8.0f;
             Vector2 monsterPosition;
-            map = new Map(200, 500);
+            map = new Map(200, 1000);
             _menu = new Menu();
             _menu.Initialize();
            
@@ -111,7 +111,7 @@ namespace Aviias
             
             Vector2 gloutoPos = spawnMonster.SpawnOnSurface(map);
             glouto = new Gloutogobe(Content, Content.Load<Texture2D>("wolfface"), gloutoPos, new ushort[5] { 10, 10, 10, 10, 10 });
-            glouto.LoadContent(Content, "wolface", "wolfleft", "wolfright", 50f, 3);
+            glouto.LoadContent(Content, "wolface", "Wolfleft", "Wolfright", 50f, 3);
             monsters.Add(glouto);
             
             base.Initialize();
@@ -233,7 +233,7 @@ namespace Aviias
                     
                     if (glouto.StepEvolve == 1)
                     {
-                        glouto.LoadContent(Content, "wolface", "wolfleft", "wolfright", 50f, 3); ;
+                        glouto.LoadContent(Content, "wolface", "Wolfleft", "Wolfright", 50f, 3); ;
                     }
                     if (glouto.StepEvolve == 2)
                     {
@@ -247,7 +247,7 @@ namespace Aviias
 
                     player.Update(player, Camera, _npc, gameTime, Content, log, map, monsters);
                     player.UpdatePlayerCollision(gameTime, player, monsters);
-                    foreach (NPC npc in _npc) npc.Update(gameTime, spriteBatch);
+                    foreach (NPC npc in _npc) npc.Update(gameTime, spriteBatch, map);
                     base.Update(gameTime);
 
                     spawnTimer.Decrem(gameTime);
@@ -338,10 +338,10 @@ namespace Aviias
                 map.Draw(spriteBatch, (int)player.Position.X, (int)player.Position.Y);
                 for (int i = 0; i < monsters.Count; i++)
                 {
-                    if (monsters[i] != null && monsters[i].Type() != "glouto") monsters[i].Draw(spriteBatch);
+                    if (monsters[i] != null && monsters[i].Type() != "glouto") monsters[i].Draw(spriteBatch, Content);
                 }
 
-                glouto.Draw(spriteBatch);
+                glouto.Draw(spriteBatch, Content);
                 //   foreach (NPC npc in _npc) if (npc._isTalking) npc.Talk(new Quest(), spriteBatch);
                 foreach (NPC npc in _npc)
                 {

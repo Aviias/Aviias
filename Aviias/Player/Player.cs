@@ -113,6 +113,7 @@ namespace Aviias
         SoundEffect sPlayerDie;
         [field: NonSerialized]
         SoundEffect sWolfDie;
+        int _luminosity;
 
         public int Width
         {
@@ -170,6 +171,7 @@ namespace Aviias
 
         public void Initialize(Texture2D texture, Vector2 position, ContentManager content, Map map)
         {
+            _luminosity = 5;
             PlayerTexture = texture;
             Position = position;
             Active = true;
@@ -392,6 +394,7 @@ namespace Aviias
 
         internal void Update(Player player, Camera2D Camera, List<NPC> _npc, GameTime gameTime, ContentManager Content, StreamWriter log, Map map, List<Monster> monsters)
         {
+            _luminosity = map._blocs[(int)Position.X / 16, (int)Position.Y / 16].Luminosity;
             currentKeyboardState = Keyboard.GetState();
             mouseState = Mouse.GetState();
             invenTimer.Decrem(gameTime);
@@ -919,7 +922,7 @@ namespace Aviias
 
         internal void Draw(SpriteBatch spriteBatch, ContentManager content, Camera2D camera)
         {
-            if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, Position, content);
+            if (CurrentAnim != null) CurrentAnim.Draw(spriteBatch, Position, _luminosity * 18, content);
             else spriteBatch.Draw(PlayerTexture, Position, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             if (currentBlood != null) Blood.Draw(spriteBatch, Position, content);

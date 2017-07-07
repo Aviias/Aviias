@@ -27,11 +27,18 @@ namespace Aviias
             _idEndNpc = idEndNpc;
             _goal = new Dictionary<string, int>(4);
             _reward = new Dictionary<string, int>(2);
-            _goal.Add("stone", 8);
-            _goal.Add("wood_shovel", 1);
+            AddGoal();
             _startNpc = startNPC;
             CreateSpitch();
             CreateReward();
+        }
+
+        void AddGoal()
+        {
+            _goal.Add("stone", Game1.random.Next(8, 24));
+            if (Game1.random.Next(1, 3) == 1) _goal.Add("torches", Game1.random.Next(4, 12));
+            else if (Game1.random.Next(1, 3) == 2) _goal.Add("wood_shovel", 1);
+            else _goal.Add("gold_ingot", 2);
         }
 
         internal bool CheckGoal(Player player, int npcId)
@@ -40,7 +47,7 @@ namespace Aviias
             {
                 foreach (KeyValuePair<string, int> goal in _goal)
                 {
-                    if (player._inv.Quantity(goal.Key) > goal.Value) return false;
+                    if (player._inv.Quantity(goal.Key) < goal.Value) return false;
                 }
                 return true;
             }
@@ -65,7 +72,7 @@ namespace Aviias
             {
                 string goal = "Salut toi ! ";
                 goal += "Ramene moi ces ressources ";
-                goal += "et ne demande pas pourquoi.\n";
+                goal += "et ne \ndemande pas pourquoi.\n";
                 foreach (KeyValuePair<string, int> entry in _goal)
                 {
                     goal += entry.Key + " x " + entry.Value + "\n";
@@ -75,8 +82,9 @@ namespace Aviias
             else
             {
                 string goal = "Salut toi !\n";
-                goal += "Peux-tu aller voir " + _idEndNpc;
-                goal += "pour moi ?\n";
+                goal += "Peux-tu transmettre";
+                goal += "cette lettre à mon\n";
+                goal += "ami pour moi ?\n";
                 _spitch = goal;
             }
         }

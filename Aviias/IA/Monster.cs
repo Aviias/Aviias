@@ -538,11 +538,12 @@ namespace Aviias
 
         internal void Update(Player player, GameTime gametime, Map map)
         {
+            CurrentAnim = Face;
             Genetic.AddPoints(this);
             ChooseAction();
             DoSomething(player, map, gametime);
             UpdatePoints();
-            if (MonsterPosition.X / 16 > 0 && MonsterPosition.X / 16 < map.WorldWidth && MonsterPosition.Y > 0 && MonsterPosition.Y < map.WorldHeight) _luminosity = map._blocs[(int)MonsterPosition.X / 16, (int)MonsterPosition.Y / 16].Luminosity;
+            if (MonsterPosition.X / 16 > 0 && MonsterPosition.Y > 0 && MonsterPosition.X / 16 < Game1.map.WorldWidth && MonsterPosition.Y / 16 < Game1.map.WorldHeight) _luminosity = map._blocs[(int)MonsterPosition.X / 16, (int)MonsterPosition.Y / 16].Luminosity;
             float x = posX;
 
             Genetic.AddPoints(this);
@@ -563,7 +564,7 @@ namespace Aviias
             ActualizeHealthRegeneration(gametime);
             ActualizeEnergieRegeneration(gametime);
             if (Genetic.Meilleur.Value != null) proba = Genetic.Meilleur.Value;
-         //   MoveOnPlayer(player, map, gametime);
+            MoveOnPlayer(player, map, gametime);
 
             if (x == posX)
             {

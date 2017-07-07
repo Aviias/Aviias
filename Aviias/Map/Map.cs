@@ -42,6 +42,7 @@ namespace Aviias
         [field:NonSerialized]
         List<Vector2> _AllCave = new List<Vector2>();
         Timer dayCycle = new Timer(100f);
+        Timer _shadowActualizer = new Timer(8f);
 
         public int WorldWidth
         {
@@ -189,8 +190,9 @@ namespace Aviias
                     {
                         if (k > 6 && l > 6 && l < WorldHeight && _blocs[k - 3, l] != null && _blocs[k - 3, l].Type == "grass_side")
                         {
-                            int rand = NextInt(1, 8500);
-                            if (rand == 1)
+                            int test;
+                            test = NextInt(1, 158500);
+                            if (test == 2)
                             {
                                     _structureModel = structures.structures["houseA"];
 
@@ -202,7 +204,7 @@ namespace Aviias
 
                         if (k > 6 && k < WorldWidth && l > 6 && l < WorldHeight && _blocs[k - 3, l] != null && _blocs[k - 3, l].Type == "grass_side")
                         {
-                            _treeGeneration = NextInt(1, 2300);
+                            _treeGeneration = NextInt(1, 8300);
                             if (_treeGeneration <= _treeRate)
                             {
                                 _treeGeneration = NextInt(1, 3);
@@ -383,9 +385,9 @@ namespace Aviias
         {
             int xx = x / 16;
             int yy = y / 16;
-            for (int i = yy - 200; i < yy + 80; i++)
+            for (int i = yy - 100; i < yy + 100; i++)
             {
-                for (int j = xx - 80; j < xx + 80; j++)
+                for (int j = xx - 100; j < xx + 100; j++)
                 {
                     if (i > 0 && j > 0 && j < _worldHeight && i < _worldWidth)
                     {
@@ -403,9 +405,9 @@ namespace Aviias
             xx = x / 16;
             yy = y / 16;
 
-            for (int i = yy - 200; i < yy + 60; i++)
+            for (int i = yy - 100; i < yy + 100; i++)
             {
-                for (int j = xx - 80; j < xx + 80; j++)
+                for (int j = xx - 100; j < xx + 100; j++)
                 {
                     if (i > 2 && j > 2 && j < _worldHeight - 2 && i < _worldWidth - 2 && _blocs[i, j-1] != null && _blocs[i, j] != null)
                     {
@@ -504,7 +506,13 @@ namespace Aviias
                 dayCycle.ReInit();
                 ActualizeShadow((int)Game1.player.Position.X, (int)Game1.player.Position.Y);
             }
+            if (_shadowActualizer.IsDown())
+            {
+                ActualizeShadow((int)Game1.player.Position.X, (int)Game1.player.Position.Y);
+                _shadowActualizer.ReInit();
+            }
             dayCycle.Decrem(gameTime);
+            _shadowActualizer.Decrem(gameTime);
         }
 
         int GetBiggestNumber(int a, int b, int c, int d)
