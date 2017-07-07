@@ -873,8 +873,10 @@ namespace Aviias
                     {
                         if (playerRect.Bottom > blocRect.Top && playerRect.Bottom < blocRect.Bottom)
                         {
-                            result.Add(3);
-                            if(!rectTest.Intersects(blocRect)) Position.Y -= 1;
+                           /* result.Add(3);
+                            if(!rectTest.Intersects(blocRect)) Position.Y -= 1;*/
+                            _yVelocity = 0;
+                            Position.Y -= 1;
                         }
                          if (playerRect.Top < blocRect.Bottom && playerRect.Top > blocRect.Top) result.Add(4);
                         //  if (playerRect.Left < blocRect.Right && playerRect.Left > blocRect.Left) result.Add(2);
