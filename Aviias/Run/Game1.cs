@@ -94,8 +94,8 @@ namespace Aviias
             IsMouseVisible = true;
 
             _npc = new List<NPC>(8);
-            _npc.Add(new NPC(Content, "Face1", spriteBatch, new Vector2(500, 250), 5));
-            _npc.Add(new NPC(Content, "Face2", spriteBatch, new Vector2(1400, 300), 3));
+            _npc.Add(new NPC(Content, "Face1", spriteBatch, new Vector2(1300, 250), 5));
+            _npc.Add(new NPC(Content, "Face2", spriteBatch, new Vector2(1600, 300), 3));
 
             spawnMonster = new Spawn(map);
             int monsterneed = 8 - monsters.Count;

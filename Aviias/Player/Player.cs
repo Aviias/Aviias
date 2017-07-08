@@ -229,9 +229,6 @@ namespace Aviias
             CraftNotPutable.Add("diamond_pickaxe");
             CraftNotPutable.Add("diamond_sword");
             
-            _inv.AddInventory(4, "stick");
-            _inv.AddInventory(4, "coal_ore");
-            _inv.AddInventory(10, "torche");
 
             /*
             _inv.AddInventory(4, "oak_plank");

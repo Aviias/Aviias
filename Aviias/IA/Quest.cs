@@ -70,9 +70,9 @@ namespace Aviias
         {
             if (_type == 0)
             {
-                string goal = "Salut toi ! ";
+                string goal = "Salut toi !";
                 goal += "Ramene moi ces ressources ";
-                goal += "et ne \ndemande pas pourquoi.\n";
+                goal += "et ne demande pas pourquoi.\n";
                 foreach (KeyValuePair<string, int> entry in _goal)
                 {
                     goal += entry.Key + " x " + entry.Value + "\n";
